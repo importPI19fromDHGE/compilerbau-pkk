@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools",
+        "luniclynx.bison",
+        "luniclynx.lex",
+        "twxs.cmake",
+        "ms-vscode"
+    ]
+}
