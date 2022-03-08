@@ -6,14 +6,14 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(compilerbau_pkk
-        main.c
-        turtle-eval.c
-        turtle-nametab.c
-        sdlinterf.c
-        turtle-types.h
-        turtle.h
-        sdlinterf.h
-        )
+        src/main.c
+        src/turtle-eval.c
+        src/turtle-nametab.c
+        src/sdlinterf.c
+        src/turtle-types.h
+        src/turtle.h
+        src/sdlinterf.h
+        src/gkk_parse.c)
 INCLUDE(FindPkgConfig)
 
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)

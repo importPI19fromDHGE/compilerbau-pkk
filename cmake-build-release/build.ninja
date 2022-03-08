@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: compilerbau_pkk
-# Configurations: Debug
+# Configurations: Release
 # =============================================================================
 
 #############################################
@@ -24,7 +24,7 @@ ninja_required_version = 1.5
 #############################################
 # Set configuration variable for custom commands.
 
-CONFIGURATION = Debug
+CONFIGURATION = Release
 # =============================================================================
 # Include auxiliary files.
 
@@ -39,13 +39,13 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /home/max/GitHub/compilerbau-pkk/cmake-build-debug/
+cmake_ninja_workdir = /home/max/GitHub/compilerbau-pkk/cmake-build-release/
 
 #############################################
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/max/GitHub/compilerbau-pkk/cmake-build-debug && /home/max/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/max/GitHub/compilerbau-pkk/cmake-build-release && /home/max/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -56,7 +56,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/max/GitHub/compilerbau-pkk/cmake-build-debug && /home/max/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/max/GitHub/compilerbau-pkk -B/home/max/GitHub/compilerbau-pkk/cmake-build-debug
+  COMMAND = cd /home/max/GitHub/compilerbau-pkk/cmake-build-release && /home/max/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/max/GitHub/compilerbau-pkk -B/home/max/GitHub/compilerbau-pkk/cmake-build-release
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -72,37 +72,37 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 build cmake_object_order_depends_target_compilerbau_pkk: phony || CMakeFiles/compilerbau_pkk.dir
 
-build CMakeFiles/compilerbau_pkk.dir/src/main.c.o: C_COMPILER__compilerbau_pkk_Debug /home/max/GitHub/compilerbau-pkk/src/main.c || cmake_object_order_depends_target_compilerbau_pkk
+build CMakeFiles/compilerbau_pkk.dir/src/main.c.o: C_COMPILER__compilerbau_pkk_Release /home/max/GitHub/compilerbau-pkk/src/main.c || cmake_object_order_depends_target_compilerbau_pkk
   DEP_FILE = CMakeFiles/compilerbau_pkk.dir/src/main.c.o.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -I/home/max/GitHub/compilerbau-pkk/. -I/usr/include/SDL2
   OBJECT_DIR = CMakeFiles/compilerbau_pkk.dir
   OBJECT_FILE_DIR = CMakeFiles/compilerbau_pkk.dir/src
 
-build CMakeFiles/compilerbau_pkk.dir/src/turtle-eval.c.o: C_COMPILER__compilerbau_pkk_Debug /home/max/GitHub/compilerbau-pkk/src/turtle-eval.c || cmake_object_order_depends_target_compilerbau_pkk
+build CMakeFiles/compilerbau_pkk.dir/src/turtle-eval.c.o: C_COMPILER__compilerbau_pkk_Release /home/max/GitHub/compilerbau-pkk/src/turtle-eval.c || cmake_object_order_depends_target_compilerbau_pkk
   DEP_FILE = CMakeFiles/compilerbau_pkk.dir/src/turtle-eval.c.o.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -I/home/max/GitHub/compilerbau-pkk/. -I/usr/include/SDL2
   OBJECT_DIR = CMakeFiles/compilerbau_pkk.dir
   OBJECT_FILE_DIR = CMakeFiles/compilerbau_pkk.dir/src
 
-build CMakeFiles/compilerbau_pkk.dir/src/turtle-nametab.c.o: C_COMPILER__compilerbau_pkk_Debug /home/max/GitHub/compilerbau-pkk/src/turtle-nametab.c || cmake_object_order_depends_target_compilerbau_pkk
+build CMakeFiles/compilerbau_pkk.dir/src/turtle-nametab.c.o: C_COMPILER__compilerbau_pkk_Release /home/max/GitHub/compilerbau-pkk/src/turtle-nametab.c || cmake_object_order_depends_target_compilerbau_pkk
   DEP_FILE = CMakeFiles/compilerbau_pkk.dir/src/turtle-nametab.c.o.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -I/home/max/GitHub/compilerbau-pkk/. -I/usr/include/SDL2
   OBJECT_DIR = CMakeFiles/compilerbau_pkk.dir
   OBJECT_FILE_DIR = CMakeFiles/compilerbau_pkk.dir/src
 
-build CMakeFiles/compilerbau_pkk.dir/src/sdlinterf.c.o: C_COMPILER__compilerbau_pkk_Debug /home/max/GitHub/compilerbau-pkk/src/sdlinterf.c || cmake_object_order_depends_target_compilerbau_pkk
+build CMakeFiles/compilerbau_pkk.dir/src/sdlinterf.c.o: C_COMPILER__compilerbau_pkk_Release /home/max/GitHub/compilerbau-pkk/src/sdlinterf.c || cmake_object_order_depends_target_compilerbau_pkk
   DEP_FILE = CMakeFiles/compilerbau_pkk.dir/src/sdlinterf.c.o.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -I/home/max/GitHub/compilerbau-pkk/. -I/usr/include/SDL2
   OBJECT_DIR = CMakeFiles/compilerbau_pkk.dir
   OBJECT_FILE_DIR = CMakeFiles/compilerbau_pkk.dir/src
 
-build CMakeFiles/compilerbau_pkk.dir/src/gkk_parse.c.o: C_COMPILER__compilerbau_pkk_Debug /home/max/GitHub/compilerbau-pkk/src/gkk_parse.c || cmake_object_order_depends_target_compilerbau_pkk
+build CMakeFiles/compilerbau_pkk.dir/src/gkk_parse.c.o: C_COMPILER__compilerbau_pkk_Release /home/max/GitHub/compilerbau-pkk/src/gkk_parse.c || cmake_object_order_depends_target_compilerbau_pkk
   DEP_FILE = CMakeFiles/compilerbau_pkk.dir/src/gkk_parse.c.o.d
-  FLAGS = -g -std=gnu11
+  FLAGS = -O3 -DNDEBUG -std=gnu11
   INCLUDES = -I/home/max/GitHub/compilerbau-pkk/. -I/usr/include/SDL2
   OBJECT_DIR = CMakeFiles/compilerbau_pkk.dir
   OBJECT_FILE_DIR = CMakeFiles/compilerbau_pkk.dir/src
@@ -115,8 +115,8 @@ build CMakeFiles/compilerbau_pkk.dir/src/gkk_parse.c.o: C_COMPILER__compilerbau_
 #############################################
 # Link the executable compilerbau_pkk
 
-build compilerbau_pkk: C_EXECUTABLE_LINKER__compilerbau_pkk_Debug CMakeFiles/compilerbau_pkk.dir/src/main.c.o CMakeFiles/compilerbau_pkk.dir/src/turtle-eval.c.o CMakeFiles/compilerbau_pkk.dir/src/turtle-nametab.c.o CMakeFiles/compilerbau_pkk.dir/src/sdlinterf.c.o CMakeFiles/compilerbau_pkk.dir/src/gkk_parse.c.o
-  FLAGS = -g
+build compilerbau_pkk: C_EXECUTABLE_LINKER__compilerbau_pkk_Release CMakeFiles/compilerbau_pkk.dir/src/main.c.o CMakeFiles/compilerbau_pkk.dir/src/turtle-eval.c.o CMakeFiles/compilerbau_pkk.dir/src/turtle-nametab.c.o CMakeFiles/compilerbau_pkk.dir/src/sdlinterf.c.o CMakeFiles/compilerbau_pkk.dir/src/gkk_parse.c.o
+  FLAGS = -O3 -DNDEBUG
   LINK_LIBRARIES = -lSDL2  -lSDL2_image  -lSDL2  -lm  -lSDL2_image  -lm
   OBJECT_DIR = CMakeFiles/compilerbau_pkk.dir
   POST_BUILD = :
@@ -133,7 +133,7 @@ build compilerbau_pkk: C_EXECUTABLE_LINKER__compilerbau_pkk_Debug CMakeFiles/com
 # =============================================================================
 
 #############################################
-# Folder: /home/max/GitHub/compilerbau-pkk/cmake-build-debug
+# Folder: /home/max/GitHub/compilerbau-pkk/cmake-build-release
 
 build all: phony compilerbau_pkk
 

@@ -87,7 +87,8 @@
 				0,
 				1,
 				2,
-				3
+				3,
+				7
 			]
 		}
 	],
@@ -153,7 +154,8 @@
 				0,
 				1,
 				2,
-				3
+				3,
+				7
 			]
 		},
 		{
@@ -171,41 +173,47 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "main.c",
+			"path" : "src/main.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "turtle-eval.c",
+			"path" : "src/turtle-eval.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "turtle-nametab.c",
+			"path" : "src/turtle-nametab.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "sdlinterf.c",
+			"path" : "src/sdlinterf.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "turtle-types.h",
+			"path" : "src/turtle-types.h",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
-			"path" : "turtle.h",
+			"path" : "src/turtle.h",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
-			"path" : "sdlinterf.h",
+			"path" : "src/sdlinterf.h",
 			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/gkk_parse.c",
+			"sourceGroupIndex" : 0
 		}
 	],
 	"type" : "EXECUTABLE"
