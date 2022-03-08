@@ -109,6 +109,7 @@ extern void sdlDrawCirc(int centerX, int centerY, int radX, int radY,
 #define SDL_CIRC_UPPER (SDL_CIRC_UPPER_LEFT | SDL_CIRC_UPPER_RIGHT)
 #define SDL_CIRC_LOWER (SDL_CIRC_LOWER_LEFT | SDL_CIRC_LOWER_RIGHT)
 #define SDL_CIRC_ALL (SDL_CIRC_LEFT | SDL_CIRC_RIGHT)
+
 extern void sdlDrawCircPart(int centerX, int centerY, int radX, int radY,
                             int r, int g, int b, int part);
 

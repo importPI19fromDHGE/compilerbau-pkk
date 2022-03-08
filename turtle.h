@@ -56,11 +56,11 @@ extern treenode_t *parse(void);
 // Speicherplätze für die vordefinierten globalen Variablen
 // (benötigt in turtle-nametab.c)
 extern double g_dir;       // Richtung (in Grad, wie in Mathe:
-                           // 0 ist nach rechts, gegen den Uhrzeigersinn)
+// 0 ist nach rechts, gegen den Uhrzeigersinn)
 extern double g_dist;      // Abstand vom Ursprung
 extern double g_x, g_y;    // Aktuelle x- und y-Position
 extern double g_args[10];  // argv[1]...argv[9] als double
-                           // g_args[0] bleibt unbenutzt
+// g_args[0] bleibt unbenutzt
 extern double g_pi;        // Die Konstante Pi
 extern double g_max_x, g_max_y; // Größe des Fensters in Benutzer-Koordinaten
 extern double g_delay;     // Verzögerung in ms nach jedem Zeichnen

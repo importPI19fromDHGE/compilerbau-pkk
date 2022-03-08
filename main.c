@@ -20,8 +20,7 @@ const char *prog_name;
 // Fehlermeldung und Programmende wenn p gleich NULL ist
 // what ... was wurde gerade angelegt?
 // pos ... für welche Stelle im Source?
-void mem_check(const void *p, const char *what, const srcpos_t *pos)
-{
+void mem_check(const void *p, const char *what, const srcpos_t *pos) {
     if (p == NULL) {
         fprintf(stderr, "%s: Fehler beim Anlegen von Speicher für %s "
                         "(Zeile %d, Spalte %d): %s\n",
@@ -32,8 +31,7 @@ void mem_check(const void *p, const char *what, const srcpos_t *pos)
 
 // Ausgabe eines Fehlers im Turtle-Programm an Stelle pos & Programmende
 // (mit variabel vielen Parametern wie printf)
-void code_error(const srcpos_t *pos, const char *format, ...)
-{
+void code_error(const srcpos_t *pos, const char *format, ...) {
     va_list arg_p;
 
     printf("Fehler in Zeile %d, Spalte %d: ", pos->line, pos->col);
@@ -44,8 +42,7 @@ void code_error(const srcpos_t *pos, const char *format, ...)
     exit(EXIT_FAILURE);
 }
 
-int main(int argc, const char *argv[])
-{
+int main(int argc, const char *argv[]) {
     if (argc < 2) {
         fprintf(stderr, "Aufruf: %s Programm-Datei [Zahlen ...]\n", argv[0]);
         exit(EXIT_FAILURE);

@@ -1,3 +1,7 @@
 # ninja log v5
-0	40	1646737727219361314	CMakeFiles/compilerbau_pkk.dir/turtle-nametab.c.o	c3a07f1230f39707
-0	43	1646737727222694647	CMakeFiles/compilerbau_pkk.dir/main.c.o	6bf61f732940dbeb
+1	94	1646738284845995281	CMakeFiles/compilerbau_pkk.dir/turtle-eval.c.o	6aa9258d0e36ba4f
+0	41	1646738284792661950	CMakeFiles/compilerbau_pkk.dir/main.c.o	c54883d64514f15e
+0	25	1646738443752652630	build.ninja	6100679d29845b9d
+1	36	1646738284789328618	CMakeFiles/compilerbau_pkk.dir/turtle-nametab.c.o	a030e6a209339e65
+0	311	1646738388529322533	CMakeFiles/compilerbau_pkk.dir/sdlinterf.c.o	729b1f4604b8ed58
+0	26	1646738443752652630	build.ninja	6100679d29845b9d
