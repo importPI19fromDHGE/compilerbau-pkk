@@ -42,6 +42,8 @@ void code_error(const srcpos_t *pos, const char *format, ...) {
     exit(EXIT_FAILURE);
 }
 
+
+
 int main(int argc, const char *argv[]) {
     if (argc < 2) {
         fprintf(stderr, "Aufruf: %s Programm-Datei [Zahlen ...]\n", argv[0]);
