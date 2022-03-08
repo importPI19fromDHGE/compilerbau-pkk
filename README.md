@@ -12,3 +12,17 @@
 
 - cmake init
 - sdl einbinden + kusche header
+
+## Token-Übersetzung
+
+| Original | iel |
+| -------- | --- |
+
+## EBNF
+
+```txt
+PROGRAM ::= { PATHDEF | CALCDEF } begin STATEMENTS end
+PATHDEF ::= path NAME [ ([ PARAMS ]) ] STATEMENTS endpath
+CALCDEF ::= calculation NAME ([ PARAMS ]) [ STATEMENTS ] returns EXPR endcalc
+
+```

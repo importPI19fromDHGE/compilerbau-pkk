@@ -42,7 +42,9 @@ void code_error(const srcpos_t *pos, const char *format, ...) {
     exit(EXIT_FAILURE);
 }
 
+treenode_t *parse(void){
 
+}
 
 int main(int argc, const char *argv[]) {
     if (argc < 2) {
