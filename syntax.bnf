@@ -1,0 +1,15 @@
+PROGRAM    ::= { PATHDEF | CALCDEF } begin STATEMENTS end
+PATHDEF    ::= path NAME [ "("[ PARAMS ]")" ] STATEMENTS endpath
+CALCDEF    ::= calculation NAME "("[ PARAMS ]")" [ STATEMENTS ] returns EXPR endcalc
+PARAMS     ::= [ VAR { "," VAR } ] /*Parameter-Liste für jede Funktion erforderlich für Eindeutigkeit der Namen*/
+BUCHST ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
+ZIFFER ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+NAME       ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }
+VAR        ::= NAME
+COND       ::=
+EXPR       ::= TERM { ( "-" | "+" ) TERM }
+TERM       ::= FAKTOR { ( "*" | "/" ) FAKTOR }
+FAKTOR     ::= <operand> [ "^" FAKTOR ]
+OPERAND    ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "(" EXPR ")" | "|" EXPR "|" | "[" EXPR "]" | <value> | <var> )
+ARGS       ::= [ EXPR { "," EXPR } ]
+STATEMENTS ::=
