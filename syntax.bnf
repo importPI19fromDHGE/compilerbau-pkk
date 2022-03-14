@@ -1,15 +1,27 @@
-PROGRAM    ::= { PATHDEF | CALCDEF } begin STATEMENTS end
-PATHDEF    ::= path NAME [ "("[ PARAMS ]")" ] STATEMENTS endpath
-CALCDEF    ::= calculation NAME "("[ PARAMS ]")" [ STATEMENTS ] returns EXPR endcalc
+PROGRAM    ::= { PATHDEF | CALCDEF } "begin" STATEMENTS "end"
+PATHDEF    ::= "path" NAME [ "("[ PARAMS ]")" ] STATEMENTS "endpath"
+CALCDEF    ::= "calculation" NAME "("[ PARAMS ]")" [ STATEMENTS ] "returns" EXPR "endcalc"
 PARAMS     ::= [ VAR { "," VAR } ] /*Parameter-Liste für jede Funktion erforderlich für Eindeutigkeit der Namen*/
 BUCHST     ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
 ZIFFER     ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 NAME       ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }
 VAR        ::= NAME
-COND       ::=
+COLOR      ::= ZIFFER [ZIFFER [ZIFFER]] "," ZIFFER [ZIFFER [ZIFFER]] "," ZIFFER [ZIFFER [ZIFFER]]
+COND       ::= ("(" COND_S ")") | COND_S
+COND_S     ::= EXPR ("<" | ">" | "<=" | ">=" | "=" | "<>") EXPR {("not" | "and" | "or") COND_S}
 EXPR       ::= TERM { ( "-" | "+" ) TERM }
 TERM       ::= FAKTOR { ( "*" | "/" ) FAKTOR }
-FAKTOR     ::= <operand> [ "^" FAKTOR ]
-OPERAND    ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "(" EXPR ")" | "|" EXPR "|" | "[" EXPR "]" | <value> | <var> )
+FAKTOR     ::= OPERAND [ "^" FAKTOR ]
+OPERAND    ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "(" EXPR ")" | "|" EXPR "|" | "[" EXPR "]" | ZIFFER {ZIFFER} ["." {ZIFFER}] | VAR )
 ARGS       ::= [ EXPR { "," EXPR } ]
-STATEMENTS ::=
+STATEMENTS ::= STATEMENT { STATEMENT } [COMMENT]
+STATEMENT  ::= DRAW_CMD | MARK_CMD | CALC_CMD | IF_CMD | TIMES_CMD | CNT_CMD | WHILE_CMD | REPEAT_CMD
+DRAW_CMD   ::= (("walk" ["back" | "home"]) | ("jump" ["back" | "home"]) | ("turn" ["left" | "right"]) | "direction" EXPR) | ("color" COLOR) | "clear" | "stop" | "finish" | ("path" NAME ["(" ARGS ")"])
+MARK_CMD   ::= ("mark") | ("walk mark") | ("jump mark")
+CALC_CMD   ::= ("store" EXPR "in" VAR) | ("add" EXPR "to" VAR) | ("sub" EXPR "from" VAR) | ("mul" VAR "by" EXPR) | ("div" VAR "by" EXPR)
+IF_CMD     ::= "if" COND "then" STATEMENTS ["else" STATEMENTS] "endif"
+TIMES_CMD  ::= "do" EXPR "times" STATEMENTS "done"
+CNT_CMD    ::= "counter" VAR "from" EXPR ("to" | "downto") EXPR ["step" EXPR] "do" STATEMENTS "done"
+WHILE_CMD  ::= "while" COND "do" STATEMENTS "done"
+REPEAT_CMD ::= "repeat" STATEMENTS "until" COND
+COMMENT    ::= "\"" {BUCHST | ZIFFER | "_" | "@" | "*" | "/" | "(" | ")" | "[" | "]" | "+" | "-" | "," | "." | ">" | "<" | "=" | "%" | "\"" | "'"} "\n"
