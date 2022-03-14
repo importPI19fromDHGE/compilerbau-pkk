@@ -11,13 +11,17 @@
 #include <stdarg.h>
 
 #include "turtle.h"
+#include "lexer.h"
 
 // Global: Der Sourcefile & der Programmname
-FILE *src_file;
+char *input_buf;
+long input_buf_length;
 const char *prog_name;
 
+// Array-Index des Beginns der aktuellen Zeile
+
 // Prüfe ob malloc/calloc/realloc erfolgreich war:
-// Fehlermeldung und Programmende wenn p gleich NULL ist
+// Fehlermeldung und Programmende, wenn p gleich NULL ist
 // what ... was wurde gerade angelegt?
 // pos ... für welche Stelle im Source?
 void mem_check(const void *p, const char *what, const srcpos_t *pos) {
@@ -43,7 +47,22 @@ void code_error(const srcpos_t *pos, const char *format, ...) {
 }
 
 treenode_t *parse(void){
+    lex();
+    //todo: parse
+}
 
+void read_from_file(FILE *src_file) {
+    // read src_file
+    // https://stackoverflow.com/questions/174531/how-to-read-the-content-of-a-file-to-a-string-in-c
+    if (src_file) {
+        fseek(src_file, 0, SEEK_END);
+        input_buf_length = ftell(src_file);
+        fseek(src_file, 0, SEEK_SET);
+        input_buf = malloc(input_buf_length);
+        if (input_buf) {
+            fread(input_buf, 1, input_buf_length, src_file);
+        }
+    }
 }
 
 int main(int argc, const char *argv[]) {
@@ -58,12 +77,15 @@ int main(int argc, const char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    src_file = fopen(argv[1], "r");
-    if (src_file == NULL) {
+    FILE *file = fopen(argv[1], "r");
+    if (file == NULL) {
         fprintf(stderr, "%s: Fehler beim Öffnen von %s zum Lesen: %s\n",
                 argv[0], argv[1], strerror(errno));
         exit(EXIT_FAILURE);
     }
+
+    read_from_file(file);
+    fclose(file);
 
     prog_name = argv[0];
 

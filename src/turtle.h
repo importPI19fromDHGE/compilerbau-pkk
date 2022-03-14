@@ -15,13 +15,13 @@
 // turtle-main.c
 ///////////////////////////////////////////////////////////////////////////////
 
-// Der Sourcefile
-extern FILE *src_file;
 // Globaler Programmname für Fehlermeldungen
 extern const char *prog_name;
+extern char *input_buf;
+extern long input_buf_length;
 
 // Prüfe ob malloc/calloc/realloc erfolgreich war:
-// Fehlermeldung und Programmende wenn p gleich NULL ist
+// Fehlermeldung und Programmende, wenn p gleich NULL ist
 // what ... was wurde gerade angelegt?
 // pos ... für welche Stelle im Source?
 extern void mem_check(const void *p, const char *what, const srcpos_t *pos);

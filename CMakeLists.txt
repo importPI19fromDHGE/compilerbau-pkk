@@ -13,7 +13,7 @@ add_executable(compilerbau_pkk
         src/turtle-types.h
         src/turtle.h
         src/sdlinterf.h
-        )
+        src/lexer.c)
 INCLUDE(FindPkgConfig)
 
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
