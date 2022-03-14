@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>GRAMMAR</ID>
+  <OriginalElement>file:///home/max/GitHub/compilerbau-pkk/syntax.bnf</OriginalElement>
+  <nodes>
+    <node x="347.9559985632185" y="0.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=ZIFFER</node>
+    <node x="163.3934985632185" y="1252.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=IF_CMD</node>
+    <node x="892.6434985632185" y="1252.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=TIMES_CMD</node>
+    <node x="803.3934985632185" y="93.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=NAME</node>
+    <node x="384.0337045019146" y="507.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=FAKTOR</node>
+    <node x="189.82177921455826" y="926.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=ARGS</node>
+    <node x="694.6434985632185" y="1252.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=WHILE_CMD</node>
+    <node x="818.1434985632185" y="901.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CNT_CMD</node>
+    <node x="1057.3101652298851" y="1700.5">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PARAMS</node>
+    <node x="491.3934985632185" y="1252.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=REPEAT_CMD</node>
+    <node x="616.6434985632185" y="913.5">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALC_CMD</node>
+    <node x="332.3934985632185" y="1278.5">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=MARK_CMD</node>
+    <node x="462.00921934866017" y="1101.5">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND</node>
+    <node x="496.6795378352479" y="2032.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PROGRAM</node>
+    <node x="440.1795378352479" y="1858.5">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PATHDEF</node>
+    <node x="570.0624999999999" y="1400.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT</node>
+    <node x="1067.0717792145583" y="93.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COMMENT</node>
+    <node x="412.5337045019146" y="645.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=TERM</node>
+    <node x="873.6758860153268" y="1688.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS</node>
+    <node x="820.2592193486602" y="231.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=VAR</node>
+    <node x="1109.4258860153268" y="1846.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALCDEF</node>
+    <node x="333.7837045019146" y="344.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=OPERAND</node>
+    <node x="33.672294061303774" y="1064.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=DRAW_CMD</node>
+    <node x="879.3934985632185" y="0.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=BUCHST</node>
+    <node x="361.7837045019146" y="758.0">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR</node>
+    <node x="0.0" y="105.5">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COLOR</node>
+    <node x="427.25921934866017" y="913.5">file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND_S</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=REPEAT_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" relationship="CONTAINS">
+      <point x="38.25" y="42.0" />
+      <point x="606.1434985632185" y="1378.0" />
+      <point x="959.6434985632185" y="1378.0" />
+      <point x="959.6434985632185" y="1656.0" />
+      <point x="992.8934985632185" y="1656.0" />
+      <point x="992.8934985632185" y="1666.0" />
+      <point x="949.6758860153268" y="1666.0" />
+      <point x="0.0" y="-42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PATHDEF" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" relationship="CONTAINS">
+      <point x="-34.0" y="-54.5" />
+      <point x="474.1795378352479" y="1824.0" />
+      <point x="18.672294061303774" y="1824.0" />
+      <point x="18.672294061303774" y="1814.0" />
+      <point x="1.5092193486600536" y="1814.0" />
+      <point x="1.5092193486600536" y="1804.0" />
+      <point x="911.6758860153268" y="1804.0" />
+      <point x="-38.0" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=WHILE_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" relationship="CONTAINS">
+      <point x="36.75" y="42.0" />
+      <point x="804.8934985632185" y="1368.0" />
+      <point x="969.6434985632185" y="1368.0" />
+      <point x="969.6434985632185" y="1656.0" />
+      <point x="992.8934985632185" y="1656.0" />
+      <point x="992.8934985632185" y="1666.0" />
+      <point x="949.6758860153268" y="1666.0" />
+      <point x="0.0" y="-42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" relationship="CONTAINS">
+      <point x="-50.66666666666663" y="-42.0" />
+      <point x="899.0092193486603" y="1666.0" />
+      <point x="371.0962045019146" y="1666.0" />
+      <point x="371.0962045019146" y="1656.0" />
+      <point x="643.5624999999999" y="1656.0" />
+      <point x="0.0" y="117.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=TIMES_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="964.6434985632185" y="839.0" />
+      <point x="450.1587045019146" y="839.0" />
+      <point x="37.875" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PATHDEF" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=NAME" relationship="CONTAINS">
+      <point x="-34.0" y="-54.5" />
+      <point x="474.1795378352479" y="1824.0" />
+      <point x="18.672294061303774" y="1824.0" />
+      <point x="18.672294061303774" y="209.0" />
+      <point x="891.1434985632185" y="209.0" />
+      <point x="29.25" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CNT_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" relationship="CONTAINS">
+      <point x="34.0" y="54.5" />
+      <point x="920.1434985632185" y="1037.0" />
+      <point x="1084.4712045019146" y="1037.0" />
+      <point x="1084.4712045019146" y="1656.0" />
+      <point x="992.8934985632185" y="1656.0" />
+      <point x="992.8934985632185" y="1666.0" />
+      <point x="949.6758860153268" y="1666.0" />
+      <point x="0.0" y="-42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALCDEF" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" relationship="CONTAINS">
+      <point x="-37.0" y="-67.0" />
+      <point x="1146.4258860153268" y="1824.0" />
+      <point x="1097.6875" y="1824.0" />
+      <point x="1097.6875" y="1814.0" />
+      <point x="987.6758860153268" y="1814.0" />
+      <point x="38.0" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND_S" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="484.75921934866017" y="869.0" />
+      <point x="548.1342193486602" y="869.0" />
+      <point x="548.1342193486602" y="859.0" />
+      <point x="424.9087045019146" y="859.0" />
+      <point x="12.625" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=OPERAND" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" relationship="CONTAINS">
+      <point x="-32.0" y="54.5" />
+      <point x="365.7837045019146" y="480.0" />
+      <point x="353.5337045019146" y="480.0" />
+      <point x="353.5337045019146" y="731.0" />
+      <point x="387.0337045019146" y="731.0" />
+      <point x="-25.25" y="-29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=TERM" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=FAKTOR" relationship="CONTAINS">
+      <point x="0.0" y="-29.5" />
+      <point x="29.0" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=IF_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND" relationship="CONTAINS">
+      <point x="1.1368683772161603E-13" y="-42.0" />
+      <point x="237.8934985632186" y="1225.0" />
+      <point x="513.5092193486602" y="1225.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=VAR" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=NAME" relationship="CONTAINS">
+      <point x="0.0" y="-29.5" />
+      <point x="865.7592193486602" y="209.0" />
+      <point x="891.1434985632185" y="209.0" />
+      <point x="29.25" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=DRAW_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=ARGS" relationship="CONTAINS">
+      <point x="0.0" y="-67.0" />
+      <point x="105.17229406130377" y="1037.0" />
+      <point x="238.82177921455826" y="1037.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=NAME" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=BUCHST" relationship="CONTAINS">
+      <point x="29.25" y="-42.0" />
+      <point x="891.1434985632185" y="72.0" />
+      <point x="907.6434985632185" y="72.0" />
+      <point x="-28.25" y="15.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CNT_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=VAR" relationship="CONTAINS">
+      <point x="34.0" y="-54.5" />
+      <point x="920.1434985632185" y="849.0" />
+      <point x="896.1434985632185" y="849.0" />
+      <point x="896.1434985632185" y="322.0" />
+      <point x="865.7592193486602" y="322.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALCDEF" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" relationship="CONTAINS">
+      <point x="37.0" y="-67.0" />
+      <point x="1220.4258860153268" y="1824.0" />
+      <point x="1230.8217792145583" y="1824.0" />
+      <point x="1230.8217792145583" y="849.0" />
+      <point x="964.6434985632185" y="849.0" />
+      <point x="964.6434985632185" y="839.0" />
+      <point x="450.1587045019146" y="839.0" />
+      <point x="37.875" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALC_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=VAR" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="684.1434985632185" y="879.0" />
+      <point x="711.6097940613038" y="879.0" />
+      <point x="711.6097940613038" y="322.0" />
+      <point x="865.7592193486602" y="322.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PATHDEF" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PARAMS" relationship="CONTAINS">
+      <point x="34.0" y="-54.5" />
+      <point x="542.1795378352479" y="1824.0" />
+      <point x="1040.6758860153268" y="1824.0" />
+      <point x="1040.6758860153268" y="1794.0" />
+      <point x="1115.3101652298851" y="1794.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COMMENT" relationship="CONTAINS">
+      <point x="50.66666666666663" y="-42.0" />
+      <point x="1000.3425526819935" y="1666.0" />
+      <point x="1095.4712045019146" y="1666.0" />
+      <point x="1095.4712045019146" y="199.0" />
+      <point x="1134.5717792145583" y="199.0" />
+      <point x="0.0" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=REPEAT_CMD" relationship="CONTAINS">
+      <point x="0.0" y="-117.0" />
+      <point x="643.5624999999999" y="1358.0" />
+      <point x="529.6434985632185" y="1358.0" />
+      <point x="-38.25" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALCDEF" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=NAME" relationship="CONTAINS">
+      <point x="37.0" y="-67.0" />
+      <point x="1220.4258860153268" y="1824.0" />
+      <point x="1230.8217792145583" y="1824.0" />
+      <point x="1230.8217792145583" y="209.0" />
+      <point x="891.1434985632185" y="209.0" />
+      <point x="29.25" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=DRAW_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COLOR" relationship="CONTAINS">
+      <point x="0.0" y="-67.0" />
+      <point x="105.17229406130377" y="1037.0" />
+      <point x="54.0" y="1037.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PROGRAM" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALCDEF" relationship="CONTAINS">
+      <point x="34.0" y="-54.5" />
+      <point x="598.6795378352479" y="2011.0" />
+      <point x="603.9295378352479" y="2011.0" />
+      <point x="603.9295378352479" y="2001.0" />
+      <point x="1183.4258860153268" y="2001.0" />
+      <point x="0.0" y="67.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=OPERAND" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=ZIFFER" relationship="CONTAINS">
+      <point x="-32.0" y="-54.5" />
+      <point x="365.7837045019146" y="322.0" />
+      <point x="392.5337045019146" y="322.0" />
+      <point x="392.5337045019146" y="72.0" />
+      <point x="397.9559985632185" y="72.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COMMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=ZIFFER" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="1134.5717792145583" y="62.0" />
+      <point x="856.8934985632185" y="62.0" />
+      <point x="856.8934985632185" y="52.0" />
+      <point x="431.28933189655186" y="52.0" />
+      <point x="33.33333333333337" y="15.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=IF_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" relationship="CONTAINS">
+      <point x="-37.25" y="42.0" />
+      <point x="200.6434985632185" y="1378.0" />
+      <point x="88.00921934866005" y="1378.0" />
+      <point x="88.00921934866005" y="1656.0" />
+      <point x="371.0962045019146" y="1656.0" />
+      <point x="371.0962045019146" y="1666.0" />
+      <point x="899.0092193486603" y="1666.0" />
+      <point x="-50.66666666666663" y="-42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=FAKTOR" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=FAKTOR" relationship="CONTAINS">
+      <point x="-29.0" y="42.0" />
+      <point x="413.0337045019146" y="611.0" />
+      <point x="364.0337045019146" y="611.0" />
+      <point x="364.0337045019146" y="549.0" />
+      <point x="-58.0" y="-0.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PROGRAM" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" relationship="CONTAINS">
+      <point x="-34.0" y="-54.5" />
+      <point x="530.6795378352479" y="2011.0" />
+      <point x="1.5092193486600536" y="2011.0" />
+      <point x="1.5092193486600536" y="1804.0" />
+      <point x="911.6758860153268" y="1804.0" />
+      <point x="-38.0" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=WHILE_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="768.1434985632185" y="1225.0" />
+      <point x="513.5092193486602" y="1225.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COMMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=BUCHST" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="1134.5717792145583" y="52.0" />
+      <point x="964.1434985632185" y="52.0" />
+      <point x="28.25" y="15.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALC_CMD" relationship="CONTAINS">
+      <point x="0.0" y="-117.0" />
+      <point x="643.5624999999999" y="1358.0" />
+      <point x="684.1434985632185" y="1358.0" />
+      <point x="0.0" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALCDEF" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PARAMS" relationship="CONTAINS">
+      <point x="-37.0" y="-67.0" />
+      <point x="1146.4258860153268" y="1824.0" />
+      <point x="1097.6875" y="1824.0" />
+      <point x="1097.6875" y="1804.0" />
+      <point x="1040.6758860153268" y="1804.0" />
+      <point x="1040.6758860153268" y="1794.0" />
+      <point x="1115.3101652298851" y="1794.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=MARK_CMD" relationship="CONTAINS">
+      <point x="0.0" y="-117.0" />
+      <point x="643.5624999999999" y="1358.0" />
+      <point x="401.8934985632185" y="1358.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=OPERAND" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=VAR" relationship="CONTAINS">
+      <point x="32.0" y="-54.5" />
+      <point x="429.7837045019146" y="312.0" />
+      <point x="835.4258860153268" y="312.0" />
+      <point x="-30.333333333333314" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=FAKTOR" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=OPERAND" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="442.0337045019146" y="480.0" />
+      <point x="429.7837045019146" y="480.0" />
+      <point x="32.0" y="54.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=TERM" relationship="CONTAINS">
+      <point x="25.25" y="-29.5" />
+      <point x="437.5337045019146" y="731.0" />
+      <point x="471.0337045019146" y="731.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND_S" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND_S" relationship="CONTAINS">
+      <point x="-28.75" y="42.0" />
+      <point x="456.00921934866017" y="1017.5" />
+      <point x="407.25921934866017" y="1017.5" />
+      <point x="407.25921934866017" y="955.5" />
+      <point x="-57.5" y="-0.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=ARGS" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" relationship="CONTAINS">
+      <point x="0.0" y="-29.5" />
+      <point x="238.82177921455826" y="879.0" />
+      <point x="399.6587045019146" y="879.0" />
+      <point x="-12.625" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND_S" relationship="CONTAINS">
+      <point x="0.0" y="-29.5" />
+      <point x="28.75" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=DRAW_CMD" relationship="CONTAINS">
+      <point x="0.0" y="-117.0" />
+      <point x="643.5624999999999" y="1358.0" />
+      <point x="105.17229406130377" y="1358.0" />
+      <point x="0.0" y="67.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=NAME" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=ZIFFER" relationship="CONTAINS">
+      <point x="-29.25" y="-42.0" />
+      <point x="832.6434985632185" y="72.0" />
+      <point x="856.8934985632185" y="72.0" />
+      <point x="856.8934985632185" y="52.0" />
+      <point x="431.28933189655186" y="52.0" />
+      <point x="33.33333333333337" y="15.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=TIMES_CMD" relationship="CONTAINS">
+      <point x="0.0" y="-117.0" />
+      <point x="643.5624999999999" y="1358.0" />
+      <point x="928.6434985632185" y="1358.0" />
+      <point x="-36.0" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PARAMS" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=VAR" relationship="CONTAINS">
+      <point x="0.0" y="-29.5" />
+      <point x="1115.3101652298851" y="312.0" />
+      <point x="896.0925526819935" y="312.0" />
+      <point x="30.333333333333314" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CALC_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="684.1434985632185" y="879.0" />
+      <point x="711.6097940613038" y="879.0" />
+      <point x="711.6097940613038" y="859.0" />
+      <point x="964.6434985632185" y="859.0" />
+      <point x="964.6434985632185" y="839.0" />
+      <point x="450.1587045019146" y="839.0" />
+      <point x="37.875" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=IF_CMD" relationship="CONTAINS">
+      <point x="0.0" y="-117.0" />
+      <point x="643.5624999999999" y="1358.0" />
+      <point x="275.1434985632186" y="1358.0" />
+      <point x="37.250000000000114" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=REPEAT_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COND" relationship="CONTAINS">
+      <point x="0.0" y="-42.0" />
+      <point x="567.8934985632185" y="1225.0" />
+      <point x="513.5092193486602" y="1225.0" />
+      <point x="0.0" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PROGRAM" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=PATHDEF" relationship="CONTAINS">
+      <point x="34.0" y="-54.5" />
+      <point x="598.6795378352479" y="2011.0" />
+      <point x="603.9295378352479" y="2011.0" />
+      <point x="603.9295378352479" y="2001.0" />
+      <point x="508.1795378352479" y="2001.0" />
+      <point x="0.0" y="54.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CNT_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" relationship="CONTAINS">
+      <point x="-34.0" y="-54.5" />
+      <point x="852.1434985632185" y="869.0" />
+      <point x="548.1342193486602" y="869.0" />
+      <point x="548.1342193486602" y="859.0" />
+      <point x="424.9087045019146" y="859.0" />
+      <point x="12.625" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=DRAW_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=NAME" relationship="CONTAINS">
+      <point x="0.0" y="-67.0" />
+      <point x="105.17229406130377" y="1037.0" />
+      <point x="94.5" y="1037.0" />
+      <point x="94.5" y="199.0" />
+      <point x="832.6434985632185" y="199.0" />
+      <point x="-29.25" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=TIMES_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENTS" relationship="CONTAINS">
+      <point x="36.0" y="42.0" />
+      <point x="1000.6434985632185" y="1378.0" />
+      <point x="979.6434985632185" y="1378.0" />
+      <point x="979.6434985632185" y="1656.0" />
+      <point x="992.8934985632185" y="1656.0" />
+      <point x="992.8934985632185" y="1666.0" />
+      <point x="949.6758860153268" y="1666.0" />
+      <point x="0.0" y="-42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=WHILE_CMD" relationship="CONTAINS">
+      <point x="0.0" y="-117.0" />
+      <point x="643.5624999999999" y="1358.0" />
+      <point x="731.3934985632185" y="1358.0" />
+      <point x="-36.75" y="42.0" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=DRAW_CMD" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=EXPR" relationship="CONTAINS">
+      <point x="0.0" y="-67.0" />
+      <point x="105.17229406130377" y="1037.0" />
+      <point x="114.6875" y="1037.0" />
+      <point x="114.6875" y="869.0" />
+      <point x="374.4087045019146" y="869.0" />
+      <point x="-37.875" y="29.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=STATEMENT" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=CNT_CMD" relationship="CONTAINS">
+      <point x="0.0" y="-117.0" />
+      <point x="643.5624999999999" y="1358.0" />
+      <point x="852.1434985632185" y="1358.0" />
+      <point x="-34.0" y="54.5" />
+    </edge>
+    <edge source="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=COLOR" target="file:///home/max/GitHub/compilerbau-pkk/syntax.bnf?rule=ZIFFER" relationship="CONTAINS">
+      <point x="0.0" y="-29.5" />
+      <point x="54.0" y="72.0" />
+      <point x="364.6226652298851" y="72.0" />
+      <point x="-33.33333333333337" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.3975011568718186" showDependencies="false" x="629.0" y="1070.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Properties</Category>
+  </Categories>
+</Diagram>
+
