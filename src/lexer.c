@@ -27,7 +27,7 @@ void lex(void) {
             if (now_reading_word) { // previous char was not whitespace aka a word just ended
                 now_reading_word = false;
                 token_length = pos - pos_word_start;
-                token = malloc(char * token_length);
+                token = malloc(sizeof(char) * token_length);
                 for (int i = 0; i < token_length; i++) {
                     token[i] = input_buf[pos_word_start + i];
                 }
