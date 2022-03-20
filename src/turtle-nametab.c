@@ -11,6 +11,10 @@
 
 #include "turtle.h"
 
+// number of entries in name_tab
+// has to be incremented, when adding a new name to the tab
+int name_tab_length = 70;
+
 // Das Array für alle Namen
 // ein linear durchsuchtes Array ist performancemäßig eine Katastrophe
 // (und limitiert die Anzahl der Namen),

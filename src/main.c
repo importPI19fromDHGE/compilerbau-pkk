@@ -17,6 +17,7 @@
 char *input_buf;
 long input_buf_length;
 const char *prog_name;
+Array token_stream;
 
 // Array-Index des Beginns der aktuellen Zeile
 
@@ -90,7 +91,7 @@ int main(int argc, const char *argv[]) {
 
     prog_name = argv[0];
 
-    evaluate(parse(), argc - 2, &(argv[2]));
+    evaluate(lex_parse(), argc - 2, &(argv[2]));
 
     exit(EXIT_SUCCESS);
 }

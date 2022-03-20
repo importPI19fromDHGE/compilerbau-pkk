@@ -35,6 +35,24 @@ void lex(void) {
                 // current token string done, print it
                 printf("%s\n", token);
                 // todo: handle finished token
+                int name_index = 0; // this stores the name_tab array index
+                bool token_found = false;
+
+                // name_index ist bei nicht gefundenen Tokens am Ende des Arrays
+                for(name_index = 0; name_index < name_tab_length; name_index++) { // lineare Suche durch die Nametab
+                    if (strcmp(token, name_tab[name_index].name) == 0) { // token matches
+                        token_found = true;
+                        break;
+                    }
+                }
+
+                if (!token_found) { // name is not in name_tab, insert it
+                    name_index++;
+//                    name_tab[name_index];
+                }
+
+                // token_stream mit name_tab index befüllen;
+                insertArray(&token_stream, &(name_tab[name_index]));
             }
 
             if (input_buf[pos] == '\n') { // Sonderfall Newline

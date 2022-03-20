@@ -39,6 +39,7 @@ void code_error(const srcpos_t *pos, const char *format, ...);
 #define MAX_NAMES 1000
 
 // die zentrale Namenstabelle
+extern int name_tab_length;
 extern nameentry_t name_tab[MAX_NAMES];
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,7 +49,7 @@ extern nameentry_t name_tab[MAX_NAMES];
 // Sourcefile komplett einlesen, lexen und parsen
 // Die Syntaxbäume von Funktionen werden in der Namenstabelle eingetragen
 // Der Returnwert ist der Syntaxbaum des Hauptprogrammes
-extern treenode_t *parse(void);
+extern treenode_t *lex_parse(void);
 
 ///////////////////////////////////////////////////////////////////////////////
 // turtle-eval.c
@@ -74,5 +75,11 @@ extern double g_red, g_green, g_blue; // Farbe des Striches
 // (ohne Programmname und Sourcefile-Name)
 extern void evaluate(const treenode_t *main_tree,
                      int arg_cnt, const char *arg_val[]);
+
+///////////////////////////////////////////////////////////////////////////////
+// global
+///////////////////////////////////////////////////////////////////////////////
+
+extern Array token_stream;
 
 #endif
