@@ -12,13 +12,12 @@
 void lex(void) {
     char *token;
     int pos_word_start = 0;
-    int token_length = 0;
+    int token_length = 0; // für malloc und String-OPs
     // debugging
     int line_no = 1; // Zeilennummer für Fehlerbehandlung
     int col_no = 0;  // Spaltennummer für Fehlerbehandlung
-    bool now_reading_word = false;
+    bool now_reading_word = false; // benötigt, um zu erkennen, ob wir ein Wort lesen, weil mehrere Whitespaces erlaubt sind
 
-    // i => pos_current
     for (int pos = 0; pos < input_buf_length; pos++) {
         // todo: comments
         col_no++;
