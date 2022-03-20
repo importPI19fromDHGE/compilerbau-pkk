@@ -46,7 +46,8 @@ void code_error(const srcpos_t *pos, const char *format, ...) {
     exit(EXIT_FAILURE);
 }
 
-treenode_t *parse(void){
+treenode_t *lex_parse(void){
+    initArray(&token_stream, 1000);
     lex();
     //todo: parse
 }
