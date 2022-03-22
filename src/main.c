@@ -91,7 +91,8 @@ int main(int argc, const char *argv[]) {
 
     prog_name = argv[0];
 
-    evaluate(lex_parse(), argc - 2, &(argv[2]));
+    lex_parse();
+    // evaluate(lex_parse(), argc - 2, &(argv[2]));
 
     exit(EXIT_SUCCESS);
 }

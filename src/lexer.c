@@ -28,12 +28,14 @@ void lex(void) {
             if (now_reading_word) { // previous char was not whitespace aka a word just ended
                 now_reading_word = false;
                 token_length = pos - pos_word_start;
-                token = malloc(sizeof(char) * token_length); //TODO Fehlerbehandlung
-                for (int i = 0; i < token_length; i++) {
+                token = malloc(sizeof(char) * (token_length + 1)); //TODO Fehlerbehandlung
+                /*for (int i = 0; i < token_length; i++) {
                     token[i] = input_buf[pos_word_start + i];
-                }
-                // current token string done, print it
-                printf("%s\n", token);
+                }*/
+                strncpy(token, input_buf + pos_word_start, token_length);
+                token[token_length] = '\0';
+
+                // current token string done
                 // todo: handle finished token
                 int name_index = 0; // this stores the name_tab array index
                 bool token_found = false;
@@ -53,10 +55,13 @@ void lex(void) {
 
                 // token_stream mit name_tab index befüllen;
                 insertArray(&token_stream, &(name_tab[name_index]));
+                // current token string done, print it
+                printf("Read: %s Save: %s\n", name_tab[name_index].name, token_stream.array[token_stream.used-1].name);
+                free(token);
             }
 
             if (input_buf[pos] == '\n') { // Sonderfall Newline
-                col_no = 1;
+                col_no = 0;
                 line_no++;
             }
             continue;
