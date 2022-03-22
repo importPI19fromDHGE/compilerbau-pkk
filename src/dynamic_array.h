@@ -10,13 +10,13 @@
 #include "turtle-types.h"
 
 typedef struct {
-    nameentry_t *array;
+    token_t *array;
     size_t used;
     size_t size;
 } Array;
 
 void initArray(Array *a, size_t initialSize);
-void insertArray(Array *a, nameentry_t *element);
+void insertArray(Array *a, token_t element);
 void freeArray(Array *a);
 
 #endif //COMPILERBAU_PKK_DYNAMIC_ARRAY_H
