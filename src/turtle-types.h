@@ -114,7 +114,7 @@ typedef enum {
     oper_less,   // <
     oper_lequ,   // <=
     oper_grtr,   // >
-    oper_gequ,   // >
+    oper_gequ,   // >=
 } type_t;
 
 
