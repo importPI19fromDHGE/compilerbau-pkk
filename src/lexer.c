@@ -74,12 +74,13 @@ int read_word(const int current_pos) {
     }
     // ignore spaces
     if (isspace(input_buf[start_pos])) { //TODO: line_nr
+        if (input_buf[start_pos] == '\n') {
+            line_nr++;
+            col_nr = 1;
+        } else {
+            col_nr++;
+        }
         return start_pos + 1;
-    }
-
-    if (word_count > 0) {
-        col_nr = words[word_count].col_nr;
-        line_nr = words[word_count].line_nr;
     }
 
     // fill struct
@@ -89,6 +90,8 @@ int read_word(const int current_pos) {
         col_nr,
         line_nr
     };
+
+    col_nr += word_len;
 
     // write to words array
     words[word_count] = word;
