@@ -30,6 +30,10 @@ delimiter_t delimiters[MAX_DELIMITER] = {
         {'|', false}
 };
 
+/// todo: documentation
+word_t *words;
+int word_count = 0;
+
 void recognise_token_type(const char *token) {
     // todo: is this is a number? --> oper_const
     // todo: is this in the nametab? --> add if it isn't
@@ -47,7 +51,7 @@ bool is_delimiter(char c) {
     return is_delimiter;
 }
 
-int read_word(int current_pos) {
+int read_word(const int current_pos) {
     int start_pos = current_pos;
     int counter;
 

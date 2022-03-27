@@ -25,7 +25,8 @@ typedef struct {
     bool needs_lookahead;
 } delimiter_t;
 
-word_t *words;
+extern int word_count;
+extern word_t *words;
 
 /// Reads a word and writes information to `words`
 /// \param current_pos start of the next word
