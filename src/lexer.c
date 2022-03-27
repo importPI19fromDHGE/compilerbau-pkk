@@ -34,6 +34,8 @@ delimiter_t delimiters[MAX_DELIMITER] = {
 word_t *words;
 int word_count = 0;
 
+int line_nr = 1, col_nr = 1;
+
 void recognise_token_type(const char *token) {
     // todo: is this is a number? --> oper_const
     // todo: is this in the nametab? --> add if it isn't
@@ -53,12 +55,48 @@ bool is_delimiter(char c) {
 
 int read_word(const int current_pos) {
     int start_pos = current_pos;
-    int counter;
+    int word_len = 0;
 
-    for (counter = 0; !is_delimiter(input_buf[current_pos]); counter++) {}
-    // todo: fill struct
+    while (!is_delimiter(input_buf[current_pos + word_len])) {
+        word_len++;
+    }
 
-    return counter+1;
+    if (word_len == 0) {
+        word_len = 1;
+    }
+
+    // handle comments
+    if (input_buf[start_pos] == '"') {
+        while (input_buf[start_pos + word_len] != '\n') { //TODO: fix OOB-read when last char of file is "
+            word_len++;
+        }
+        return start_pos + word_len;
+    }
+    // ignore spaces
+    if (isspace(input_buf[start_pos])) { //TODO: line_nr
+        return start_pos + 1;
+    }
+
+    if (word_count > 0) {
+        col_nr = words[word_count].col_nr;
+        line_nr = words[word_count].line_nr;
+    }
+
+    // fill struct
+    word_t word = {
+        input_buf + start_pos,
+        (word_len > 0) ? word_len + 1 : word_len,
+        col_nr,
+        line_nr
+    };
+
+    // write to words array
+    words[word_count] = word;
+    printf("[ln: %d, col: %d] %.*s\n", word.line_nr, word.col_nr, word_len, word.word_ptr);
+
+    word_count++;
+
+    return current_pos + word_len;
 }
 
 void lex(void) {
