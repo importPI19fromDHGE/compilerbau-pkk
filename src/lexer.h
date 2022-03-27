@@ -29,9 +29,9 @@ extern int word_count;
 extern word_t *words;
 
 /// Reads a word and writes information to `words`
-/// \param current_pos start of the next word
+/// \param start_pos globales Offset zu input_buf
 /// \return position for the next `read_word` call
-int read_word(int current_pos);
+int read_word(int start_pos);
 
 /// Determines the type of a token.
 /// \param token
