@@ -4,10 +4,9 @@
 
 #include <ctype.h>
 #include <stdbool.h>
-#include <malloc.h>
 #include <string.h>
+#include <stdlib.h>
 
-#include "debug.h"
 #include "lexer.h"
 
 // global `char *input_buf` is the input source code
@@ -48,7 +47,7 @@ bool is_delimiter(char c) {
     return is_delimiter;
 }
 
-int read_word(const int start_pos) {// start_pos ist globales Offset zu input_buf
+int read_word(const int start_pos) { // start_pos ist globales Offset zu input_buf
     int word_len = 0;
 
     // todo: document buffer overflow check
@@ -82,8 +81,8 @@ int read_word(const int start_pos) {// start_pos ist globales Offset zu input_bu
     word_t word = {
         input_buf + start_pos,
         word_len,
-        col_nr,
-        line_nr
+        line_nr,
+        col_nr
     };
 
     col_nr += word_len;
@@ -170,7 +169,7 @@ type_t recognise_token_type(const char *word) {
 
 
 void lex(void) {
-    insertArray(&token_stream, (token_t) {tok_bofeof, -1});
+    insertArray(&token_stream, (token_t) {tok_bofeof});
     words = malloc(20000 * sizeof(word_t));
 
     int current_pos = 0;
@@ -181,16 +180,63 @@ void lex(void) {
     // ab hier gesamter Input getrennt
 
     for (int i = 0; i < word_count; i++) {
-        char word[words[i].length + 1];
-        memset(word, '\0', sizeof(word));
+        char *word = malloc((words[i].length + 1) * sizeof(char));
+        word[words[i].length] = '\0';
         strncpy(word, words[i].word_ptr, words[i].length);
         type_t token_type =  recognise_token_type(word);
 
-        printf("[ln: %d, col: %d] \"%.*s\" of type [%s]\n",
-               words[i].line_nr, words[i].col_nr, words[i].length, words[i].word_ptr,
-               DEBUG_TURTLE_TYPE_NAMES[token_type]);
+
+////////// rly unsure if this is useful to the whole situation but here are my thoughts
+        // todo: open problem to solve
+        //  - find solution to save numbers
+        //  - some const need a ref to name_tab but recognise_token_type only returns type
+        //      - for name_any we can just lookup the last name_tab entry cause we have to add every name_any
+        // fixme: current solution => added nodedata_t to token instead of name_tab_index so doubles can be saved
+
+        switch (token_type) {
+            case keyw_walk: case keyw_back: case keyw_home: case keyw_mark:
+                insertArray(&token_stream, (token_t) {
+                    token_type,
+                    words[i].pos,
+                    (nodedata_t) token_type
+                });
+                break;
+            // todo: constants which need ref to name_tab
+            // case name_pvar_ro: case name_pvar_rw:
+            // case name_math_sin: case name_math_cos: case name_math_tan: case name_math_sqrt: case name_math_rand:
+            //    insertArray(&token_stream,(token_t) {
+            //            token_type,
+            //            words[i].pos,
+            //            (nodedata_t) &name_tab[???]
+            //    });
+            //    break;
+            case name_any:
+                // if the type is name_any the word was added to the name_tab
+                // so the index is the len of name_tab minus 1
+                insertArray(&token_stream, (token_t) {
+                    token_type,
+                    words[i].pos,
+                    (nodedata_t) &name_tab[name_tab_length - 1]
+                });
+                break;
+            case oper_const: {
+                // conversion of word to double
+                char *_ignore;
+                insertArray(&token_stream, (token_t) {
+                    token_type,
+                    words[i].pos,
+                    (nodedata_t) strtod(words[i].word_ptr, &_ignore)
+                });
+                break;
+            }
+            default:
+                insertArray(&token_stream, (token_t) {
+                    token_type,
+                    words[i].pos
+                });
+                break;
+        }
     }
-
-
-    insertArray(&token_stream, (token_t) {tok_bofeof, -1});
+////////// end
+    insertArray(&token_stream, (token_t) {tok_bofeof});
 }

@@ -15,8 +15,7 @@ typedef struct {
     char *word_ptr;
     int length;
 
-    int col_nr; // counts from 1
-    int line_nr; // counts from 1
+    srcpos_t pos;
 } word_t;
 
 /// Represents a delimiting character and whether or not lookahead is required for proper type identification

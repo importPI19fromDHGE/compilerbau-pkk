@@ -239,7 +239,8 @@ struct _treenode {
 ///////////////////////////////////////////////////////////////////////////////
 typedef struct {
     type_t type;
-    int nameentry_index;
+    srcpos_t pos;
+    nodedata_t value;
 } token_t;
 
 #endif
