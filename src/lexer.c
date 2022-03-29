@@ -51,7 +51,8 @@ int read_word(const int start_pos) { // start_pos ist globales Offset zu input_b
     int word_len = 0;
 
     // todo: document buffer overflow check
-    while ((start_pos + word_len) <= input_buf_length && !is_delimiter(input_buf[start_pos + word_len])) {
+    while ((start_pos + word_len) <= input_buf_length
+            && !is_delimiter(input_buf[start_pos + word_len])) {
         word_len++;
     }
 
@@ -61,7 +62,8 @@ int read_word(const int start_pos) { // start_pos ist globales Offset zu input_b
 
     // handle comments
     if (input_buf[start_pos] == '"') {
-        while ((start_pos + word_len) <= input_buf_length && input_buf[start_pos + word_len] != '\n') {
+        while ((start_pos + word_len) <= input_buf_length
+                && input_buf[start_pos + word_len] != '\n') {
             word_len++;
         }
         return start_pos + word_len;
@@ -75,6 +77,17 @@ int read_word(const int start_pos) { // start_pos ist globales Offset zu input_b
             col_nr++;
         }
         return start_pos + 1;
+    }
+
+    // detect edge cases: <> etc. because they are also delimiters
+    if (word_len == 1
+        && (input_buf[start_pos] == '<' || input_buf[start_pos] == '>')) {
+        switch(input_buf[start_pos + 1]) {
+            case '=':
+            case '>':
+                word_len++;
+                break;
+        }
     }
 
     // fill struct
@@ -163,8 +176,7 @@ type_t recognise_token_type(const char *word) {
             // check if oper_const contains any alphabetic char
             //  E/e is ignored due to task specifications
             for (int i = 0; word[i] != '\0'; i++) {
-                if ((word[i] >= 'a' && word[i] <= 'z')
-                    || (word[i] >= 'A' && word[i] <= 'Z')) {
+                if (!isdigit(word[i]) && word[i] != '.') {
                     // drop out if an alphabetic char was found
                     type = name_any;
                     break;
