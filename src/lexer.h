@@ -41,13 +41,13 @@ int read_word(int start_pos);
 
 /// Performs a linear search over the nameentry_t `name_tab`, looking for a given token
 /// \param word a \0-terminated String, the token to search for
-/// \return The index of the token in the `nametab`; -1 if not found
+/// \return The index of the token in the `name_tab`; -1 if not found
 int find_in_name_tab(const char *word);
 
-/// Insert a new name into the nametab
-/// \param nameentry
-/// \return the nametab-index of the new entry
-int insert_in_name_tab(nameentry_t nameentry);
+/// Insert a new name into the name_tab
+/// \param name_entry which will be inserted into name_tab
+/// \return the name_tab-index of the new entry
+int insert_in_name_tab(nameentry_t name_entry);
 
 /// Determines the type of a given word.
 /// \param word for which the token type should be determined.
@@ -55,5 +55,9 @@ int insert_in_name_tab(nameentry_t nameentry);
 /// \returns token type of given word.
 ///           if name_any is returned the index of name_tab is the last name_tab_length - 1.
 type_t recognise_token_type(const char *word);
+
+/// Inserts a given word_t into token_stream.
+/// \param word which will be inserted into token_stream
+void insert_in_token_stream(const word_t *word);
 
 #endif //COMPILERBAU_PKK_LEXER_H

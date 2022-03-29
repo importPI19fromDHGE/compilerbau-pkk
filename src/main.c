@@ -48,32 +48,39 @@ void code_error(const srcpos_t *pos, const char *format, ...) {
     exit(EXIT_FAILURE);
 }
 
-treenode_t *lex_parse(void){
+treenode_t *lex_parse(void) {
     initArray(&token_stream, 1000);
     lex();
 
-    // debug: output to review the token_stream
-    //  values surrounded by <> are variables and should have a link to name_tab => bug:
-    for (int i = 0; i < token_stream.used; i++ ) {
+    // debug: output from lex
+    for (int i = 0; i < token_stream.used; i++) {
         token_t token = token_stream.array[i];
-        printf("[ln: %2d, col: %2d, type: %16s] ",
-               token.pos.line, token.pos.col, DEBUG_TURTLE_TYPE_NAMES[token.type].name);
         switch (token.type) {
-            // used in combination with walk and jump => cause only token we don't care yet
-            case keyw_walk: case keyw_back: case keyw_home: case keyw_mark:
-                printf("%s\n", DEBUG_TURTLE_TYPE_NAMES[token.value.walk].name);
-                break;
             case name_any:
-            // case name_pvar_ro: case name_pvar_rw: case name_math_sin: case name_math_cos:
-            // case name_math_tan: case name_math_sqrt: case name_math_rand:
-                printf("%s\n", token.value.p_name->name);
+                printf("%s", name_tab[token.data.name_tab_index].name);
+                break;
+            case name_pvar_ro:
+            case name_pvar_rw:
+            case name_math_sin:
+            case name_math_cos:
+            case name_math_tan:
+            case name_math_sqrt:
+            case name_math_rand:
+                printf("[%s: %s]",
+                       DEBUG_TURTLE_TYPE_NAMES[token.type].name,
+                       name_tab[token.data.name_tab_index].name
+                );
                 break;
             case oper_const:
-                printf("%f\n", token.value.val);
+                printf("%f", token.data.val);
                 break;
             default:
-                printf("%s\n", DEBUG_TURTLE_TYPE_NAMES[token.type].value);
+                printf("%s", DEBUG_TURTLE_TYPE_NAMES[token.type].value);
         }
+        // format lines
+        printf("%s",
+               i + 1 < token_stream.used ? (token.pos.line == token_stream.array[i + 1].pos.line ? " " : "\n") : ""
+        );
     }
 
     //todo: parse
@@ -118,6 +125,7 @@ int main(int argc, const char *argv[]) {
     prog_name = argv[0];
 
     lex_parse();
+    // todo: free input_stream to save storage and reveal problems
     // evaluate(lex_parse(), argc - 2, &(argv[2]));
 
     exit(EXIT_SUCCESS);

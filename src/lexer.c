@@ -23,11 +23,11 @@ delimiter_t delimiters[MAX_DELIMITER] = {
         {'+',  false},
         {'-',  false},
         {'*',  false},
-        {'/', false},
-        {'^', false},
-        {'(', false},
-        {')', false},
-        {'|', false}
+        {'/',  false},
+        {'^',  false},
+        {'(',  false},
+        {')',  false},
+        {'|',  false}
 };
 
 /// todo: documentation
@@ -79,10 +79,10 @@ int read_word(const int start_pos) { // start_pos ist globales Offset zu input_b
 
     // fill struct
     word_t word = {
-        input_buf + start_pos,
-        word_len,
-        line_nr,
-        col_nr
+            input_buf + start_pos,
+            word_len,
+            line_nr,
+            col_nr
     };
 
     col_nr += word_len;
@@ -92,38 +92,66 @@ int read_word(const int start_pos) { // start_pos ist globales Offset zu input_b
     return start_pos + word_len;
 }
 
+int find_in_name_tab(const char *word) {
+    for (int index = 0; index < name_tab_length; index++) { // lineare search through name_tab
+        if (strcmp(word, name_tab[index].name) == 0) { // word matches
+            return index;
+        }
+    }
+    return -1;
+}
+
+int insert_in_name_tab(nameentry_t name_entry) {
+    name_tab[name_tab_length] = name_entry;
+    name_tab_length++;
+    return name_tab_length - 1;
+}
+
 type_t recognise_token_type(const char *word) {
     type_t type;
 
     // set matching type if the first char is a delimiter
     switch (word[0]) {
-        case '(': type = oper_lpar;
+        case '(':
+            type = oper_lpar;
             break;
-        case ')': type = oper_rpar;
+        case ')':
+            type = oper_rpar;
             break;
-        case ',': type = oper_sep;
+        case ',':
+            type = oper_sep;
             break;
-        case '|': type = oper_abs;
+        case '|':
+            type = oper_abs;
             break;
-        case '^': type = oper_pow;
+        case '^':
+            type = oper_pow;
             break;
-        case '*': type = oper_mul;
+        case '*':
+            type = oper_mul;
             break;
-        case '/': type = oper_div;
+        case '/':
+            type = oper_div;
             break;
-        case '+': type = oper_add;
+        case '+':
+            type = oper_add;
             break;
-        case '-': type = oper_sub; // als Token sind unäre (-) auch oper_sub, siehe turtle-types.h
+        case '-':
+            type = oper_sub; // als Token sind unäre (-) auch oper_sub, siehe turtle-types.h
             break;
-        case '=': type = oper_equ;
+        case '=':
+            type = oper_equ;
             break;
         case '<': //type = oper_less; // kann oper_less oder oper_nequ oder oper_lequ sein
             switch (word[1]) {
-                case '=': type = oper_lequ;
+                case '=':
+                    type = oper_lequ;
                     break;
-                case '>': type = oper_nequ;
+                case '>':
+                    type = oper_nequ;
                     break;
-                default: type = oper_less;
+                default:
+                    type = oper_less;
                     break;
             }
             break;
@@ -150,93 +178,69 @@ type_t recognise_token_type(const char *word) {
         return type;
     }
 
-    // search a matching name in name_tab
-    for (int i = 0; i < name_tab_length; i++) { // lineare search through name_tab
-        if (strcmp(word, name_tab[i].name) == 0) { // word matches
-            type = name_tab[i].type;
-            break;
-        }
+    int name_entry_index = find_in_name_tab(word);
+
+    if (name_entry_index < 0) {
+        name_entry_index = insert_in_name_tab((nameentry_t) {type, word, {}});
     }
 
-    // type in name_tab found
-    if (type != name_any) {
-        return type;
-    }
-
-    name_tab[name_tab_length++] = (nameentry_t) {type, word, {} };
-    return type;
+    return name_tab[name_entry_index].type;
 }
 
+void insert_in_token_stream(const word_t *word_entry) {
+    // slice word of length word_length of the given word_ptr
+    char *word = malloc((word_entry->length + 1) * sizeof(char));
+    word[word_entry->length] = '\0';
+    strncpy(word, word_entry->word_ptr, word_entry->length);
+
+    type_t type = recognise_token_type(word);
+
+    switch (type) {
+        case name_any:
+        case name_pvar_ro:
+        case name_pvar_rw:
+        case name_math_sin:
+        case name_math_cos:
+        case name_math_tan:
+        case name_math_sqrt:
+        case name_math_rand:
+            insertArray(&token_stream, (token_t) {
+                    type,
+                    word_entry->pos,
+                    {.name_tab_index = find_in_name_tab(word)}
+            });
+            break;
+        case oper_const:
+            // conversion of word to double
+            insertArray(&token_stream, (token_t) {
+                    type,
+                    word_entry->pos,
+                    {.val = strtod(word_entry->word_ptr, NULL)}
+            });
+            break;
+        default:
+            insertArray(&token_stream, (token_t) {type, word_entry->pos});
+            break;
+    }
+
+    // free word if it isn't saved as name_tab entry
+    if (type != name_any) {
+        free(word);
+    }
+}
 
 void lex(void) {
-    insertArray(&token_stream, (token_t) {tok_bofeof});
+    insertArray(&token_stream, (token_t) {tok_bofeof, 0, 0});
     words = malloc(20000 * sizeof(word_t));
 
     int current_pos = 0;
-
     while (current_pos < input_buf_length) {
         current_pos = read_word(current_pos);
     }
-    // ab hier gesamter Input getrennt
 
     for (int i = 0; i < word_count; i++) {
-        char *word = malloc((words[i].length + 1) * sizeof(char));
-        word[words[i].length] = '\0';
-        strncpy(word, words[i].word_ptr, words[i].length);
-        type_t token_type =  recognise_token_type(word);
-
-
-////////// rly unsure if this is useful to the whole situation but here are my thoughts
-        // todo: open problem to solve
-        //  - find solution to save numbers
-        //  - some const need a ref to name_tab but recognise_token_type only returns type
-        //      - for name_any we can just lookup the last name_tab entry cause we have to add every name_any
-        // fixme: current solution => added nodedata_t to token instead of name_tab_index so doubles can be saved
-
-        switch (token_type) {
-            case keyw_walk: case keyw_back: case keyw_home: case keyw_mark:
-                insertArray(&token_stream, (token_t) {
-                    token_type,
-                    words[i].pos,
-                    (nodedata_t) token_type
-                });
-                break;
-            // todo: constants which need ref to name_tab
-            // case name_pvar_ro: case name_pvar_rw:
-            // case name_math_sin: case name_math_cos: case name_math_tan: case name_math_sqrt: case name_math_rand:
-            //    insertArray(&token_stream,(token_t) {
-            //            token_type,
-            //            words[i].pos,
-            //            (nodedata_t) &name_tab[???]
-            //    });
-            //    break;
-            case name_any:
-                // if the type is name_any the word was added to the name_tab
-                // so the index is the len of name_tab minus 1
-                insertArray(&token_stream, (token_t) {
-                    token_type,
-                    words[i].pos,
-                    (nodedata_t) &name_tab[name_tab_length - 1]
-                });
-                break;
-            case oper_const: {
-                // conversion of word to double
-                char *_ignore;
-                insertArray(&token_stream, (token_t) {
-                    token_type,
-                    words[i].pos,
-                    (nodedata_t) strtod(words[i].word_ptr, &_ignore)
-                });
-                break;
-            }
-            default:
-                insertArray(&token_stream, (token_t) {
-                    token_type,
-                    words[i].pos
-                });
-                break;
-        }
+        insert_in_token_stream(&(words[i]));
     }
-////////// end
-    insertArray(&token_stream, (token_t) {tok_bofeof});
+
+    insertArray(&token_stream, (token_t) {tok_bofeof, 0, 0});
 }
