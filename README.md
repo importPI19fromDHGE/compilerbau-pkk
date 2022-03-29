@@ -9,11 +9,6 @@
 - umgebung: GNU/Linux
 - Source Files **müssen** in LF gespeichert werden
 
-## Todo
-
-- cmake init
-- sdl einbinden + kusche header
-
 ## Token-Übersetzung
 
 | Original | iel |

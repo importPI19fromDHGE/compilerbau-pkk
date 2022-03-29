@@ -1,4 +1,10 @@
 
+" Kleines Testprogramm: "Schnecke" aus Quadraten
+"
+" Optional ein Befehlszeilen-Wert: Skalierungsfaktor
+"
+" Klaus Kusche, 2022
+
 path sqr(len)
   do 4 times
     walk testfunc(len)

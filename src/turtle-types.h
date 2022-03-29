@@ -235,11 +235,20 @@ struct _treenode {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// lexer.h
+// Anpassungen von PKK-Team
 ///////////////////////////////////////////////////////////////////////////////
+typedef union {
+    double val;
+    int name_tab_index;
+} token_data_t;
+
 typedef struct {
     type_t type;
-    int nameentry_index;
+    srcpos_t pos;
+
+    // holds a data object when needed
+    // to be used by type => name_any, oper_const, name_pvar_ro, name_pvar_rw, name_math_sin, name_math_cos, name_math_tan, name_math_sqrt, name_math_rand
+    token_data_t data;
 } token_t;
 
 #endif
