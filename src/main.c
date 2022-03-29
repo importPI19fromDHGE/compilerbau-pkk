@@ -19,6 +19,7 @@ char *input_buf;
 long input_buf_length;
 const char *prog_name;
 Array token_stream;
+treenode_t *syntax_tree;
 
 // Array-Index des Beginns der aktuellen Zeile
 

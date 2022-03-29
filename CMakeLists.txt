@@ -16,6 +16,8 @@ add_executable(compilerbau_pkk
         src/lexer.c
         src/dynamic_array.c
         src/dynamic_array.h
+        src/parser.c
+        src/parser.h
         src/debug.h)
 INCLUDE(FindPkgConfig)
 
