@@ -231,6 +231,7 @@ struct _treenode {
     // (oder NULL beim letzten Statement einer Statement-Liste)
     // Bei allen anderen Knoten: NULL
     treenode_t *son[MAX_ARGS]; // Sohn-Syntaxbäume
+    size_t son_len; // Anzahl an Sohn-Syntaxbäumen
     nodedata_t d;     // Daten zum Knoten
 };
 
