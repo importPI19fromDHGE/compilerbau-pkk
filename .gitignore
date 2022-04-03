@@ -21,3 +21,6 @@ cmake-build-release
 *-prefix/
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake
+
+# do not commit Doxygen
+docs/
