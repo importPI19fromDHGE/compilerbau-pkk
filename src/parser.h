@@ -19,9 +19,6 @@ extern treenode_t *syntax_tree;
 
 extern Array *token_stream;
 
-
-treenode_t *parse();
-
 treenode_t *program();
 treenode_t *pathdef();
 treenode_t *calcdef();
@@ -39,7 +36,10 @@ const token_t *get_token();
 /// \param son_node which gets inserted
 void add_son_node(treenode_t *parent_node, treenode_t *son_node);
 
+/// creates new tree node with default initialized values
+/// \returns the created tree node pointer
 treenode_t *new_tree_node();
+
 
 treenode_t *statements();
 

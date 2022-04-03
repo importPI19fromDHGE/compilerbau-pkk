@@ -4,6 +4,7 @@
 
 #ifndef COMPILERBAU_PKK_DEBUG_H
 #define COMPILERBAU_PKK_DEBUG_H
+#define DEBUG
 
 typedef struct {
     char *name;

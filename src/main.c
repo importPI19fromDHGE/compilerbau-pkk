@@ -12,6 +12,7 @@
 
 #include "turtle.h"
 #include "lexer.h"
+#include "parser.h"
 #include "debug.h"
 
 // Global: Der Sourcefile & der Programmname
@@ -84,7 +85,7 @@ treenode_t *lex_parse(void) {
         );
     }
 
-    //todo: parse
+    program();
 }
 
 void read_from_file(FILE *src_file) {

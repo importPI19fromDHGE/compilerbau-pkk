@@ -12,10 +12,6 @@
 /// should only increment after successfully processed
 int token_index = 0;
 
-treenode_t *parse() {
-    return program();
-}
-
 treenode_t *program() {
     treenode_t *node = new_tree_node();
 
