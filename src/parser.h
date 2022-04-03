@@ -14,55 +14,128 @@
 #include "dynamic_array.h"
 #endif
 
-// todo: remove probably (not globally required)
+// todo: remove probably (not required globally)
 extern treenode_t *syntax_tree;
 
-extern Array *token_stream;
+/// stream of token created by lexer.
+extern Array token_stream;
 
-treenode_t *program();
-treenode_t *pathdef();
-treenode_t *calcdef();
-treenode_t *params();
 
-/// checks on token with type "tok_bofeof" (program begin/end)
+/// checks on token with type "tok_bofeof" (program begin/end).
 void program_begin_end();
 
-/// get the current token in relation to token_index
+/// Print an error message related to the currently used token, depending on token_index.
+/// \param msg A custom Error message. Set to NULL to print a generic / unkown error.
+void parser_error(const char *msg);
+
+
+/// PROGRAM ::= { PATHDEF | CALCDEF } "begin" STATEMENTS "end".
+/// \returns the treenode_t* syntax tree required by evaluate in main
+treenode_t *program();
+
+////////////////////////////////////////////////////////
+/// returns a treenode_t* or NULL if no matching was found
+////////////////////////////////////////////////////////
+
+/// PATHDEF ::= "path" NAME [ "("[ PARAMS ]")" ] STATEMENTS "endpath"
+/// definition of a path function.
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *pathdef();
+/// CALCDEF ::= "calculation" NAME "("[ PARAMS ]")" [ STATEMENTS ] "returns" EXPR "endcalc"
+/// definition of a calculation function.
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *calcdef();
+
+/// NAME ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }.
+/// name of a function.
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *name(); // == var or name idk
+/// VAR ::= NAME
+/// name of a variable.
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *var();
+/// PARAMS ::= [ VAR { "," VAR } ]
+/// params is a argument list.
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *params();
+
+/// STATEMENTS ::= STATEMENT { STATEMENT }.
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *statements();
+/// STATEMENT  ::= DRAW_CMD | MARK_CMD | CALC_CMD | IF_CMD | TIMES_CMD | CNT_CMD | WHILE_CMD | REPEAT_CMD.
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *statement();
+
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *name_var_any();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *determine_name_var();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *color();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *cond();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *cond_s();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *expr();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *term();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *faktor();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *operand();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *args();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *draw_cmd();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *calc_cmd();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *if_cmd();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *times_cmd();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *cnt_cmd();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *while_cmd();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *repeat();
+
+
+/// get the current token in relation to token_index.
 /// \returns current token
 const token_t *get_token();
 
-/// inserts son_node into parent_node if 'not NULL
+/// inserts son_node into parent_node if 'not NULL.
 /// \param parent_node to insert son_node in
 /// \param son_node which gets inserted
-void add_son_node(treenode_t *parent_node, treenode_t *son_node);
+/// \returns true if the provided node was not NULL and added, otherwise false
+bool add_son_node(treenode_t *parent_node, treenode_t *son_node);
 
-/// creates new tree node with default initialized values
+/// creates new tree node with default initialized values.
 /// \returns the created tree node pointer
 treenode_t *new_tree_node();
 
-
-treenode_t *statements();
-
-treenode_t *name(); // == var or name idk
-treenode_t *var();
-treenode_t *name_var_any();
-treenode_t *determine_name_var();
-
-treenode_t *color();
-treenode_t *cond();
-treenode_t *cond_s();
-treenode_t *expr();
-treenode_t *term();
-treenode_t *faktor();
-treenode_t *operand();
-treenode_t *args();
-treenode_t *statement();
-treenode_t *draw_cmd();
-treenode_t *calc_cmd();
-treenode_t *if_cmd();
-treenode_t *times_cmd();
-treenode_t *cnt_cmd();
-treenode_t *while_cmd();
-treenode_t *repeat();
+/// holds logic for error messages related to token operations.
+/// \param expression Boolean for determining success of operation as returned by a helper function.
+/// \param msg An Error message.
+void assert_token(bool expression, const char* msg);
 
 #endif

@@ -1,0 +1,28 @@
+\hypertarget{dynamic__array_8h_source}{}\doxysection{dynamic\+\_\+array.\+h}
+\label{dynamic__array_8h_source}\index{src/dynamic\_array.h@{src/dynamic\_array.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{//}}
+\DoxyCodeLine{2 \textcolor{comment}{// Created by max on 20.03.22.}}
+\DoxyCodeLine{3 \textcolor{comment}{// Source: https://stackoverflow.com/questions/3536153/c-\/dynamically-\/growing-\/array\#3536261}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#ifndef COMPILERBAU\_PKK\_DYNAMIC\_ARRAY\_H}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#define COMPILERBAU\_PKK\_DYNAMIC\_ARRAY\_H}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <stddef.h>}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}turtle-\/types.h"{}}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{13     \mbox{\hyperlink{structtoken__t}{token\_t}} *array;}
+\DoxyCodeLine{14     \textcolor{keywordtype}{size\_t} used;}
+\DoxyCodeLine{15     \textcolor{keywordtype}{size\_t} size;}
+\DoxyCodeLine{16 \} \mbox{\hyperlink{structArray}{Array}};}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{keywordtype}{void} initArray(\mbox{\hyperlink{structArray}{Array}} *a, \textcolor{keywordtype}{size\_t} initialSize);}
+\DoxyCodeLine{19 \textcolor{keywordtype}{void} insertArray(\mbox{\hyperlink{structArray}{Array}} *a, \mbox{\hyperlink{structtoken__t}{token\_t}} element);}
+\DoxyCodeLine{20 \textcolor{keywordtype}{void} freeArray(\mbox{\hyperlink{structArray}{Array}} *a);}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//COMPILERBAU\_PKK\_DYNAMIC\_ARRAY\_H}}
+
+\end{DoxyCode}

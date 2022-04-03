@@ -54,37 +54,40 @@ treenode_t *lex_parse(void) {
     initArray(&token_stream, 1000);
     lex();
 
-    // debug: output from lex
-    for (int i = 0; i < token_stream.used; i++) {
-        token_t token = token_stream.array[i];
-        switch (token.type) {
-            case name_any:
-                printf("%s", name_tab[token.data.name_tab_index].name);
-                break;
-            case name_pvar_ro:
-            case name_pvar_rw:
-            case name_math_sin:
-            case name_math_cos:
-            case name_math_tan:
-            case name_math_sqrt:
-            case name_math_rand:
-                printf("[%s: %s]",
-                       DEBUG_TURTLE_TYPE_NAMES[token.type].name,
-                       name_tab[token.data.name_tab_index].name
-                );
-                break;
-            case oper_const:
-                printf("%f", token.data.val);
-                break;
-            default:
-                printf("%s", DEBUG_TURTLE_TYPE_NAMES[token.type].value);
+    if (DEBUG == 1) {
+        // debug: output from lex
+        for (int i = 0; i < token_stream.used; i++) {
+            token_t token = token_stream.array[i];
+            switch (token.type) {
+                case name_any:
+                    printf("%s", name_tab[token.data.name_tab_index].name);
+                    break;
+                case name_pvar_ro:
+                case name_pvar_rw:
+                case name_math_sin:
+                case name_math_cos:
+                case name_math_tan:
+                case name_math_sqrt:
+                case name_math_rand:
+                    printf("[%s: %s]",
+                           DEBUG_TURTLE_TYPE_NAMES[token.type].name,
+                           name_tab[token.data.name_tab_index].name
+                    );
+                    break;
+                case oper_const:
+                    printf("%f", token.data.val);
+                    break;
+                default:
+                    printf("%s", DEBUG_TURTLE_TYPE_NAMES[token.type].value);
+            }
+            // format lines
+            printf("%s",
+                   i + 1 < token_stream.used ? (token.pos.line == token_stream.array[i + 1].pos.line ? " " : "\n") : ""
+            );
         }
-        // format lines
-        printf("%s",
-               i + 1 < token_stream.used ? (token.pos.line == token_stream.array[i + 1].pos.line ? " " : "\n") : ""
-        );
     }
 
+    // parse
     program();
 }
 

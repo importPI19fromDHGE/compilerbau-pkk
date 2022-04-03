@@ -1,0 +1,67 @@
+\hypertarget{parser_8h_source}{}\doxysection{parser.\+h}
+\label{parser_8h_source}\index{src/parser.h@{src/parser.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{//}}
+\DoxyCodeLine{2 \textcolor{comment}{// Created by pkk on 29.03.22.}}
+\DoxyCodeLine{3 \textcolor{comment}{//}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#ifndef COMPILERBAU\_PKK\_PARSER\_H}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#define COMPILERBAU\_PKK\_PARSER\_H}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#ifndef COMPILERBAU\_PKK\_DYNAMIC\_ARRAY\_H}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}dynamic\_array.h"{}}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17 \textcolor{comment}{// todo: remove probably (not required globally)}}
+\DoxyCodeLine{18 \textcolor{keyword}{extern} \mbox{\hyperlink{struct__treenode}{treenode\_t}} *syntax\_tree;}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{21 \textcolor{keyword}{extern} \mbox{\hyperlink{structArray}{Array}} token\_stream;}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23 }
+\DoxyCodeLine{25 \textcolor{keywordtype}{void} program\_begin\_end();}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{29 \textcolor{keywordtype}{void} parser\_error(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *msg);}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31 }
+\DoxyCodeLine{34 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *program();}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{39 }
+\DoxyCodeLine{43 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *pathdef();}
+\DoxyCodeLine{46 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *calcdef();}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{51 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *name(); \textcolor{comment}{// == var or name idk}}
+\DoxyCodeLine{55 \textcolor{comment}{}\mbox{\hyperlink{struct__treenode}{treenode\_t}} *var();}
+\DoxyCodeLine{59 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *params();}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{63 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *statements();}
+\DoxyCodeLine{66 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *statement();}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{70 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *name\_var\_any();}
+\DoxyCodeLine{73 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *determine\_name\_var();}
+\DoxyCodeLine{76 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *color();}
+\DoxyCodeLine{79 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *cond();}
+\DoxyCodeLine{82 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *cond\_s();}
+\DoxyCodeLine{85 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *expr();}
+\DoxyCodeLine{88 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *term();}
+\DoxyCodeLine{91 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *faktor();}
+\DoxyCodeLine{94 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *operand();}
+\DoxyCodeLine{97 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *args();}
+\DoxyCodeLine{100 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *draw\_cmd();}
+\DoxyCodeLine{103 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *calc\_cmd();}
+\DoxyCodeLine{106 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *if\_cmd();}
+\DoxyCodeLine{109 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *times\_cmd();}
+\DoxyCodeLine{112 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *cnt\_cmd();}
+\DoxyCodeLine{115 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *while\_cmd();}
+\DoxyCodeLine{118 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *repeat();}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{120 }
+\DoxyCodeLine{123 \textcolor{keyword}{const} \mbox{\hyperlink{structtoken__t}{token\_t}} *get\_token();}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{129 \textcolor{keywordtype}{bool} add\_son\_node(\mbox{\hyperlink{struct__treenode}{treenode\_t}} *parent\_node, \mbox{\hyperlink{struct__treenode}{treenode\_t}} *son\_node);}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{133 \mbox{\hyperlink{struct__treenode}{treenode\_t}} *new\_tree\_node();}
+\DoxyCodeLine{134 }
+\DoxyCodeLine{135 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

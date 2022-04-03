@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Germanischer Kompilier-Kasten: src/turtle-types.h Quellcode</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Germanischer Kompilier-Kasten
+   </div>
+   <div id="projectbrief">Kompilierkastenbau: Projekt Schildkr√∂ten-Bilder (ichüê¢iel)</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Erzeugt von Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Suchen','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Suchen');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">turtle-types.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Turte-Graphics-Compiler:</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// Gemeinsamer Header-File f¸r die Typen f¸r Nametable und Syntaxbaum</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">// Klaus Kusche 2021, 2022</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#ifndef _TURTLE_TYPES_H</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define _TURTLE_TYPES_H</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// Max. Anzahl von Funktions-Argumenten</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#define MAX_ARGS 8</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">// Unsere &quot;Universal-Enumeration&quot;: Konstanten f¸r die Art ...</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">// * ... eines Tokens (turtle-parse: Globale Variable tok)</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">// * ... eines Eintrags in der Namens-Tabelle (nameentry_t Member type)</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">// * ... eines Syntaxbaum-Knotens (treenode_t Member type)</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">// innerhalb des Programms definierte Namen</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"></span>    <span class="comment">// In Token: Alle Namen werden vom Lexer als name_any-Token geliefert</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="comment">// In der Namenstabelle: Solange noch nicht feststeht,</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="comment">//   ob ein neuer Name als name_var, name_path oder name_calc verwendet wird,</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="comment">//   bekommt er Namenstyp name_any</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="comment">// Im Syntaxbaum:</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="comment">//   - Lesende Zugriffe auf Variablen in Rechnungen</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="comment">//   werden im Syntaxbaum durch name_any-Knoten repr‰sentiert</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="comment">//   (egal ob der Name ein name_var, name_glob oder name_pvar ist)</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="comment">//   - Funktionsaufrufe bekommen im Syntaxbaum einen oper_lpar-Knoten,</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="comment">//   sowohl f¸r benutzerdefinierte als auch f¸r vordefinierte Funktionen</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    name_any = 0,  <span class="comment">// beliebiger Name</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    name_var,      <span class="comment">// lokale Variable oder Parameter (werden nicht unterschieden!)</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    name_path,     <span class="comment">// Name einer Path-Funktion</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    name_calc,     <span class="comment">// Name einer Calc-Funktion</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    name_glob,     <span class="comment">// benutzerdefinierte globale Variable</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"></span><span class="comment">// vordefinierte globale Variablen</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"></span>    name_pvar_ro,      <span class="comment">// nur lesbar</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    name_pvar_rw,      <span class="comment">// lesbar und schreibbar</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"></span><span class="comment">// vordefinierte Funktionen</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"></span>    name_math_sin, name_math_cos, name_math_tan, name_math_sqrt,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    name_math_rand,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">// Keywords</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"></span>    keyw_dummy,  <span class="comment">// Dummy, Beginn der Keywords in der enum</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    keyw_walk,</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    keyw_jump,</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    keyw_back,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    keyw_home,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    keyw_turn,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    keyw_left,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    keyw_right,</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    keyw_direction,</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    keyw_clear,</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    keyw_stop,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    keyw_finish,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    keyw_path,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    keyw_color,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    keyw_store,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    keyw_in,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    keyw_add,</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    keyw_to,</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    keyw_sub,</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    keyw_from,</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    keyw_mul,</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    keyw_by,</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    keyw_div,</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    keyw_mark,</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    keyw_if,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    keyw_then,</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    keyw_else,</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    keyw_endif,</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    keyw_do,</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    keyw_times,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    keyw_done,</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    keyw_counter,</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    keyw_downto,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    keyw_step,</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    keyw_while,</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    keyw_repeat,</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    keyw_until,</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    keyw_endpath,</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    keyw_calculation,</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    keyw_returns,</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    keyw_endcalc,</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    keyw_begin,</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    keyw_end,</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    keyw_and,</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    keyw_or,</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    keyw_not,</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">// Tokens, die nicht Namen/Keywords sind</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"></span>    tok_bofeof,  <span class="comment">// Beginning &amp; End of file (nur als Tokens)</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    oper_const,  <span class="comment">// Zahl</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    oper_lpar,   <span class="comment">// (, im Syntaxbaum: Funktionsaufruf</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    oper_rpar,   <span class="comment">// )</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    oper_sep,    <span class="comment">// ,</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    oper_abs,    <span class="comment">// |</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    oper_pow,    <span class="comment">// ^</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    oper_mul,    <span class="comment">// *</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    oper_div,    <span class="comment">// /</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    oper_add,    <span class="comment">// +</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    oper_sub,    <span class="comment">// Token: Un‰res oder bin‰res -, Syntaxbaum: Bin‰res -</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    oper_neg,    <span class="comment">// Syntaxbaum: Un‰res -</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    oper_equ,    <span class="comment">// =</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    oper_nequ,   <span class="comment">// &lt;&gt;</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    oper_less,   <span class="comment">// &lt;</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    oper_lequ,   <span class="comment">// &lt;=</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    oper_grtr,   <span class="comment">// &gt;</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    oper_gequ,   <span class="comment">// &gt;=</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>} type_t;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">// Vorab-typedef&#39;s f¸r alle folgenden struct&#39;s und union&#39;s</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct__srcpos.html">_srcpos</a> <a class="code hl_struct" href="struct__srcpos.html">srcpos_t</a>;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct__funcdef.html">_funcdef</a> <a class="code hl_struct" href="struct__funcdef.html">funcdef_t</a>;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="keyword">typedef</span> <span class="keyword">union </span><a class="code hl_union" href="union__namedata.html">_namedata</a> <a class="code hl_union" href="union__namedata.html">namedata_t</a>;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct__nameentry.html">_nameentry</a> <a class="code hl_struct" href="struct__nameentry.html">nameentry_t</a>;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="keyword">typedef</span> <span class="keyword">union </span><a class="code hl_union" href="union__nodedata.html">_nodedata</a> <a class="code hl_union" href="union__nodedata.html">nodedata_t</a>;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct__treenode.html">_treenode</a> <a class="code hl_struct" href="struct__treenode.html">treenode_t</a>;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">// Position eines Tokens oder Syntax-Knotens im Source-File (Zeile / Spalte)</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno"><a class="line" href="struct__srcpos.html">  130</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct__srcpos.html">_srcpos</a> {</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <span class="keywordtype">int</span> line, col;   <span class="comment">// Zeilennummer und Spaltennummer</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>};</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment">// Daten einer Funktions- oder Pfaddefinition: Parameternamen und Code</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">// (h‰ngt am Funktions- oder Pfadnamen in der Namenstabelle)</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="struct__funcdef.html">  136</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct__funcdef.html">_funcdef</a> {</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <a class="code hl_struct" href="struct__treenode.html">treenode_t</a> *body; <span class="comment">// Pointer auf den Syntaxbaum des Funktionsrumpfes</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    <span class="comment">// f¸r name_calc ohne Rumpf: NULL</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <a class="code hl_struct" href="struct__treenode.html">treenode_t</a> *ret;  <span class="comment">// f¸r name_calc: Pointer auf den Syntaxbaum des Returnwerts</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="comment">// f¸r name_path: NULL</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <a class="code hl_struct" href="struct__nameentry.html">nameentry_t</a> *params[MAX_ARGS]; <span class="comment">// Pointer auf die Namenseintr‰ge der Parameter</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>};</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">// Unterschiedliche Nutzdaten eines Eintrags in der Namens-Tabelle,</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">// je nach Art des Namens</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="union__namedata.html">  146</a></span><span class="keyword">union </span><a class="code hl_union" href="union__namedata.html">_namedata</a> {</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keywordtype">double</span> val;       <span class="comment">// f¸r name_glob: Aktueller Wert der globalen Variable</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <a class="code hl_struct" href="struct__funcdef.html">funcdef_t</a> *func;  <span class="comment">// f¸r name_path und name_calc:</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="comment">//   Pointer auf die Funktionsdaten</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keywordtype">double</span> *p_val;    <span class="comment">// f¸r name_pvar_...: Pointer auf den Variablenwert</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="comment">// (d.h. auf die globale Variable im Evaluator)</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    double (*math)(double); <span class="comment">// f¸r name_math_... auﬂer name_math_rand:</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="comment">// Function Pointer auf die math.h-Funktion</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="comment">// leer f¸r name_var, name_any, name_math_rand und keyw_...</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>};</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="comment">// Typ eines Eintrags in der Namens-Tabelle</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno"><a class="line" href="struct__nameentry.html">  158</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct__nameentry.html">_nameentry</a> {</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    type_t type;      <span class="comment">// Art des Namens</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> *name; <span class="comment">// Namens-String (bei name_glob und name_pvar_... *mit* @):</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="comment">// Pointer auf den mit strdup dynamisch gespeicherten Namen</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <a class="code hl_union" href="union__namedata.html">namedata_t</a> d;     <span class="comment">// Daten zum Namen</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>};</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment">// Unterschiedliche Nutzdaten eines Syntaxbaum-Knotens,</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment">// je nach Art des Knotens</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="union__nodedata.html">  167</a></span><span class="keyword">union </span><a class="code hl_union" href="union__nodedata.html">_nodedata</a> {</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    <a class="code hl_struct" href="struct__nameentry.html">nameentry_t</a> *p_name; <span class="comment">// f¸r jeden Knoten mit Variablen- oder Funktionsnamen:</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    <span class="comment">// Pointer auf den Namens-Eintrag</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keywordtype">double</span> val;          <span class="comment">// f¸r Zahl-Konstanten: Wert der Zahl</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    type_t walk;         <span class="comment">// Art von walk und jump: keyw_back, keyw_home, keyw_mark</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <span class="comment">// oder keyw_walk f¸r normales walk/jump,</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="comment">// leer f¸r alle anderen Knotentypen</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>};</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">// Im Syntaxbaum werden folgende Knotentypen verwendet,</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment">// mit folgenden Unter-Syntaxb‰umen im son-Array (keine wenn nichts angegeben)</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">// und folgender Information im Art-abh‰ngigen Member d</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment">//</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment">// name_any     Variable (lesend in einer Rechnung): d = Namenseintrag (p_name)</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment">// oper_const   Zahl: Konstante, d = Wert (val)</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">// oper_neg     un‰res -: son 0 = Operand</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment">// oper_pow, oper_mul, oper_div, oper_add, oper_sub</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment">//              ^ * / + -: son 0 und son 1 = Operanden</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment">// oper_abs,    Absolutbetrag: son 0 = Operand</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment">// oper_lpar    &#39;(&#39; = Funktionsaufruf:</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment">//              d = Namenseintrag der Funktion (p_name)</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment">//              son 0, 1, ...: Argumente (nicht vorhandene Argumente sind NULL)</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="comment">// oper_equ, oper_nequ, oper_less, oper_lequ, oper_grtr, oper_gequ</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment">//              = &lt;&gt; &lt; &lt;= &gt; &gt;=: son 0 und son 1 = Operanden   </span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment">// oper_not     Logisches not: son 0 = Operand</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment">// oper_and, oper_or  Logisches and und or: son 0 und son 1 = Operanden  </span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="comment">// keyw_walk, keyw_jump</span></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment">//              walk oder jump in allen Kombinationen</span></div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span><span class="comment">//              d = Art des walk: keyw_walk, keyw_back, keyw_home, keyw_mark</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment">//              bei walk/jump und walk/jump back: son 0 = expr</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">// keyw_right   turn und turn right: son 0 = expr</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">// keyw_left    turn left: son 0 = expr</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="comment">// keyw_direction  direction: son 0 = expr</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="comment">// keyw_clear, keyw_stop, keyw_finish, keyw_mark</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment">//              clear, stop, finish, mark: Keine Operanden  </span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment">// keyw_path    path-Aufruf: d = Name der Pfadfunktion, son 0, 1, ...: Argumente</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="comment">//              nicht vorhandene Argumente sind NULL</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="comment">// keyw_color   color: son 0 = rot, son 1 = gr¸n, son 2 = blau</span></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span><span class="comment">// keyw_store, keyw_add, keyw_sub, keyw_mul, keyw_div</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="comment">//              store, add, sub, mul, div:</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="comment">//              d = Namens-Eintrag der Variable (p_name),</span></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="comment">//              son 0 = expr</span></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="comment">// keyw_if      if: son 0 = cond, son 1 = then-statements,</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="comment">//              son 2 = else-statements oder NULL</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="comment">// keyw_do,     times-Schleife: son 0 = expr, son 1 = statements</span></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="comment">// keyw_counter counter-Schleife:</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="comment">//              d = Namens-Eintrag der Variable (p_name),</span></div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="comment">//              son 0 = Startwert</span></div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="comment">//              to: son 1 = Endwert, son 2 = NULL</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="comment">//              downto: son 1 = NULL, son 2 = Endwert</span></div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="comment">//              son 3 = Schrittwert oder NULL</span></div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="comment">//              son 4 = statements</span></div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span><span class="comment">// keyw_while   while-Schleife: son 0 = cond, son 1 = statements</span></div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span><span class="comment">// keyw_repeat  repeat-Schleife: son 0 = cond, son 1 = statements</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="comment">//</span></div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span><span class="comment">// Vorrang-Klammern in Rechnungen und Bedingungen</span></div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="comment">// sind *keine* eigenen Knoten im Syntaxbaum</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="comment">// sondern beeinflussen beim Parsen nur die Struktur des Syntaxbaumes</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span><span class="comment">// Typ eines Syntaxbaum-Knotens</span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno"><a class="line" href="struct__treenode.html">  227</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct__treenode.html">_treenode</a> {</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    type_t type;      <span class="comment">// Art des Knotens</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    <a class="code hl_struct" href="struct__srcpos.html">srcpos_t</a> pos;     <span class="comment">// Position im Sourcefile (f¸r Fehlermeldungen)</span></div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <a class="code hl_struct" href="struct__treenode.html">treenode_t</a> *next; <span class="comment">// Bei allen Statements: N‰chstes Statement</span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    <span class="comment">// (oder NULL beim letzten Statement einer Statement-Liste)</span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    <span class="comment">// Bei allen anderen Knoten: NULL</span></div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <a class="code hl_struct" href="struct__treenode.html">treenode_t</a> *son[MAX_ARGS]; <span class="comment">// Sohn-Syntaxb‰ume</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <span class="keywordtype">size_t</span> son_len; <span class="comment">// Anzahl an Sohn-Syntaxb‰umen</span></div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <a class="code hl_union" href="union__nodedata.html">nodedata_t</a> d;     <span class="comment">// Daten zum Knoten</span></div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>};</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="comment">// Anpassungen von PKK-Team</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno"><a class="line" href="uniontoken__data__t.html">  241</a></span><span class="comment"></span><span class="keyword">typedef</span> <span class="keyword">union </span>{</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <span class="keywordtype">double</span> val;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="keywordtype">int</span> name_tab_index;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>} <a class="code hl_union" href="uniontoken__data__t.html">token_data_t</a>;</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno"><a class="line" href="structtoken__t.html">  246</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    type_t type;</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <a class="code hl_struct" href="struct__srcpos.html">srcpos_t</a> pos;</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    <span class="comment">// holds a data object when needed</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    <span class="comment">// to be used by type =&gt; name_any, oper_const, name_pvar_ro, name_pvar_rw, name_math_sin, name_math_cos, name_math_tan, name_math_sqrt, name_math_rand</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    <a class="code hl_union" href="uniontoken__data__t.html">token_data_t</a> data;</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>} <a class="code hl_struct" href="structtoken__t.html">token_t</a>;</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="astruct__funcdef_html"><div class="ttname"><a href="struct__funcdef.html">_funcdef</a></div><div class="ttdef"><b>Definition:</b> turtle-types.h:136</div></div>
+<div class="ttc" id="astruct__nameentry_html"><div class="ttname"><a href="struct__nameentry.html">_nameentry</a></div><div class="ttdef"><b>Definition:</b> turtle-types.h:158</div></div>
+<div class="ttc" id="astruct__srcpos_html"><div class="ttname"><a href="struct__srcpos.html">_srcpos</a></div><div class="ttdef"><b>Definition:</b> turtle-types.h:130</div></div>
+<div class="ttc" id="astruct__treenode_html"><div class="ttname"><a href="struct__treenode.html">_treenode</a></div><div class="ttdef"><b>Definition:</b> turtle-types.h:227</div></div>
+<div class="ttc" id="astructtoken__t_html"><div class="ttname"><a href="structtoken__t.html">token_t</a></div><div class="ttdef"><b>Definition:</b> turtle-types.h:246</div></div>
+<div class="ttc" id="aunion__namedata_html"><div class="ttname"><a href="union__namedata.html">_namedata</a></div><div class="ttdef"><b>Definition:</b> turtle-types.h:146</div></div>
+<div class="ttc" id="aunion__nodedata_html"><div class="ttname"><a href="union__nodedata.html">_nodedata</a></div><div class="ttdef"><b>Definition:</b> turtle-types.h:167</div></div>
+<div class="ttc" id="auniontoken__data__t_html"><div class="ttname"><a href="uniontoken__data__t.html">token_data_t</a></div><div class="ttdef"><b>Definition:</b> turtle-types.h:241</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Erzeugt von&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+</small></address>
+</body>
+</html>
