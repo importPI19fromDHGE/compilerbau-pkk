@@ -4,6 +4,8 @@
 //
 // Klaus Kusche 2021, 2022
 
+// Anm. d. R.: dieser Code enthält Memory-Leaks jenseits von gut und böse. Schnallen Sie sich an.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>

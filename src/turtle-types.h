@@ -238,11 +238,13 @@ struct _treenode {
 ///////////////////////////////////////////////////////////////////////////////
 // Anpassungen von PKK-Team
 ///////////////////////////////////////////////////////////////////////////////
+/// Defines data used by acm token.
 typedef union {
     double val;
     int name_tab_index;
 } token_data_t;
 
+/// Defines a token used by token_stream.
 typedef struct {
     type_t type;
     srcpos_t pos;

@@ -49,15 +49,15 @@ treenode_t *calcdef();
 /// NAME ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }.
 /// name of a function.
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *name(); // == var or name idk
+nameentry_t *name(); // == var or name idk
 /// VAR ::= NAME
 /// name of a variable.
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *var();
+nameentry_t *var();
 /// PARAMS ::= [ VAR { "," VAR } ]
-/// params is a argument list.
-/// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *params();
+/// insert fill_params to a function.
+/// \returns a nameentry_t* matching to description or default (see parser.h)
+void *fill_params(funcdef_t *func /**< func to insert */);
 
 /// STATEMENTS ::= STATEMENT { STATEMENT }.
 /// \returns a treenode_t* matching to description or default (see parser.h)
@@ -124,18 +124,18 @@ treenode_t *repeat();
 const token_t *get_token();
 
 /// inserts son_node into parent_node if 'not NULL.
-/// \param parent_node to insert son_node in
-/// \param son_node which gets inserted
 /// \returns true if the provided node was not NULL and added, otherwise false
-bool add_son_node(treenode_t *parent_node, treenode_t *son_node);
+bool add_son_node(treenode_t *parent_node, ///< node to insert son_node in
+                  treenode_t *son_node ///< node to insert
+                  );
 
 /// creates new tree node with default initialized values.
 /// \returns the created tree node pointer
 treenode_t *new_tree_node();
 
 /// holds logic for error messages related to token operations.
-/// \param expression Boolean for determining success of operation as returned by a helper function.
-/// \param msg An Error message.
-void assert_token(bool expression, const char* msg);
+void assert_token(bool expression, ///< Boolean for determining success of operation as returned by a helper function.
+                  const char* msg ///< An Error message.
+                  );
 
 #endif

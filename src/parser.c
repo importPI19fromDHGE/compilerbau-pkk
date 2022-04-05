@@ -15,6 +15,10 @@
 
 #include "parser.h"
 
+#ifndef _TURTLE_H
+#include "turtle.h"
+#endif
+
 /// should only increment after successfully processed.
 int token_index = 0;
 
@@ -63,58 +67,106 @@ void program_begin_end() {
 
 treenode_t *pathdef() {
     treenode_t *node = new_tree_node();
+    node->type = name_path;
 
     if (get_token()->type != keyw_path) {
         return NULL;
     }
     token_index++;
-    if (!add_son_node(node, name())) {
-        parser_error("Syntax error at path definition (could not find path name)"); // TODO: SPRICH
-    }
+    assert_token(add_son_node(node, name()), "Missing path name for path definition");
+
     if (get_token()->type == oper_lpar){
         token_index++;
-        add_son_node(node, params());
-        if (get_token()->type != oper_rpar) {
-            parser_error("Missing closing parenthesis");
-        }
+        add_son_node(node, fill_params());
+        assert_token(get_token()->type == oper_rpar, "Missing closing parenthesis");
         token_index++;
     }
-    if (!add_son_node(node, statements())) {
-        parser_error("Missing statements for path definition");
-    }
-    if (get_token()->type != keyw_endpath) {
-        parser_error("Missing endpath keyword!");
-    }
+    assert_token(add_son_node(node, statements()), "Missing statements for path definition");
+    assert_token(get_token()->type == keyw_endpath, "Missing endpath keyword!");
     token_index++;
 
     return node;
 }
 
 treenode_t *calcdef() {
+    // treenode for syntaxtree
     treenode_t *node = new_tree_node();
+    node->type = name_calc;
+
+    // function which gets called
+    funcdef_t *func = malloc(sizeof (funcdef_t));
+    // node in which the statements get inserted
+    treenode_t *body = new_tree_node(); // can be null -> don't forgor free
+    func->body = body; // body can also be NULL in calcdef
 
     if (get_token()->type != keyw_calculation) {
         return NULL;
     }
     token_index++;
-    assert_token(add_son_node(node, name()), "Missing path name for calc definition");
+    // todo: call error with "Missing path name for calc definition"
+    nameentry_t *func_entry = name();
+
     assert_token(get_token()->type == oper_lpar, "Missing opening parenthesis");
-
     token_index++;
-    add_son_node(node, params());
+    fill_params(func);
     assert_token(get_token()->type == oper_rpar, "Missing closing parenthesis");
-
     token_index++;
-    add_son_node(node, statements());
+
+    // node in which the return expression gets inserted
+    treenode_t *ret = new_tree_node();
+    func->ret = ret; // cant be null in calc def
+    add_son_node(body, statements());
     assert_token(get_token()->type == keyw_returns, "returns keyword is missing");
 
     token_index++;
-    assert_token(add_son_node(node, expr()), "missing expression");
+    assert_token(add_son_node(ret, expr()), "missing expression");
     assert_token(get_token()->type == keyw_endcalc, "missing endcalc keyword");
 
     token_index++;
 
+    // set type of nameentry to satisfy kusche evaluation
+    func_entry->type = name_calc;
+    node->d = (nodedata_t) func_entry;
+
     return node;
+}
+
+
+nameentry_t *name() {
+    // todo: check if name adheres to convention (and make sure it exists)
+
+}
+
+nameentry_t *var() {
+    // todo: make call to name() instead
+    if (get_token()->type != name_any) {
+        return NULL;
+    }
+
+    nameentry_t *entry = malloc(sizeof(nameentry_t));
+    entry->type = get_token()->type;
+    entry->name = name_tab[get_token()->data.name_tab_index].name;
+
+    token_index++;
+
+    return entry;
+}
+
+void *fill_params(funcdef_t *func) {
+//    nameentry_t *entry = malloc(sizeof(nameentry_t) * MAX_ARGS);
+    int index = 0;
+
+    /// name_any oper_sep name_any oper_sep name_any oper_rpar
+    nameentry_t *v = var();
+    func->params[index] = v;
+
+    while(get_token()->type == oper_sep) {
+        index++;
+        token_index++;
+        v = var();
+        assert_token(v != NULL, "Missing variable after ");
+        func->params[index] = v;
+    }
 }
 
 // HELPER FUNCTIONS BELOW
