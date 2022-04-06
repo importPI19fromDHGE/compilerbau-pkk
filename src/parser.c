@@ -44,7 +44,7 @@ treenode_t *program() {
     } else {
         parser_error("begin keyword missing!");
     }
-    statements();
+    fill_statements(node);
 
     // end => (type == keyw_end)
     if (get_token()->type == keyw_end) {
@@ -68,20 +68,36 @@ void program_begin_end() {
 treenode_t *pathdef() {
     treenode_t *node = new_tree_node();
     node->type = name_path;
+    // function for the node in the syntaxtree
+    funcdef_t *func = malloc(sizeof (funcdef_t));
+    func->ret = NULL; // cause pathdef -> no return to fill (see funcdef_t)
 
     if (get_token()->type != keyw_path) {
         return NULL;
     }
     token_index++;
-    assert_token(add_son_node(node, name()), "Missing path name for path definition");
 
-    if (get_token()->type == oper_lpar){
+    nameentry_t *func_entry = name();
+    assert_token(func_entry != NULL, "Missing path name for path definition");
+
+    // assign func and func_entry
+    func_entry->type = name_calc;
+    func_entry->d.func = func;
+    node->d.p_name = func_entry;
+
+    // fill params when parentheses occur
+    if (get_token()->type == oper_lpar) {
         token_index++;
-        add_son_node(node, fill_params());
+        fill_params(func);
         assert_token(get_token()->type == oper_rpar, "Missing closing parenthesis");
         token_index++;
     }
-    assert_token(add_son_node(node, statements()), "Missing statements for path definition");
+
+    // fill body with statements
+    treenode_t *body = new_tree_node();
+    func->body = body;
+    fill_statements(body);
+    assert_token(body != NULL, "Missing statements for path definition");
     assert_token(get_token()->type == keyw_endpath, "Missing endpath keyword!");
     token_index++;
 
@@ -89,56 +105,87 @@ treenode_t *pathdef() {
 }
 
 treenode_t *calcdef() {
-    // treenode for syntaxtree
     treenode_t *node = new_tree_node();
     node->type = name_calc;
-
-    // function which gets called
+    // function for the node in the syntaxtree
     funcdef_t *func = malloc(sizeof (funcdef_t));
-    // node in which the statements get inserted
-    treenode_t *body = new_tree_node(); // can be null -> don't forgor free
-    func->body = body; // body can also be NULL in calcdef
 
     if (get_token()->type != keyw_calculation) {
         return NULL;
     }
     token_index++;
-    // todo: call error with "Missing path name for calc definition"
-    nameentry_t *func_entry = name();
 
+    nameentry_t *func_entry = name();
+    assert_token(func_entry != NULL, "Missing path name for path definition");
+
+    // assign func and func_entry
+    func_entry->type = name_calc;
+    func_entry->d.func = func;
+    node->d.p_name = func_entry;
+
+    // fill params
     assert_token(get_token()->type == oper_lpar, "Missing opening parenthesis");
     token_index++;
     fill_params(func);
     assert_token(get_token()->type == oper_rpar, "Missing closing parenthesis");
     token_index++;
 
-    // node in which the return expression gets inserted
-    treenode_t *ret = new_tree_node();
-    func->ret = ret; // cant be null in calc def
-    add_son_node(body, statements());
+    // fill body with statements | can be null -> todo: don't forgor free if no statement inserted
+    treenode_t *body = new_tree_node();
+    fill_statements(body);
+    func->body = body;
     assert_token(get_token()->type == keyw_returns, "returns keyword is missing");
-
     token_index++;
+
+    // fill return with expression
+    treenode_t *ret = new_tree_node();
     assert_token(add_son_node(ret, expr()), "missing expression");
+    func->ret = ret;
     assert_token(get_token()->type == keyw_endcalc, "missing endcalc keyword");
-
     token_index++;
-
-    // set type of nameentry to satisfy kusche evaluation
-    func_entry->type = name_calc;
-    node->d = (nodedata_t) func_entry;
 
     return node;
 }
 
 
 nameentry_t *name() {
-    // todo: check if name adheres to convention (and make sure it exists)
+    // todo: check if done | todo: check if name adheres to convention (and make sure it exists)
+    const token_t *token = get_token();
+    nameentry_t *nameentry = &(name_tab[token->data.name_tab_index]);
+    const char *name = nameentry->name; // variable names for the mentally deranged (╯°□°）╯︵ ┻━┻
 
+    switch (name[0]) {
+        case '@':
+        case 'a' ... 'z':
+        case 'A' ... 'Z':
+        case '_':
+            break; // check all allowed chars - in this case, leave switch
+        default:
+            printf("Invalid starting character for name '%c'", name[0]);
+            parser_error(NULL);
+            break;
+    }
+
+    for (int i = 1; name[i] != '\0'; i++) {
+        switch (name[i]) {
+            case 'a' ... 'z':
+            case 'A' ... 'Z':
+            case '0' ... '9':
+            case '_':
+                break;
+            default:
+                printf("Invalid character in name '%c'", name[i]);
+                parser_error(NULL);
+                break;
+        }
+    }
+
+    return nameentry;
 }
 
 nameentry_t *var() {
     // todo: make call to name() instead
+
     if (get_token()->type != name_any) {
         return NULL;
     }
@@ -150,6 +197,27 @@ nameentry_t *var() {
     token_index++;
 
     return entry;
+}
+
+treenode_t *statement() {
+    // todo: oh boi
+}
+
+void fill_statements(treenode_t *parent) {
+    // statement() legt Speicher für statement-Knoten an, diese Funktion verknüpft das zu einer EVL in parent
+    treenode_t *st;
+    treenode_t *target = parent->son[parent->son_len];
+    bool statements_found = false;
+
+    while ((st = statement()) != NULL) {
+        statements_found = true;
+        *target = *st; // zpm: i have some worries here, to be tested
+        free(st); // Pointer unneeded - at least one mem leak less
+        target = target->next; // classic EVL - move pointer to next statement
+    }
+    if (statements_found) { // if statements found, increment son length once
+        parent->son_len++;
+    }
 }
 
 void *fill_params(funcdef_t *func) {

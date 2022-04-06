@@ -206,18 +206,18 @@ union _nodedata {
 //              store, add, sub, mul, div:
 //              d = Namens-Eintrag der Variable (p_name),
 //              son 0 = expr
-// keyw_if      if: son 0 = cond, son 1 = then-statements,
-//              son 2 = else-statements oder NULL
-// keyw_do,     times-Schleife: son 0 = expr, son 1 = statements
+// keyw_if      if: son 0 = cond, son 1 = then-fill_statements,
+//              son 2 = else-fill_statements oder NULL
+// keyw_do,     times-Schleife: son 0 = expr, son 1 = fill_statements
 // keyw_counter counter-Schleife:
 //              d = Namens-Eintrag der Variable (p_name),
 //              son 0 = Startwert
 //              to: son 1 = Endwert, son 2 = NULL
 //              downto: son 1 = NULL, son 2 = Endwert
 //              son 3 = Schrittwert oder NULL
-//              son 4 = statements
-// keyw_while   while-Schleife: son 0 = cond, son 1 = statements
-// keyw_repeat  repeat-Schleife: son 0 = cond, son 1 = statements
+//              son 4 = fill_statements
+// keyw_while   while-Schleife: son 0 = cond, son 1 = fill_statements
+// keyw_repeat  repeat-Schleife: son 0 = cond, son 1 = fill_statements
 //
 // Vorrang-Klammern in Rechnungen und Bedingungen
 // sind *keine* eigenen Knoten im Syntaxbaum

@@ -33,14 +33,15 @@ void parser_error(const char *msg);
 /// \returns the treenode_t* syntax tree required by evaluate in main
 treenode_t *program();
 
-////////////////////////////////////////////////////////
-/// returns a treenode_t* or NULL if no matching was found
-////////////////////////////////////////////////////////
+/*
+////////// returns a treenode_t* or NULL if no matching was found
+*/
 
 /// PATHDEF ::= "path" NAME [ "("[ PARAMS ]")" ] STATEMENTS "endpath"
 /// definition of a path function.
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *pathdef();
+
 /// CALCDEF ::= "calculation" NAME "("[ PARAMS ]")" [ STATEMENTS ] "returns" EXPR "endcalc"
 /// definition of a calculation function.
 /// \returns a treenode_t* matching to description or default (see parser.h)
@@ -48,20 +49,22 @@ treenode_t *calcdef();
 
 /// NAME ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }.
 /// name of a function.
-/// \returns a treenode_t* matching to description or default (see parser.h)
+/// \returns a nameentry_t* matching to description or default (see parser.h)
 nameentry_t *name(); // == var or name idk
+
 /// VAR ::= NAME
 /// name of a variable.
-/// \returns a treenode_t* matching to description or default (see parser.h)
+/// \returns a nameentry_t* matching to description or default (see parser.h)
 nameentry_t *var();
+
 /// PARAMS ::= [ VAR { "," VAR } ]
 /// insert fill_params to a function.
-/// \returns a nameentry_t* matching to description or default (see parser.h)
 void *fill_params(funcdef_t *func /**< func to insert */);
 
+/// concatenates statement-nodes from statement() to an EVL in the parent-node.
 /// STATEMENTS ::= STATEMENT { STATEMENT }.
-/// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *statements();
+void fill_statements(treenode_t *parent /**< The parent node where the statements will be linked*/);
+
 /// STATEMENT  ::= DRAW_CMD | MARK_CMD | CALC_CMD | IF_CMD | TIMES_CMD | CNT_CMD | WHILE_CMD | REPEAT_CMD.
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *statement();
