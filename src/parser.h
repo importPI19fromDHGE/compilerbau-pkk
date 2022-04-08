@@ -50,7 +50,7 @@ treenode_t *calcdef();
 /// NAME ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }.
 /// name of a function.
 /// \returns a nameentry_t* matching to description or default (see parser.h)
-nameentry_t *name(); // == var or name idk
+nameentry_t *name(bool is_var); // == var or name idk
 
 /// VAR ::= NAME
 /// name of a variable.
@@ -69,12 +69,6 @@ void fill_statements(treenode_t *parent /**< The parent node where the statement
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *statement();
 
-///
-/// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *name_var_any();
-///
-/// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *determine_name_var();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *color();

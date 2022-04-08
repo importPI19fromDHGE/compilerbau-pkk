@@ -77,7 +77,7 @@ treenode_t *pathdef() {
     }
     token_index++;
 
-    nameentry_t *func_entry = name();
+    nameentry_t *func_entry = name(false);
     assert_token(func_entry != NULL, "Missing path name for path definition");
 
     // assign func and func_entry
@@ -115,7 +115,7 @@ treenode_t *calcdef() {
     }
     token_index++;
 
-    nameentry_t *func_entry = name();
+    nameentry_t *func_entry = name(false);
     assert_token(func_entry != NULL, "Missing path name for path definition");
 
     // assign func and func_entry
@@ -148,19 +148,23 @@ treenode_t *calcdef() {
 }
 
 
-nameentry_t *name() {
-    // todo: check if done | todo: check if name adheres to convention (and make sure it exists)
+nameentry_t *name(bool is_var) {
     const token_t *token = get_token();
     nameentry_t *nameentry = &(name_tab[token->data.name_tab_index]);
     const char *name = nameentry->name; // variable names for the mentally deranged (╯°□°）╯︵ ┻━┻
 
     switch (name[0]) {
         case '@':
+            if (!is_var) {
+                goto bad_code1; // i hate it // höhö LG Max (ノ°益°)ノ // todo: rework plz
+            }
+            break;
         case 'a' ... 'z':
         case 'A' ... 'Z':
         case '_':
             break; // check all allowed chars - in this case, leave switch
         default:
+        bad_code1:
             printf("Invalid starting character for name '%c'", name[0]);
             parser_error(NULL);
             break;
@@ -180,27 +184,26 @@ nameentry_t *name() {
         }
     }
 
+    token_index++;
+
     return nameentry;
 }
 
 nameentry_t *var() {
-    // todo: make call to name() instead
-
     if (get_token()->type != name_any) {
         return NULL;
     }
 
-    nameentry_t *entry = malloc(sizeof(nameentry_t));
-    entry->type = get_token()->type;
-    entry->name = name_tab[get_token()->data.name_tab_index].name;
-
-    token_index++;
+    nameentry_t *entry = name(true);
+    entry->type = name_var;
 
     return entry;
 }
 
 treenode_t *statement() {
     // todo: oh boi
+    treenode_t *statement_to_add = NULL;
+
 }
 
 void fill_statements(treenode_t *parent) {
@@ -210,6 +213,7 @@ void fill_statements(treenode_t *parent) {
     bool statements_found = false;
 
     while ((st = statement()) != NULL) {
+
         statements_found = true;
         *target = *st; // zpm: i have some worries here, to be tested
         free(st); // Pointer unneeded - at least one mem leak less
