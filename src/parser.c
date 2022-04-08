@@ -203,7 +203,57 @@ nameentry_t *var() {
 treenode_t *statement() {
     // todo: oh boi
     treenode_t *statement_to_add = NULL;
+    
+    switch (get_token()->type) {
+        case keyw_walk:
+        case keyw_jump:
+            // next token => back | home | mark
+        case keyw_turn:
+            // next token => left | right
+        case keyw_direction:
+            // continue with default
+            expr();
+            // keyw_color
+            color();
+            // clear | stop | finish | (path something -> bnf)
+            break;
 
+            // only mark
+        case keyw_mark:
+            break;
+
+            // first expr then var
+        case keyw_store:
+        case keyw_add:
+        case keyw_sub:
+            expr();
+            // store -> in | add -> to | sub -> from
+            var();
+            break;
+
+            // first var then expr
+        case keyw_mul:
+        case keyw_div:
+            var();
+            // by
+            expr();
+            break;
+
+            // simple
+        case keyw_if:
+            break;
+        case keyw_do:
+            break;
+        case keyw_counter:
+            break;
+        case keyw_while:
+            break;
+        case keyw_repeat:
+            break;
+
+        default:
+            perror("error");
+    }
 }
 
 void fill_statements(treenode_t *parent) {
