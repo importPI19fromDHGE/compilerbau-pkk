@@ -291,6 +291,27 @@ void *fill_params(funcdef_t *func) {
     }
 }
 
+treenode_t *color() {
+    const token_t *t;
+
+    for (int i = 0; i < 3; ++i) {
+        t = get_token();
+        token_index++;
+
+        if (t->type != oper_const ||
+            t->data.val < 0 || t->data.val > 100) {
+            parser_error("Invalid color value");
+        }
+        if (i != 2) {
+            if (get_token()->type != oper_sep) {
+                parser_error("Missing comma for color value");
+            }
+            token_index++;
+        }
+    }
+    // todo: was muss man hier zurückgeben?
+}
+
 // HELPER FUNCTIONS BELOW
 
 // big todo: maybe increment token_index here... depending on duplicate code
