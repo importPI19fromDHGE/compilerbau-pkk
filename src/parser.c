@@ -312,6 +312,29 @@ treenode_t *color() {
     // todo: was muss man hier zurückgeben?
 }
 
+treenode_t *args() {
+    if (expr() != NULL) {
+        while (get_token()->type == oper_sep) {
+            token_index++;
+            if (expr() == NULL) {
+                parser_error("Missing expression after comma");
+            }
+        }
+    }
+    // todo: fill this into some kind of struct and return something
+}
+
+treenode_t *factor() {
+    operand();
+
+    if (get_token()->type == oper_pow) {
+        token_index++;
+        factor();
+    }
+
+    // todo: return something
+}
+
 // HELPER FUNCTIONS BELOW
 
 // big todo: maybe increment token_index here... depending on duplicate code

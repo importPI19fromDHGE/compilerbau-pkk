@@ -86,7 +86,7 @@ treenode_t *expr();
 treenode_t *term();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *faktor();
+treenode_t *factor();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *operand();
