@@ -294,7 +294,7 @@ void *fill_params(funcdef_t *func) {
 treenode_t *color() {
     const token_t *t;
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; i++) {
         t = get_token();
         token_index++;
 
