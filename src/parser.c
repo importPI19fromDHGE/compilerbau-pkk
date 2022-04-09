@@ -19,6 +19,8 @@
 #include "turtle.h"
 #endif
 
+#define FNPTRS 8
+
 /// should only increment after successfully processed.
 int token_index = 0;
 
@@ -201,59 +203,30 @@ nameentry_t *var() {
 }
 
 treenode_t *statement() {
-    // todo: oh boi
+    // fixme: oh boi... yes... this... notLikeThisCat
     treenode_t *statement_to_add = NULL;
-    
-    switch (get_token()->type) {
-        case keyw_walk:
-        case keyw_jump:
-            // next token => back | home | mark
-        case keyw_turn:
-            // next token => left | right
-        case keyw_direction:
-            // continue with default
-            expr();
-            // keyw_color
-            color();
-            // clear | stop | finish | (path something -> bnf)
-            break;
 
-            // only mark
-        case keyw_mark:
-            break;
+    treenode_t* (*fun_ptrs[FNPTRS])(void) = { // this is where the fun* begins // now THIS is peak C programming
+            draw_cmd,
+            mark_cmd,
+            calc_cmd,
+            if_cmd,
+            times_cmd,
+            cnt_cmd,
+            while_cmd,
+            repeat_cmd
+    };
 
-            // first expr then var
-        case keyw_store:
-        case keyw_add:
-        case keyw_sub:
-            expr();
-            // store -> in | add -> to | sub -> from
-            var();
+    // preferably a switch case... but c shenanigans ¯\_(ツ)_/¯
+    // ┌∩┐(◣_◢)┌∩┐
+    for (int i = 0; i < FNPTRS; i++) {
+        statement_to_add = fun_ptrs[i]();
+        if (statement_to_add != NULL) {
             break;
-
-            // first var then expr
-        case keyw_mul:
-        case keyw_div:
-            var();
-            // by
-            expr();
-            break;
-
-            // simple
-        case keyw_if:
-            break;
-        case keyw_do:
-            break;
-        case keyw_counter:
-            break;
-        case keyw_while:
-            break;
-        case keyw_repeat:
-            break;
-
-        default:
-            perror("error");
+        }
     }
+
+    return statement_to_add;
 }
 
 void fill_statements(treenode_t *parent) {
@@ -293,6 +266,8 @@ void *fill_params(funcdef_t *func) {
 
 treenode_t *color() {
     const token_t *t;
+    treenode_t *node = new_tree_node();
+    node->type = keyw_color;
 
     for (int i = 0; i < 3; i++) {
         t = get_token();
@@ -301,17 +276,22 @@ treenode_t *color() {
             t->data.val < 0 || t->data.val > 100) {
             parser_error("Invalid color value");
         }
+
+        treenode_t *color = new_tree_node();
+        color->d = (nodedata_t) { .val = t->data.val }; // Willkommen bei C ( : ౦ ‸ ౦ : )
+        add_son_node(node, color);
         
         token_index++;
         
-        if (i != 2) {
+        if (i != 2) { // not last iteration
             if (get_token()->type != oper_sep) {
                 parser_error("Missing comma for color value");
             }
             token_index++;
         }
     }
-    // todo: was muss man hier zurückgeben?
+
+    return node;
 }
 
 treenode_t *args() {
@@ -327,14 +307,16 @@ treenode_t *args() {
 }
 
 treenode_t *factor() {
-    operand();
+    treenode_t *node = new_tree_node();
+    node->type = oper_pow;
+    assert_token(add_son_node(node, operand()), "missing operand");
 
     if (get_token()->type == oper_pow) {
         token_index++;
-        factor();
+        assert_token(add_son_node(node, factor()), "missing operand after ^");
     }
 
-    // todo: return something
+    return node;
 }
 
 // HELPER FUNCTIONS BELOW

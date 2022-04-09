@@ -98,6 +98,9 @@ treenode_t *args();
 treenode_t *draw_cmd();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *mark_cmd();
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *calc_cmd();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
@@ -113,7 +116,7 @@ treenode_t *cnt_cmd();
 treenode_t *while_cmd();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *repeat();
+treenode_t *repeat_cmd();
 
 
 /// get the current token in relation to token_index.
