@@ -72,6 +72,11 @@ treenode_t *statement();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *color();
+
+///
+/// \returns a treenode_t* matching to description or default (see parser.h)
+treenode_t *args();
+
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *cond();
@@ -92,9 +97,6 @@ treenode_t *factor();
 treenode_t *operand();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *args();
-///
-/// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *draw_cmd();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
@@ -107,7 +109,7 @@ treenode_t *calc_cmd();
 treenode_t *if_cmd();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *times_cmd();
+treenode_t *do_cmd();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *cnt_cmd();
