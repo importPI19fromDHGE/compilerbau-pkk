@@ -20,3 +20,16 @@
 - jede Funktion gibt ``double`` zurück
 
 Siehe [hier](syntax.bnf).
+
+## TODO
+- Oliver
+  - cmd_calc
+  - cmd_draw
+- Max
+  - cmd_counter
+  - expr
+  - term
+  - cond/cond_s
+- Felix
+  - operand
+  - args

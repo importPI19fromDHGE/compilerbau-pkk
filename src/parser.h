@@ -14,8 +14,6 @@
 #include "dynamic_array.h"
 #endif
 
-// todo: remove probably (not required globally)
-extern treenode_t *syntax_tree;
 
 /// stream of token created by lexer.
 extern Array token_stream;
@@ -97,28 +95,28 @@ treenode_t *factor();
 treenode_t *operand();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *draw_cmd();
+treenode_t *cmd_draw();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *mark_cmd();
+treenode_t *cmd_mark();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *calc_cmd();
+treenode_t *cmd_calc();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *if_cmd();
+treenode_t *cmd_if();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *do_cmd();
+treenode_t *cmd_do();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *cnt_cmd();
+treenode_t *cmd_counter();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *while_cmd();
+treenode_t *cmd_while();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *repeat_cmd();
+treenode_t *cmd_repeat();
 
 
 /// get the current token in relation to token_index.

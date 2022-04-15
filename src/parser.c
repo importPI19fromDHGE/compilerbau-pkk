@@ -24,6 +24,18 @@
 /// should only increment after successfully processed.
 int token_index = 0;
 
+// maybe look at first token and choose or skip cmd (func for each array entry)
+treenode_t* (*cmd_ptrs[FNPTRS])(void) = { // this is where the fun* begins // now THIS is peak C programming
+        cmd_draw,
+        cmd_mark,
+        cmd_calc,
+        cmd_if,
+        cmd_do,
+        cmd_counter,
+        cmd_while,
+        cmd_repeat
+};
+
 void parser_error(const char *msg) {
     if (msg != NULL) {
         printf("%s\n", msg);
@@ -206,22 +218,10 @@ treenode_t *statement() {
     // fixme: oh boi... yes... this... notLikeThisCat
     treenode_t *statement_to_add = NULL;
 
-    // todo: maybe look at first token and choose or skip cmd (func for each array entry)
-    treenode_t* (*fun_ptrs[FNPTRS])(void) = { // this is where the fun* begins // now THIS is peak C programming
-            draw_cmd,
-            mark_cmd,
-            calc_cmd,
-            if_cmd,
-            do_cmd,
-            cnt_cmd,
-            while_cmd,
-            repeat_cmd
-    };
-
     // preferably a switch case... but c shenanigans ¯\_(ツ)_/¯
     // ┌∩┐(◣_◢)┌∩┐
     for (int i = 0; i < FNPTRS; i++) {
-        statement_to_add = fun_ptrs[i]();
+        statement_to_add = cmd_ptrs[i]();
         if (statement_to_add != NULL) {
             break;
         }
@@ -322,13 +322,69 @@ treenode_t *factor() {
     return node;
 }
 
+//
 // Statement Commands
+//
 
-treenode_t *draw_cmd() {
+treenode_t *cmd_draw() {
+    int last_token_index = token_index;
+    type_t type = get_token()->type;
+    switch (type) {
+        case keyw_walk:
+        case keyw_jump:
+            token_index++;
+            switch (get_token()->type) {
+                case keyw_back:
+                case keyw_home:
+                    break;
+                default:
+                    token_index--;
+                    break;
+            }
+            break;
+        case keyw_turn:
+            switch (get_token()->type) {
+                case keyw_left:
+                case keyw_right:
+                    token_index++;
+                    break;
+                default:
+                    token_index--;
+                    break;
+            }
+            break;
+        case keyw_direction:
+            token_index++;
+            break;
+        case keyw_color:
+            token_index++;
+            assert_token(color(), "missing value for color");
+            break;
+        case keyw_clear:
+        case keyw_stop:
+        case keyw_finish:
+            token_index++;
+            break;
+        case keyw_path:
+            token_index++;
+            assert_token(name(false), "missing name for path");
+            if (get_token()->type == oper_lpar) {
+                token_index++;
+                args();
+                assert_token(get_token()->type == oper_rpar, "missing closing parenthesis");
+                token_index++;
+            }
+            break;
+        default:
+            return NULL;
+    }
+
+    assert_token(expr(), "missing expression");
+
 
 }
 
-treenode_t *mark_cmd() {
+treenode_t *cmd_mark() {
     int last_token_index = token_index;
     type_t type = get_token()->type;
     switch (type) {
@@ -352,14 +408,16 @@ treenode_t *mark_cmd() {
             return NULL;
         }
     }
+
+    return node;
 }
 
-treenode_t *calc_cmd() {
+treenode_t *cmd_calc() {
 
 }
 
 
-treenode_t *if_cmd() {
+treenode_t *cmd_if() {
     if (get_token()->type != keyw_if) {
         return NULL;
     }
@@ -385,7 +443,7 @@ treenode_t *if_cmd() {
     return node;
 }
 
-treenode_t *do_cmd() {
+treenode_t *cmd_do() {
     if (get_token()->type != keyw_do) {
         return NULL;
     }
@@ -405,11 +463,11 @@ treenode_t *do_cmd() {
     return node;
 }
 
-treenode_t *cnt_cmd() {
+treenode_t *cmd_counter() {
 
 }
 
-treenode_t *while_cmd() {
+treenode_t *cmd_while() {
     if (get_token()->type != keyw_while) {
         return NULL;
     }
@@ -429,7 +487,7 @@ treenode_t *while_cmd() {
     return node;
 }
 
-treenode_t *repeat_cmd() {
+treenode_t *cmd_repeat() {
     if (get_token()->type != keyw_repeat) {
         return NULL;
     }
