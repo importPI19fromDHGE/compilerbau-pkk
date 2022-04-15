@@ -24,6 +24,18 @@
 /// should only increment after successfully processed.
 int token_index = 0;
 
+// maybe look at first token and choose or skip cmd (func for each array entry)
+treenode_t* (*cmd_ptrs[FNPTRS])(void) = { // this is where the fun* begins // now THIS is peak C programming
+        cmd_draw,
+        cmd_mark,
+        cmd_calc,
+        cmd_if,
+        cmd_do,
+        cmd_counter,
+        cmd_while,
+        cmd_repeat
+};
+
 void parser_error(const char *msg) {
     if (msg != NULL) {
         printf("%s\n", msg);
@@ -206,21 +218,10 @@ treenode_t *statement() {
     // fixme: oh boi... yes... this... notLikeThisCat
     treenode_t *statement_to_add = NULL;
 
-    treenode_t* (*fun_ptrs[FNPTRS])(void) = { // this is where the fun* begins // now THIS is peak C programming
-            draw_cmd,
-            mark_cmd,
-            calc_cmd,
-            if_cmd,
-            times_cmd,
-            cnt_cmd,
-            while_cmd,
-            repeat_cmd
-    };
-
     // preferably a switch case... but c shenanigans ¯\_(ツ)_/¯
     // ┌∩┐(◣_◢)┌∩┐
     for (int i = 0; i < FNPTRS; i++) {
-        statement_to_add = fun_ptrs[i]();
+        statement_to_add = cmd_ptrs[i]();
         if (statement_to_add != NULL) {
             break;
         }
@@ -244,6 +245,8 @@ void fill_statements(treenode_t *parent) {
     }
     if (statements_found) { // if statements found, increment son length once
         parent->son_len++;
+    } else {
+        parser_error("missing at least one valid statement");
     }
 }
 
@@ -315,6 +318,189 @@ treenode_t *factor() {
         token_index++;
         assert_token(add_son_node(node, factor()), "missing operand after ^");
     }
+
+    return node;
+}
+
+//
+// Statement Commands
+//
+
+treenode_t *cmd_draw() {
+    int last_token_index = token_index;
+    type_t type = get_token()->type;
+    switch (type) {
+        case keyw_walk:
+        case keyw_jump:
+            token_index++;
+            switch (get_token()->type) {
+                case keyw_back:
+                case keyw_home:
+                    break;
+                default:
+                    token_index--;
+                    break;
+            }
+            break;
+        case keyw_turn:
+            switch (get_token()->type) {
+                case keyw_left:
+                case keyw_right:
+                    token_index++;
+                    break;
+                default:
+                    token_index--;
+                    break;
+            }
+            break;
+        case keyw_direction:
+            token_index++;
+            break;
+        case keyw_color:
+            token_index++;
+            assert_token(color(), "missing value for color");
+            break;
+        case keyw_clear:
+        case keyw_stop:
+        case keyw_finish:
+            token_index++;
+            break;
+        case keyw_path:
+            token_index++;
+            assert_token(name(false), "missing name for path");
+            if (get_token()->type == oper_lpar) {
+                token_index++;
+                args();
+                assert_token(get_token()->type == oper_rpar, "missing closing parenthesis");
+                token_index++;
+            }
+            break;
+        default:
+            return NULL;
+    }
+
+    assert_token(expr(), "missing expression");
+
+
+}
+
+treenode_t *cmd_mark() {
+    int last_token_index = token_index;
+    type_t type = get_token()->type;
+    switch (type) {
+        case keyw_walk:
+        case keyw_jump:
+        case keyw_mark:
+            break;
+        default:
+            return NULL;
+    }
+    token_index++;
+
+    treenode_t *node = new_tree_node();
+    node->type = type;
+    if (type != keyw_mark) {
+        if (get_token()->type == keyw_mark) {
+            token_index++;
+            node->d = (nodedata_t) {.walk = keyw_mark};
+        } else {
+            token_index = last_token_index;
+            return NULL;
+        }
+    }
+
+    return node;
+}
+
+treenode_t *cmd_calc() {
+
+}
+
+
+treenode_t *cmd_if() {
+    if (get_token()->type != keyw_if) {
+        return NULL;
+    }
+    token_index++;
+
+    treenode_t *node = new_tree_node();
+    node->type = keyw_if;
+
+    assert_token(add_son_node(node, cond()), "missing condition");
+    assert_token(get_token()->type == keyw_then, "missing then keyword");
+    token_index++;
+
+    fill_statements(node);
+
+    if (get_token()->type == keyw_else) {
+        token_index++;
+        fill_statements(node);
+    }
+
+    assert_token(get_token()->type == keyw_endif, "missing endif keyword");
+    token_index++;
+
+    return node;
+}
+
+treenode_t *cmd_do() {
+    if (get_token()->type != keyw_do) {
+        return NULL;
+    }
+    token_index++;
+
+    treenode_t *node = new_tree_node();
+    node->type = keyw_do;
+
+    assert_token(add_son_node(node, expr()), "missing expression for times cmd");
+    assert_token(get_token()->type == keyw_times, "missing times keyword");
+    token_index++;
+
+    fill_statements(node);
+    assert_token(get_token()->type == keyw_done, "missing done keyword");
+    token_index++;
+
+    return node;
+}
+
+treenode_t *cmd_counter() {
+
+}
+
+treenode_t *cmd_while() {
+    if (get_token()->type != keyw_while) {
+        return NULL;
+    }
+    token_index++;
+
+    treenode_t *node = new_tree_node();
+    node->type = keyw_while;
+
+    assert_token(add_son_node(node, cond()), "missing condition for while cmd");
+    assert_token(get_token()->type == keyw_do, "missing do keyword");
+    token_index++;
+
+    fill_statements(node);
+    assert_token(get_token()->type == keyw_done, "missing done keyword");
+    token_index++;
+
+    return node;
+}
+
+treenode_t *cmd_repeat() {
+    if (get_token()->type != keyw_repeat) {
+        return NULL;
+    }
+    token_index++;
+
+    treenode_t *node = new_tree_node();
+    node->type = keyw_repeat;
+
+    fill_statements(node);
+    assert_token(get_token()->type == keyw_until, "missing until keyword");
+    token_index++;
+
+    assert_token(add_son_node(node, cond()), "missing condition for repeat cmd");
 
     return node;
 }
