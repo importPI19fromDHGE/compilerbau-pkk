@@ -71,9 +71,8 @@ treenode_t *statement();
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *color();
 
-///
-/// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *args();
+/// ARGS ::= [ EXPR { "," EXPR } ]
+void fill_args(treenode_t *parent_node);
 
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
@@ -90,9 +89,11 @@ treenode_t *term();
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *factor();
-///
+
+/// OPERAND ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "rand" "(" EXPR "," EXPR ")" | "(" EXPR ")" | "|" EXPR "|"  | ZIFFER {ZIFFER} ["." {ZIFFER}] | VAR )
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *operand();
+
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *cmd_draw();
