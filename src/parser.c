@@ -430,6 +430,7 @@ treenode_t *cmd_calc() {
                 case keyw_sub:
                     assert_token(get_token()->type == keyw_from, "missing 'from' keyword");
                 default:
+                    assert(false);
                     break;
             }
             token_index++;
