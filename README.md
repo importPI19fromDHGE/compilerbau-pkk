@@ -31,5 +31,7 @@ Siehe [hier](syntax.bnf).
   - term
   - cond/cond_s
 - Felix
-  - operand
-  - args
+  - [done] operand 
+    - added `"rand" "(" EXPR "," EXPR ")"` 
+    - removed `"[" EXPR "]"`
+  - [done] args -> fill_args

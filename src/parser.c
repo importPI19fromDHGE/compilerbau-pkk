@@ -252,8 +252,8 @@ treenode_t *color() {
         }
 
         treenode_t *color = new_tree_node();
-        color->d = (nodedata_t) { .val = t->data.val }; // Willkommen bei C ( : ౦ ‸ ౦ : )
-        add_son_node(node, color); // todo: assert
+        color->d.val = t->data.val;
+        add_son_node(node, color);
         
         token_index++;
         
@@ -265,16 +265,17 @@ treenode_t *color() {
     return node;
 }
 
-treenode_t *args() {
-    if (expr() != NULL) {
-        while (get_token()->type == oper_sep) {
-            token_index++;
-            if (expr() == NULL) {
-                parser_error("Missing expression after comma");
-            }
+void fill_args(treenode_t *parent_node) {
+    bool has_added_token;
+    const token_t *token;
+    do {
+        has_added_token = add_son_node(parent_node, expr());
+        if (parent_node != NULL && parent_node->son_len > 0) {
+            assert_token(has_added_token, "Missing expression after comma");
         }
-    }
-    // todo: fill this into some kind of struct and return something
+        token = get_token();
+        token_index++;
+    } while (token->type == oper_sep);
 }
 
 treenode_t *factor() {
@@ -290,6 +291,83 @@ treenode_t *factor() {
     return node;
 }
 
+treenode_t *operand() {
+    treenode_t *node = new_tree_node();
+    treenode_t *active_node = node;
+
+    if (get_token()->type == oper_neg) {
+        token_index++; // todo: when moving token_index++ in get_token, add else with token_index--
+        active_node->type = oper_neg;
+        active_node = new_tree_node();
+    }
+
+    const token_t *token = get_token();
+    token_index++;
+    switch (token->type) {
+        // ("sqrt" | "sin" | "cos" | "tan") "(" EXPR ")"
+        case name_math_sqrt:
+        case name_math_sin:
+        case name_math_cos:
+        case name_math_tan: {
+            treenode_t *math_node = new_tree_node();
+            math_node->type = token->type; // theoretically not required by the turtle-eval
+            math_node->d.p_name = &(name_tab[token->data.name_tab_index]);
+            add_son_node(active_node, math_node);
+
+            assert_token(get_token()->type == oper_lpar, "missing left bracket");
+            token_index++;
+            assert_token(add_son_node(math_node, expr()), "Missing expression");
+            assert_token(get_token()->type == oper_rpar, "missing right bracket");
+            token_index++;
+            break;
+        }
+        // "rand" "(" EXPR "," EXPR ")"
+        case name_math_rand: {
+            treenode_t *rand_node = new_tree_node();
+            rand_node->type = token->type;
+            rand_node->d.p_name = &(name_tab[token->data.name_tab_index]);
+            add_son_node(active_node, rand_node);
+
+            assert_token(add_son_node(rand_node, expr()), "Missing expression");
+            assert_token(get_token()->type == oper_sep, "Missing comma");
+            token_index++;
+            assert_token(add_son_node(rand_node, expr()), "Missing expression after comma");
+            break;
+        }
+        // "(" EXPR ")" | "|" EXPR "|"
+        case oper_abs:
+        case oper_lpar:
+            assert_token(add_son_node(active_node, expr()), "Missing expression");
+            if (token->type == oper_abs) {
+                assert_token(get_token()->type == oper_abs, "missing right absolut");
+            } else {
+                assert_token(get_token()->type == oper_rpar, "missing right bracket");
+            }
+            token_index++;
+            break;
+        // ZIFFER {ZIFFER} ["." {ZIFFER}]
+        // done by lexer => copy value of token
+        case oper_const: {
+            treenode_t *const_node = new_tree_node();
+            const_node->type = oper_const;
+            const_node->d.val = get_token()->data.val;
+            token_index++;
+            break;
+        }
+        // VAR
+        case name_any: {
+            treenode_t *var_node = new_tree_node();
+            var_node->d.p_name = var();
+            add_son_node(active_node, var_node);
+            break;
+        }
+        default:
+            token_index--;
+            return NULL;
+    }
+    return node;
+}
+
 //
 // Statement Commands
 //
@@ -297,6 +375,9 @@ treenode_t *factor() {
 treenode_t *cmd_draw() {
     int last_token_index = token_index;
     type_t type = get_token()->type;
+    treenode_t *node = new_tree_node();
+    node->type = type;
+
     switch (type) {
         case keyw_walk:
         case keyw_jump:
@@ -304,16 +385,18 @@ treenode_t *cmd_draw() {
             switch (get_token()->type) {
                 case keyw_back:
                 case keyw_home:
+                    node->d.walk = get_token()->type;
                     break;
                 default:
                     token_index--;
                     break;
             }
             break;
-        case keyw_turn:
+        case keyw_turn: // todo: keyw_turn kommt in der turtle-eval iwi gar nicht vor?
             switch (get_token()->type) {
                 case keyw_left:
                 case keyw_right:
+                    node-type = get_token()->type;
                     token_index++;
                     break;
                 default:
@@ -326,7 +409,7 @@ treenode_t *cmd_draw() {
             break;
         case keyw_color:
             token_index++;
-            assert_token(color(), "missing value for color");
+            assert_token(node = color(), "missing value for color");
             break;
         case keyw_clear:
         case keyw_stop:
@@ -335,21 +418,22 @@ treenode_t *cmd_draw() {
             break;
         case keyw_path:
             token_index++;
-            assert_token(name(false), "missing name for path");
+            assert_token(node.d.p_name = name(false), "missing name for path");
             if (get_token()->type == oper_lpar) {
                 token_index++;
-                args();
+                fill_args(node); // todo: insert parent_node instead of NULL >_<
                 assert_token(get_token()->type == oper_rpar, "missing closing parenthesis");
                 token_index++;
             }
             break;
         default:
+            free(node);
             return NULL;
     }
 
-    assert_token(expr(), "missing expression");
+    assert_token(add_son_node(node, expr()), "missing expression");
 
-
+    return node;
 }
 
 treenode_t *cmd_mark() {
@@ -371,7 +455,7 @@ treenode_t *cmd_mark() {
     if (type != keyw_mark) {
         if (get_token()->type == keyw_mark) {
             token_index++;
-            node->d = (nodedata_t) {.walk = keyw_mark};
+            node->d.walk = keyw_mark;
         } else {
             token_index = last_token_index;
             return NULL;
@@ -382,7 +466,43 @@ treenode_t *cmd_mark() {
 }
 
 treenode_t *cmd_calc() {
+    treenode_t *node = new_tree_node();
+    node->type = get_token()->type;
 
+    switch (get_token()->type) {
+        case keyw_store:
+        case keyw_add:
+        case keyw_sub:
+            token_index++;
+            assert_token(add_son_node(node, expr()), "missing expression");
+            switch (node->type) {
+                case keyw_store:
+                    assert_token(get_token()->type == keyw_in, "missing 'in' keyword");
+                case keyw_add:
+                    assert_token(get_token()->type == keyw_to, "missing 'to' keyword");
+                case keyw_sub:
+                    assert_token(get_token()->type == keyw_from, "missing 'from' keyword");
+                default:
+                    assert(false);
+                    break;
+            }
+            token_index++;
+            assert_token(node->d.p_name = var(), "missing variable");
+            break;
+        case keyw_mul:
+        case keyw_div:
+            token_index++;
+            assert_token(node->d.p_name = var(), "missing variable");
+            assert_token(get_token()->type == keyw_by, "missing 'from' keyword");
+            token_index++;
+            assert_token(add_son_node(node, expr()), "missing expression");
+            break;
+        default:
+            free(node);
+            return NULL;
+    }
+
+    return node;
 }
 
 
