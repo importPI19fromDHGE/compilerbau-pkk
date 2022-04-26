@@ -407,6 +407,9 @@ treenode_t *operand() {
 treenode_t *cmd_draw() {
     int last_token_index = token_index;
     type_t type = get_token()->type;
+    treenode_t *node = new_tree_node();
+    node->type = type;
+
     switch (type) {
         case keyw_walk:
         case keyw_jump:
@@ -414,16 +417,18 @@ treenode_t *cmd_draw() {
             switch (get_token()->type) {
                 case keyw_back:
                 case keyw_home:
+                    node->d.walk = get_token()->type;
                     break;
                 default:
                     token_index--;
                     break;
             }
             break;
-        case keyw_turn:
+        case keyw_turn: // todo: keyw_turn kommt in der turtle-eval iwi gar nicht vor?
             switch (get_token()->type) {
                 case keyw_left:
                 case keyw_right:
+                    node-type = get_token()->type;
                     token_index++;
                     break;
                 default:
@@ -436,7 +441,7 @@ treenode_t *cmd_draw() {
             break;
         case keyw_color:
             token_index++;
-            assert_token(color(), "missing value for color");
+            assert_token(node = color(), "missing value for color");
             break;
         case keyw_clear:
         case keyw_stop:
@@ -445,21 +450,22 @@ treenode_t *cmd_draw() {
             break;
         case keyw_path:
             token_index++;
-            assert_token(name(false), "missing name for path");
+            assert_token(node.d.p_name = name(false), "missing name for path");
             if (get_token()->type == oper_lpar) {
                 token_index++;
-                fill_args(NULL); // todo: insert parent_node instead of NULL >_<
+                fill_args(node); // todo: insert parent_node instead of NULL >_<
                 assert_token(get_token()->type == oper_rpar, "missing closing parenthesis");
                 token_index++;
             }
             break;
         default:
+            free(node);
             return NULL;
     }
 
-    assert_token(expr(), "missing expression");
+    assert_token(add_son_node(node, expr()), "missing expression");
 
-
+    return node;
 }
 
 treenode_t *cmd_mark() {
