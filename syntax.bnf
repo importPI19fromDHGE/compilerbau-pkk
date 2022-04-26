@@ -12,7 +12,7 @@ COND_S     ::= EXPR ("<" | ">" | "<=" | ">=" | "=" | "<>") EXPR {("not" | "and" 
 EXPR       ::= TERM { ( "-" | "+" ) TERM }
 TERM       ::= FAKTOR { ( "*" | "/" ) FAKTOR }
 FAKTOR     ::= OPERAND [ "^" FAKTOR ]
-OPERAND    ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "(" EXPR ")" | "|" EXPR "|" | "[" EXPR "]" | ZIFFER {ZIFFER} ["." {ZIFFER}] | VAR )
+OPERAND    ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "rand" "(" EXPR "," EXPR ")" | "(" EXPR ")" | "|" EXPR "|"  | ZIFFER {ZIFFER} ["." {ZIFFER}] | VAR )
 ARGS       ::= [ EXPR { "," EXPR } ]
 STATEMENTS ::= STATEMENT { STATEMENT }
 STATEMENT  ::= DRAW_CMD | MARK_CMD | CALC_CMD | IF_CMD | DO_CMD | CNT_CMD | WHILE_CMD | REPEAT_CMD
