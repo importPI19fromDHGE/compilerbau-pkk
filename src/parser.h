@@ -14,18 +14,10 @@
 #include "dynamic_array.h"
 #endif
 
+#define get_token(...) def_get_token((get_token_args_t){__VA_ARGS__})
 
 /// stream of token created by lexer.
 extern Array token_stream;
-
-
-/// checks on token with type "tok_bofeof" (program begin/end).
-void program_begin_end();
-
-/// Print an error message related to the currently used token, depending on token_index.
-/// \param msg A custom Error message. Set to NULL to print a generic / unkown error.
-void parser_error(const char *msg);
-
 
 /// PROGRAM ::= { PATHDEF | CALCDEF } "begin" STATEMENTS "end".
 /// \returns the treenode_t* syntax tree required by evaluate in main
@@ -120,9 +112,18 @@ treenode_t *cmd_while();
 treenode_t *cmd_repeat();
 
 
+/// Print an error message related to the currently used token, depending on token_index or a set token.
+/// \param msg A custom Error message. Set to NULL to print a generic / unkown error.
+void parser_error(const char *msg);
+
+typedef struct get_token_args {
+    bool increment_index;
+} get_token_args_t;
+
 /// get the current token in relation to token_index.
+/// \param args struct to impl a default value solution
 /// \returns current token
-const token_t *get_token();
+const token_t *def_get_token(get_token_args_t args);
 
 /// inserts son_node into parent_node if 'not NULL.
 /// \returns true if the provided node was not NULL and added, otherwise false
