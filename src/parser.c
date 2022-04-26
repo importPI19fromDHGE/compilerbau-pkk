@@ -413,7 +413,43 @@ treenode_t *cmd_mark() {
 }
 
 treenode_t *cmd_calc() {
+    treenode_t *node = new_tree_node();
+    node->type = get_token()->type;
 
+    switch (get_token()->type) {
+        case keyw_store:
+        case keyw_add:
+        case keyw_sub:
+            token_index++;
+            assert_token(add_son_node(node, expr()), "missing expression");
+            switch (node->type) {
+                case keyw_store:
+                    assert_token(get_token()->type == keyw_in, "missing 'in' keyword");
+                case keyw_add:
+                    assert_token(get_token()->type == keyw_to, "missing 'to' keyword");
+                case keyw_sub:
+                    assert_token(get_token()->type == keyw_from, "missing 'from' keyword");
+                default:
+                    assert(false);
+                    break;
+            }
+            token_index++;
+            assert_token(node->d.p_name = var(), "missing variable");
+            break;
+        case keyw_mul:
+        case keyw_div:
+            token_index++;
+            assert_token(node->d.p_name = var(), "missing variable");
+            assert_token(get_token()->type == keyw_by, "missing 'from' keyword");
+            token_index++;
+            assert_token(add_son_node(node, expr()), "missing expression");
+            break;
+        default:
+            free(node);
+            return NULL;
+    }
+
+    return node;
 }
 
 
