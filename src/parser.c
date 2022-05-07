@@ -267,15 +267,90 @@ treenode_t *color() {
 
 void fill_args(treenode_t *parent_node) {
     bool has_added_token;
-    const token_t *token;
     do {
         has_added_token = add_son_node(parent_node, expr());
         if (parent_node != NULL && parent_node->son_len > 0) {
             assert_token(has_added_token, "Missing expression after comma");
         }
-        token = get_token();
+    } while (get_token(true)->type == oper_sep);
+}
+
+treenode_t *cond() {
+    treenode_t *node = new_tree_node();
+    if (get_token()->type == oper_lpar) {
         token_index++;
-    } while (token->type == oper_sep);
+        node = cond_s(node);
+        assert_token(get_token(true)->type == oper_rpar, "error in condition: expected expression");
+    } else {
+        node = cond_s(node);
+    }
+
+    return node;
+}
+
+treenode_t *cond_s(treenode_t *node) {
+    add_son_node(node,expr());
+    const token_t *token = get_token(true);
+
+    switch (token->type) {
+        case oper_less:
+        case oper_grtr:
+        case oper_lequ:
+        case oper_gequ:
+        case oper_equ:
+        case oper_nequ:
+            node->type = token->type;
+            break;
+        default:
+            parser_error("missing comparing operator");
+    }
+
+    add_son_node(node, expr());
+
+    switch (get_token()->type) {
+        case keyw_not:
+        case keyw_and:
+        case keyw_or:
+            node->son[1]->type = get_token(true)->type;
+            cond_s(node->son[1]); // todo: check if this works
+            break;
+        default:
+            break;
+    }
+
+    return node;
+}
+
+treenode_t *expr() { //todo fixme
+    treenode_t *node = new_tree_node();
+    assert_token(add_son_node(node, term()), "error in expression: expected a term");
+    // token_index got incremented in term()
+    type_t type = get_token(true)->type;
+    // token_index got incremented in get_token(true)
+    while ((type == oper_add) || (type == oper_sub)) {
+        assert_token(add_son_node(node, term()), "error in expression: expected a term");
+        // token_index got incremented in term()
+        type = get_token(true)->type;
+        // token_index got incremented in get_token(true)
+    }
+
+    return node;
+}
+
+treenode_t *term() {
+    treenode_t *node = new_tree_node();
+    assert_token(add_son_node(node, factor()), "error in expression: expected a factor");
+    // token_index got incremented in term()
+    type_t type = get_token(true)->type;
+    // token_index got incremented in get_token(true)
+    while ((type == oper_mul) || (type == oper_div)) {
+        assert_token(add_son_node(node, factor()), "error in expression: expected a factor");
+        // token_index got incremented in term()
+        type = get_token(true)->type;
+        // token_index got incremented in get_token(true)
+    }
+
+    return node;
 }
 
 treenode_t *factor() {
@@ -296,13 +371,12 @@ treenode_t *operand() {
     treenode_t *active_node = node;
 
     if (get_token()->type == oper_neg) {
-        token_index++; // todo: when moving token_index++ in get_token, add else with token_index--
+        token_index++;
         active_node->type = oper_neg;
         active_node = new_tree_node();
     }
 
-    const token_t *token = get_token();
-    token_index++;
+    const token_t *token = get_token(true);
     switch (token->type) {
         // ("sqrt" | "sin" | "cos" | "tan") "(" EXPR ")"
         case name_math_sqrt:
@@ -314,11 +388,9 @@ treenode_t *operand() {
             math_node->d.p_name = &(name_tab[token->data.name_tab_index]);
             add_son_node(active_node, math_node);
 
-            assert_token(get_token()->type == oper_lpar, "missing left bracket");
-            token_index++;
+            assert_token(get_token(true)->type == oper_lpar, "missing left bracket");
             assert_token(add_son_node(math_node, expr()), "Missing expression");
-            assert_token(get_token()->type == oper_rpar, "missing right bracket");
-            token_index++;
+            assert_token(get_token(true)->type == oper_rpar, "missing right bracket");
             break;
         }
         // "rand" "(" EXPR "," EXPR ")"
@@ -329,8 +401,7 @@ treenode_t *operand() {
             add_son_node(active_node, rand_node);
 
             assert_token(add_son_node(rand_node, expr()), "Missing expression");
-            assert_token(get_token()->type == oper_sep, "Missing comma");
-            token_index++;
+            assert_token(get_token(true)->type == oper_sep, "Missing comma");
             assert_token(add_son_node(rand_node, expr()), "Missing expression after comma");
             break;
         }
@@ -339,19 +410,17 @@ treenode_t *operand() {
         case oper_lpar:
             assert_token(add_son_node(active_node, expr()), "Missing expression");
             if (token->type == oper_abs) {
-                assert_token(get_token()->type == oper_abs, "missing right absolut");
+                assert_token(get_token(true)->type == oper_abs, "missing right absolut");
             } else {
-                assert_token(get_token()->type == oper_rpar, "missing right bracket");
+                assert_token(get_token(true)->type == oper_rpar, "missing right bracket");
             }
-            token_index++;
             break;
         // ZIFFER {ZIFFER} ["." {ZIFFER}]
         // done by lexer => copy value of token
         case oper_const: {
             treenode_t *const_node = new_tree_node();
             const_node->type = oper_const;
-            const_node->d.val = get_token()->data.val;
-            token_index++;
+            const_node->d.val = get_token(true)->data.val;
             break;
         }
         // VAR
@@ -373,60 +442,50 @@ treenode_t *operand() {
 //
 
 treenode_t *cmd_draw() {
-    int last_token_index = token_index;
-    type_t type = get_token()->type;
     treenode_t *node = new_tree_node();
-    node->type = type;
+    node->type = get_token(true)->type;
 
-    switch (type) {
+    switch (node->type) {
         case keyw_walk:
         case keyw_jump:
-            token_index++;
             switch (get_token()->type) {
                 case keyw_back:
                 case keyw_home:
-                    node->d.walk = get_token()->type;
+                    node->d.walk = get_token(true)->type;
                     break;
                 default:
-                    token_index--;
                     break;
             }
             break;
-        case keyw_turn: // todo: keyw_turn kommt in der turtle-eval iwi gar nicht vor?
+        case keyw_turn: // todo: keyw_turn kommt in der turtle-eval gar nicht vor?
             switch (get_token()->type) {
                 case keyw_left:
                 case keyw_right:
-                    node->type = get_token()->type;
-                    token_index++;
+                    node->type = get_token(true)->type;
                     break;
                 default:
-                    token_index--;
                     break;
             }
             break;
-        case keyw_direction:
-            token_index++;
-            break;
         case keyw_color:
-            token_index++;
             assert_token(node = color(), "missing value for color");
             break;
+        // only check for keyword
+        case keyw_direction:
         case keyw_clear:
         case keyw_stop:
         case keyw_finish:
-            token_index++;
             break;
         case keyw_path:
-            token_index++;
             assert_token(node->d.p_name = name(false), "missing name for path");
             if (get_token()->type == oper_lpar) {
                 token_index++;
-                fill_args(node); // todo: insert parent_node instead of NULL >_<
-                assert_token(get_token()->type == oper_rpar, "missing closing parenthesis");
-                token_index++;
+                fill_args(node);
+                assert_token(get_token(true)->type == oper_rpar, "missing closing parenthesis");
             }
             break;
         default:
+            token_index--;
             free(node);
             return NULL;
     }
@@ -453,8 +512,7 @@ treenode_t *cmd_mark() {
     token_index++;
 
     if (type != keyw_mark) {
-        if (get_token()->type == keyw_mark) {
-            token_index++;
+        if (get_token(true)->type == keyw_mark) {
             node->d.walk = keyw_mark;
         } else {
             token_index = last_token_index;
@@ -467,39 +525,36 @@ treenode_t *cmd_mark() {
 
 treenode_t *cmd_calc() {
     treenode_t *node = new_tree_node();
-    node->type = get_token()->type;
+    node->type = get_token(true)->type;
 
-    switch (get_token()->type) {
+    switch (node->type) {
         case keyw_store:
         case keyw_add:
         case keyw_sub:
-            token_index++;
             assert_token(add_son_node(node, expr()), "missing expression");
             switch (node->type) {
                 case keyw_store:
-                    assert_token(get_token()->type == keyw_in, "missing 'in' keyword");
+                    assert_token(get_token(true)->type == keyw_in, "missing 'in' keyword");
                     break;
                 case keyw_add:
-                    assert_token(get_token()->type == keyw_to, "missing 'to' keyword");
+                    assert_token(get_token(true)->type == keyw_to, "missing 'to' keyword");
                     break;
                 case keyw_sub:
-                    assert_token(get_token()->type == keyw_from, "missing 'from' keyword");
+                    assert_token(get_token(true)->type == keyw_from, "missing 'from' keyword");
                     break;
                 default:
                     assert(false);
             }
-            token_index++;
             assert_token(node->d.p_name = var(), "missing variable");
             break;
         case keyw_mul:
         case keyw_div:
-            token_index++;
             assert_token(node->d.p_name = var(), "missing variable");
-            assert_token(get_token()->type == keyw_by, "missing 'from' keyword");
-            token_index++;
+            assert_token(get_token(true)->type == keyw_by, "missing 'from' keyword");
             assert_token(add_son_node(node, expr()), "missing expression");
             break;
         default:
+            token_index--;
             free(node);
             return NULL;
     }
@@ -542,7 +597,7 @@ treenode_t *cmd_do() {
     node->type = keyw_do;
 
     assert_token(add_son_node(node, expr()), "missing expression for times cmd");
-    assert_token(get_token(true)->type == keyw_times, "missing times keyword");
+    assert_token(get_token(true)->type == keyw_times, "missing times keyword"); // todo fixme
 
     fill_statements(node);
     assert_token(get_token(true)->type == keyw_done, "missing done keyword");
@@ -559,7 +614,8 @@ treenode_t *cmd_counter() {
     treenode_t *node = new_tree_node();
     node->type = keyw_counter;
 
-    assert_token(node->d.p_name = name(true), "missing counter variable"); // holds VAR (see BNF) according to incremented token_index in node
+    // holds VAR (see BNF) according to incremented token_index in node
+    assert_token(node->d.p_name = name(true), "missing counter variable");
     // token_index got incremented in name()
     assert_token(get_token(true)->type == keyw_from, "Syntax error in counter command");
     // get_token(true) increments token_index
@@ -585,7 +641,7 @@ treenode_t *cmd_counter() {
     assert_token(get_token(true)->type == keyw_do, "syntax error in counter: expected \"do\"");
     token_index++;
     fill_statements(node);
-    
+
     return node;
 }
 

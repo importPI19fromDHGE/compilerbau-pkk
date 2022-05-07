@@ -23,15 +23,15 @@ Siehe [hier](syntax.bnf).
 
 ## TODO
 - Oliver
-  - cmd_calc
-  - cmd_draw
+  - [x] cmd_calc
+  - [x] cmd_draw
 - Max
-  - cmd_counter
-  - expr
-  - term
-  - cond/cond_s
+  - [x] cmd_counter
+  - [ ] expr
+  - [ ] term
+  - [ ] cond/cond_s
 - Felix
-  - [done] operand 
+  - [x] operand 
     - added `"rand" "(" EXPR "," EXPR ")"` 
     - removed `"[" EXPR "]"`
-  - [done] args -> fill_args
+  - [x] args -> fill_args
