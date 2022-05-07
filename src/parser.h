@@ -38,7 +38,7 @@ treenode_t *pathdef();
 treenode_t *calcdef();
 
 /// NAME ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }.
-/// name of a function.
+/// name or var of a function; increments token_index.
 /// \returns a nameentry_t* matching to description or default (see parser.h)
 nameentry_t *name(bool is_var); // == var or name idk
 

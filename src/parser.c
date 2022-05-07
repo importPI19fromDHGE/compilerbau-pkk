@@ -396,7 +396,7 @@ treenode_t *cmd_draw() {
             switch (get_token()->type) {
                 case keyw_left:
                 case keyw_right:
-                    node-type = get_token()->type;
+                    node->type = get_token()->type;
                     token_index++;
                     break;
                 default:
@@ -418,7 +418,7 @@ treenode_t *cmd_draw() {
             break;
         case keyw_path:
             token_index++;
-            assert_token(node.d.p_name = name(false), "missing name for path");
+            assert_token(node->d.p_name = name(false), "missing name for path");
             if (get_token()->type == oper_lpar) {
                 token_index++;
                 fill_args(node); // todo: insert parent_node instead of NULL >_<
@@ -478,13 +478,15 @@ treenode_t *cmd_calc() {
             switch (node->type) {
                 case keyw_store:
                     assert_token(get_token()->type == keyw_in, "missing 'in' keyword");
+                    break;
                 case keyw_add:
                     assert_token(get_token()->type == keyw_to, "missing 'to' keyword");
+                    break;
                 case keyw_sub:
                     assert_token(get_token()->type == keyw_from, "missing 'from' keyword");
+                    break;
                 default:
                     assert(false);
-                    break;
             }
             token_index++;
             assert_token(node->d.p_name = var(), "missing variable");
@@ -549,7 +551,42 @@ treenode_t *cmd_do() {
 }
 
 treenode_t *cmd_counter() {
+    if (get_token()->type != keyw_counter) {
+        return NULL;
+    }
+    token_index++;
 
+    treenode_t *node = new_tree_node();
+    node->type = keyw_counter;
+
+    assert_token(node->d.p_name = name(true), "missing counter variable"); // holds VAR (see BNF) according to incremented token_index in node
+    // token_index got incremented in name()
+    assert_token(get_token(true)->type == keyw_from, "Syntax error in counter command");
+    // get_token(true) increments token_index
+    // syntax ok, next token please
+    assert_token(add_son_node(node, expr()), "missing expression in counter");
+    // token_index got incremented in expr()
+    type_t cnt_type = get_token()->type;
+    switch (cnt_type) {
+        case keyw_to:
+        case keyw_downto:
+            // todo: figure out if i have to do something here
+            break;
+        default:
+            parser_error("syntax error in counter: expected 'to' or 'downto', got something else");
+    }
+    token_index++;
+    assert_token(add_son_node(node, expr()), "missing expression in counter");
+    // token_index got incremented in expr()
+    if (get_token()->type == keyw_step) {
+        assert_token(add_son_node(node, expr()), "missing expression for step in counter");
+        // token_index got incremented in expr()
+    }
+    assert_token(get_token(true)->type == keyw_do, "syntax error in counter: expected \"do\"");
+    token_index++;
+    fill_statements(node);
+    
+    return node;
 }
 
 treenode_t *cmd_while() {
