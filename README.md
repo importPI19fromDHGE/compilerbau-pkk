@@ -27,7 +27,9 @@ Siehe [hier](syntax.bnf).
   - [x] cmd_draw
 - Max
   - [x] cmd_counter
-  - [x] expr
+  - [ ] expr
+    - TODO: vordefinierte Funktionen wie sin, cos, tan
+    - Funktionsaufrufe
   - [x] term
   - [x] cond/cond_s
 - Felix

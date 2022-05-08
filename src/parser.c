@@ -328,7 +328,7 @@ treenode_t *cond_s(treenode_t *node) {
     return node;
 }
 
-treenode_t *expr() { //todo fixme
+treenode_t *expr() {
     treenode_t *node = new_tree_node();
     assert_token(add_son_node(node, term()), "error in expression: expected a term");
     // token_index got incremented in term()
@@ -432,11 +432,22 @@ treenode_t *operand() {
             const_node->d.val = token->data.val;
             break;
         }
-        // VAR
+        // VAR | NAME "(" ARGS ")"
         case name_any: {
-            treenode_t *var_node = new_tree_node();
-            var_node->d.p_name = var();
-            add_son_node(active_node, var_node);
+            treenode_t *var_fct_node = new_tree_node();
+            token_index++;
+            if (get_token()->type == oper_lpar) {
+                token_index--;
+                var_fct_node->d.p_name = name(false);
+                token_index++;
+                assert_token(get_token(true)->type == oper_lpar, "missing left bracket");
+                fill_args(var_fct_node);
+                assert_token(get_token(true)->type == oper_rpar, "missing left bracket");
+            } else {
+                token_index--;
+                var_fct_node->d.p_name = var();
+                add_son_node(active_node, var_fct_node);
+            }
             break;
         }
         default:
