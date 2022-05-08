@@ -27,9 +27,9 @@ Siehe [hier](syntax.bnf).
   - [x] cmd_draw
 - Max
   - [x] cmd_counter
-  - [ ] expr
-  - [ ] term
-  - [ ] cond/cond_s
+  - [x] expr
+  - [x] term
+  - [x] cond/cond_s
 - Felix
   - [x] operand 
     - added `"rand" "(" EXPR "," EXPR ")"` 

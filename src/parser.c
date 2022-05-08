@@ -19,6 +19,10 @@
 #include "turtle.h"
 #endif
 
+#ifndef _STRING_H
+#include <string.h>
+#endif
+
 #define FNPTRS 8
 
 /// should only increment after successfully processed.
@@ -204,13 +208,16 @@ treenode_t *statement() {
 void fill_statements(treenode_t *parent) {
     // statement() legt Speicher für statement-Knoten an, diese Funktion verknüpft das zu einer EVL in parent
     treenode_t *st;
-    treenode_t *target = parent->son[parent->son_len];
+    treenode_t *target; // = parent->son[parent->son_len];
     bool statements_found = false;
 
     while ((st = statement()) != NULL) {
 
         statements_found = true;
-        *target = *st; // zpm: i have some worries here, to be tested
+        target = (treenode_t*) malloc(sizeof(treenode_t));
+        memcpy(target, st, sizeof(treenode_t));
+//        *target = *st; // zpm: i have some worries here, to be tested
+        parent->son[parent->son_len] = target;
         free(st); // Pointer unneeded - at least one mem leak less
         target = target->next; // classic EVL - move pointer to next statement
     }
@@ -325,12 +332,13 @@ treenode_t *expr() { //todo fixme
     treenode_t *node = new_tree_node();
     assert_token(add_son_node(node, term()), "error in expression: expected a term");
     // token_index got incremented in term()
-    type_t type = get_token(true)->type;
+    type_t type = get_token()->type;
     // token_index got incremented in get_token(true)
     while ((type == oper_add) || (type == oper_sub)) {
+        token_index++;
         assert_token(add_son_node(node, term()), "error in expression: expected a term");
         // token_index got incremented in term()
-        type = get_token(true)->type;
+        type = get_token()->type;
         // token_index got incremented in get_token(true)
     }
 
@@ -341,12 +349,13 @@ treenode_t *term() {
     treenode_t *node = new_tree_node();
     assert_token(add_son_node(node, factor()), "error in expression: expected a factor");
     // token_index got incremented in term()
-    type_t type = get_token(true)->type;
+    type_t type = get_token()->type;
     // token_index got incremented in get_token(true)
     while ((type == oper_mul) || (type == oper_div)) {
+        token_index++;
         assert_token(add_son_node(node, factor()), "error in expression: expected a factor");
         // token_index got incremented in term()
-        type = get_token(true)->type;
+        type = get_token()->type;
         // token_index got incremented in get_token(true)
     }
 
@@ -420,7 +429,7 @@ treenode_t *operand() {
         case oper_const: {
             treenode_t *const_node = new_tree_node();
             const_node->type = oper_const;
-            const_node->d.val = get_token(true)->data.val;
+            const_node->d.val = token->data.val;
             break;
         }
         // VAR
