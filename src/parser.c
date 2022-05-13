@@ -69,14 +69,10 @@ treenode_t *program() {
 
     assert(get_token(true)->type == tok_bofeof);
     while(get_token()->type != keyw_begin) {
-        assign_head_or_next(&node, &active_node, pathdef);
-        assign_head_or_next(&node, &active_node, calcdef);
-
-//        if (node == NULL) active_node = (node = pathdef());
-//        else active_node->next = pathdef();
-//
-//        if (node == NULL) active_node = (node = calcdef());
-//        else active_node->next = calcdef();
+        // fixme: pathdef/calcdef muss in nametab hinterlegt werden -> Aufrufe meussen das dann referenzieren
+        //  idee => nametab entry hinzufuegen => aufrufe z.b. cmd_draw => nametab von hinten durchsuchen
+        // assign_head_or_next(&node, &active_node, pathdef);
+        // assign_head_or_next(&node, &active_node, calcdef);
     }
 
     // begin => (type == keyw_begin)
@@ -247,23 +243,11 @@ treenode_t *statement() {
 treenode_t* statements() {
     // statement() legt Speicher für statement-Knoten an, diese Funktion verknüpft das zu einer EVL in parent
     treenode_t *statement_tree = NULL; // top head
-//    treenode_t *st = NULL; // current_statement
     treenode_t *active_statement = NULL; // current head of subtree
-//    bool statements_found = false;
     do {
-//        statements_found = true;
-//        target = (treenode_t*) malloc(sizeof(treenode_t));
-//        memcpy(target, st, sizeof(treenode_t));
         assign_head_or_next(&statement_tree, &active_statement, statement);
-//        *target = *st; // zpm: i have some worries here, to be tested
-//        parent->son[parent->son_len] = target;
-//        free(st); // Pointer unneeded - at least one mem leak less
-//        target = target->next; // classic EVL - move pointer to next statement
     } while (active_statement != NULL);
-
-//    if (statements_found) { // if statements found, increment son length once
-//        parent->son_len++;
-//    }
+    
     if (statement_tree == NULL) {
         parser_error("missing at least one valid statement");
     }
