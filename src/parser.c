@@ -41,16 +41,25 @@ treenode_t* (*cmd_ptrs[FNPTRS])(void) = { // this is where the fun* begins // no
         cmd_repeat  // repeat
 };
 
+// node->next
+// "statments" => walk, jump, left, right, direction, clear, stop, finish, mark, path,
+//                 color, store, add, sub, mul, div, if, do, counter, while, repeat
+
+// node->son[...]
+// cond, expr, fcall -> arg/param, pcall -> arg/param,
+
 // yes... it works and that's the only thing that matters (fix soon™)
 void assign_head_or_next(treenode_t **head, treenode_t **next_head, treenode_t* (*fptr)()) {
     if (*head == NULL) {
         *head = (fptr)();
-        if (*head != NULL) {
+        if (*head != NULL && next_head != NULL) {
             *next_head = *head;
         }
-    } else {
+    } else if (next_head != NULL) {
         (*next_head)->next = (fptr)();
         *next_head = (*next_head)->next;
+    } else {
+        assert(false); // "safety first" :^)
     }
 }
 
@@ -72,7 +81,8 @@ treenode_t *program() {
 
     // begin => (type == keyw_begin)
     assert_token(get_token(true)->type == keyw_begin, "begin keyword missing!");
-    fill_statements(active_node);
+    // fill statements of main treenode
+    assign_head_or_next(&node, &active_node, statements);
 
     // end => (type == keyw_end)
     assert_token(get_token(true)->type == keyw_end, "end keyword missing!");
@@ -110,10 +120,9 @@ treenode_t *pathdef() {
     }
 
     // fill body with statements
-    treenode_t *body = new_tree_node();
-    func->body = body;
-    fill_statements(body);
-    assert_token(body != NULL, "Missing statements for path definition");
+    func->body = NULL;
+    fill_statements(&(func->body));
+    assert_token(func->body != NULL, "Missing statements for path definition");
     assert_token(get_token(true)->type == keyw_endpath, "Missing endpath keyword!");
 
     return node;
@@ -146,12 +155,10 @@ treenode_t *calcdef() {
     assert_token(get_token(true)->type == oper_rpar, "Missing closing parenthesis");
 
     // fill body with statements | can be null
-    treenode_t *body = new_tree_node();
-    fill_statements(body); // fixme
-    // free if no statement inserted
-    if (body->son_len == 0) {
-        free(body);
-    } else {
+    treenode_t *body = NULL;
+    fill_statements(&body);
+    // free if no statements inserted
+    if (body != NULL) {
         func->body = body;
     }
     assert_token(get_token(true)->type == keyw_returns, "returns keyword is missing");
@@ -237,27 +244,31 @@ treenode_t *statement() {
     return statement_to_add;
 }
 
-void fill_statements(treenode_t *parent) {
+treenode_t* statements() {
     // statement() legt Speicher für statement-Knoten an, diese Funktion verknüpft das zu einer EVL in parent
-    treenode_t *st;
-    treenode_t *target; // = parent->son[parent->son_len];
-    bool statements_found = false;
-
-    while ((st = statement()) != NULL) {
-
-        statements_found = true;
-        target = (treenode_t*) malloc(sizeof(treenode_t));
-        memcpy(target, st, sizeof(treenode_t));
+    treenode_t *statement_tree = NULL; // top head
+//    treenode_t *st = NULL; // current_statement
+    treenode_t *active_statement = NULL; // current head of subtree
+//    bool statements_found = false;
+    do {
+//        statements_found = true;
+//        target = (treenode_t*) malloc(sizeof(treenode_t));
+//        memcpy(target, st, sizeof(treenode_t));
+        assign_head_or_next(&statement_tree, &active_statement, statement);
 //        *target = *st; // zpm: i have some worries here, to be tested
-        parent->son[parent->son_len] = target;
-        free(st); // Pointer unneeded - at least one mem leak less
-        target = target->next; // classic EVL - move pointer to next statement
-    }
-    if (statements_found) { // if statements found, increment son length once
-        parent->son_len++;
-    } else {
+//        parent->son[parent->son_len] = target;
+//        free(st); // Pointer unneeded - at least one mem leak less
+//        target = target->next; // classic EVL - move pointer to next statement
+    } while (active_statement != NULL);
+
+//    if (statements_found) { // if statements found, increment son length once
+//        parent->son_len++;
+//    }
+    if (statement_tree == NULL) {
         parser_error("missing at least one valid statement");
     }
+
+    return statement_tree;
 }
 
 void *fill_params(funcdef_t *func) {
@@ -639,11 +650,13 @@ treenode_t *cmd_if() {
     assert_token(add_son_node(node, cond()), "missing condition");
     assert_token(get_token(true)->type == keyw_then, "missing then keyword");
 
-    fill_statements(node);
+    // fill then statements -> son[1]
+    fill_statements(&node);
 
     if (get_token()->type == keyw_else) {
         token_index++;
-        fill_statements(node);
+        // fill else statements -> son[2]
+        fill_statements(&node);
     }
 
     assert_token(get_token(true)->type == keyw_endif, "missing endif keyword");
@@ -663,7 +676,8 @@ treenode_t *cmd_do() {
     assert_token(add_son_node(node, expr()), "missing expression for times cmd");
     assert_token(get_token(true)->type == keyw_times, "missing times keyword");
 
-    fill_statements(node);
+    // fill statements into son 1
+    fill_statements(&node);
     assert_token(get_token(true)->type == keyw_done, "missing done keyword");
 
     return node;
@@ -704,7 +718,8 @@ treenode_t *cmd_counter() {
         // token_index got incremented in expr()
     }
     assert_token(get_token(true)->type == keyw_do, "syntax error in counter: expected \"do\"");
-    fill_statements(node);
+    // fill statements into son 4
+    fill_statements(&node);
     assert_token(get_token(true)->type == keyw_done, "Missing done keyboard");
 
     return node;
@@ -722,7 +737,8 @@ treenode_t *cmd_while() {
     assert_token(add_son_node(node, cond()), "missing condition for while cmd");
     assert_token(get_token(true)->type == keyw_do, "missing do keyword");
 
-    fill_statements(node);
+    // fill statements into son 1
+    fill_statements(&node);
     assert_token(get_token(true)->type == keyw_done, "missing done keyword");
 
     return node;
@@ -737,7 +753,8 @@ treenode_t *cmd_repeat() {
     treenode_t *node = new_tree_node();
     node->type = keyw_repeat;
 
-    fill_statements(node);
+    // fill statements into son 1
+    fill_statements(&node);
     assert_token(get_token(true)->type == keyw_until, "missing until keyword");
 
     assert_token(add_son_node(node, cond()), "missing condition for repeat cmd");
@@ -781,6 +798,22 @@ treenode_t *new_tree_node() {
     node->pos = get_token()->pos;
 
     return node;
+}
+
+void fill_statements(treenode_t **node_to_fill) {
+    treenode_t *helper = NULL;
+    if (*node_to_fill != NULL) {
+        helper = (*node_to_fill)->son[(*node_to_fill)->son_len];
+    }
+    assign_head_or_next(
+        &helper, // &((*node_to_fill)->son)[(*node_to_fill)->son_len]
+        NULL, statements
+    );
+    if (*node_to_fill != NULL) {
+        (*node_to_fill)->son_len++;
+    } else {
+        *node_to_fill = helper;
+    }
 }
 
 void assert_token(bool expression, const char* msg) {
