@@ -31,46 +31,67 @@ const token_t *capture_error_token = NULL;
 
 // maybe look at first token and choose or skip cmd (func for each array entry)
 treenode_t* (*cmd_ptrs[FNPTRS])(void) = { // this is where the fun* begins // now THIS is peak C programming
-        cmd_mark,
-        cmd_draw,
-        cmd_calc,
-        cmd_if,
-        cmd_do,
-        cmd_counter,
-        cmd_while,
-        cmd_repeat
+        cmd_mark,   // jump, walk, mark
+        cmd_draw,   // walk, jump, turn, color, clear, stop, finish, path
+        cmd_calc,   // store, add, sub, mul, div
+        cmd_if,     // if
+        cmd_do,     // do
+        cmd_counter,// counter
+        cmd_while,  // while
+        cmd_repeat  // repeat
 };
 
+// yes... it works and that's the only thing that matters (fix soon™)
+void assign_head_or_next(treenode_t **head, treenode_t **next_head, treenode_t* (*fptr)()) {
+    if (*head == NULL) {
+        *head = (fptr)();
+        if (*head != NULL) {
+            *next_head = *head;
+        }
+    } else {
+        (*next_head)->next = (fptr)();
+        *next_head = (*next_head)->next;
+    }
+}
+
 treenode_t *program() {
-    treenode_t *node = new_tree_node();
+    treenode_t *node = NULL;
+    treenode_t *active_node = NULL;
 
     assert(get_token(true)->type == tok_bofeof);
     while(get_token()->type != keyw_begin) {
-        add_son_node(node, pathdef());
-        add_son_node(node, calcdef());
+        assign_head_or_next(&node, &active_node, pathdef);
+        assign_head_or_next(&node, &active_node, calcdef);
+
+//        if (node == NULL) active_node = (node = pathdef());
+//        else active_node->next = pathdef();
+//
+//        if (node == NULL) active_node = (node = calcdef());
+//        else active_node->next = calcdef();
     }
+
     // begin => (type == keyw_begin)
     assert_token(get_token(true)->type == keyw_begin, "begin keyword missing!");
-    fill_statements(node);
+    fill_statements(active_node);
 
     // end => (type == keyw_end)
     assert_token(get_token(true)->type == keyw_end, "end keyword missing!");
-    assert(get_token(true)->type == tok_bofeof);// todo: increment yes/no?
+    assert(get_token(true)->type == tok_bofeof);
 
     assert(token_index == token_stream.used);
     return node;
 }
 
 treenode_t *pathdef() {
+    if (get_token()->type != keyw_path) {
+        return NULL;
+    }
+
     treenode_t *node = new_tree_node();
     node->type = name_path;
     // function for the node in the syntaxtree
     funcdef_t *func = malloc(sizeof (funcdef_t));
     func->ret = NULL; // cause pathdef -> no return to fill (see funcdef_t)
-
-    if (get_token()->type != keyw_path) {
-        return NULL;
-    }
     token_index++;
 
     nameentry_t *func_entry = name(false);
@@ -99,14 +120,16 @@ treenode_t *pathdef() {
 }
 
 treenode_t *calcdef() {
+
+    if (get_token()->type != keyw_calculation) {
+        return NULL;
+    }
+
     treenode_t *node = new_tree_node();
     node->type = name_calc;
     // function for the node in the syntaxtree
     funcdef_t *func = malloc(sizeof (funcdef_t));
 
-    if (get_token()->type != keyw_calculation) {
-        return NULL;
-    }
     token_index++;
 
     nameentry_t *func_entry = name(false);
@@ -122,10 +145,15 @@ treenode_t *calcdef() {
     fill_params(func);
     assert_token(get_token(true)->type == oper_rpar, "Missing closing parenthesis");
 
-    // fill body with statements | can be null -> todo: don't forgor free if no statement inserted
+    // fill body with statements | can be null
     treenode_t *body = new_tree_node();
-    fill_statements(body);
-    func->body = body;
+    fill_statements(body); // fixme
+    // free if no statement inserted
+    if (body->son_len == 0) {
+        free(body);
+    } else {
+        func->body = body;
+    }
     assert_token(get_token(true)->type == keyw_returns, "returns keyword is missing");
 
     // fill return with expression
@@ -145,13 +173,13 @@ nameentry_t *name(bool is_var) {
     switch (name[0]) {
         case '@':
             if (!is_var) {
-                goto bad_code1; // i hate it // höhö LG Max (ノ°益°)ノ // todo: rework plz
+                goto bad_code1; // i hate it // höhö LG Max (ノ°益°)ノ
             }
             break;
         case 'a' ... 'z':
         case 'A' ... 'Z':
         case '_':
-            break; // check all allowed chars - in this case, leave switch
+            break; // check first char on all allowed chars - in this case, leave switch
         default:
         bad_code1:
             printf("Invalid starting character for name '%c'", name[0]);
@@ -159,6 +187,7 @@ nameentry_t *name(bool is_var) {
             break;
     }
 
+    // check remaining chars on allowed chars
     for (int i = 1; name[i] != '\0'; i++) {
         switch (name[i]) {
             case 'a' ... 'z':
@@ -194,12 +223,10 @@ nameentry_t *var() {
     return entry;
 }
 
+// [DONE]
 treenode_t *statement() {
-    // fixme: oh boi... yes... this... notLikeThisCat
     treenode_t *statement_to_add = NULL;
 
-    // preferably a switch case... but c shenanigans ¯\_(ツ)_/¯
-    // ┌∩┐(◣_◢)┌∩┐
     for (int i = 0; i < FNPTRS; i++) {
         statement_to_add = cmd_ptrs[i]();
         if (statement_to_add != NULL) {
@@ -325,7 +352,7 @@ treenode_t *cond_s(treenode_t *node) {
         case keyw_and:
         case keyw_or:
             node->son[1]->type = get_token(true)->type;
-            cond_s(node->son[1]); // todo: check if this works
+            cond_s(node->son[1]); // todo: check if this works for kusche code
             break;
         default:
             break;
@@ -450,7 +477,7 @@ treenode_t *operand() {
         // VAR | NAME "(" ARGS ")"
         case name_any: {
             treenode_t *var_fct_node = new_tree_node();
-            if (get_token()->type == oper_lpar) { // todo: fixme
+            if (get_token()->type == oper_lpar) {
                 token_index++;
                 var_fct_node->d.p_name = name(false);
                 // token_index got incremented in name()
@@ -634,7 +661,7 @@ treenode_t *cmd_do() {
     node->type = keyw_do;
 
     assert_token(add_son_node(node, expr()), "missing expression for times cmd");
-    assert_token(get_token(true)->type == keyw_times, "missing times keyword"); // todo fixme
+    assert_token(get_token(true)->type == keyw_times, "missing times keyword");
 
     fill_statements(node);
     assert_token(get_token(true)->type == keyw_done, "missing done keyword");
@@ -677,7 +704,6 @@ treenode_t *cmd_counter() {
         // token_index got incremented in expr()
     }
     assert_token(get_token(true)->type == keyw_do, "syntax error in counter: expected \"do\"");
-    // fixme: token_index++;
     fill_statements(node);
     assert_token(get_token(true)->type == keyw_done, "Missing done keyboard");
 
