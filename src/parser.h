@@ -30,12 +30,12 @@ treenode_t *program();
 /// PATHDEF ::= "path" NAME [ "("[ PARAMS ]")" ] STATEMENTS "endpath"
 /// definition of a path function.
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *pathdef();
+void pathdef();
 
 /// CALCDEF ::= "calculation" NAME "("[ PARAMS ]")" [ STATEMENTS ] "returns" EXPR "endcalc"
 /// definition of a calculation function.
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *calcdef();
+void calcdef();
 
 /// NAME ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }.
 /// name or var of a function; increments token_index.
@@ -144,7 +144,5 @@ void assert_token(bool expression, ///< Boolean for determining success of opera
                   );
 
 void assign_head_or_next(treenode_t **head, treenode_t **next_head, treenode_t* (*fptr)());
-
-void fill_statements(treenode_t **node_to_fill);
 
 #endif
