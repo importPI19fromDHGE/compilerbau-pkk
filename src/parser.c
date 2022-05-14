@@ -276,17 +276,7 @@ treenode_t *color() {
     for (int i = 0; i < 3; i++) {
         t = get_token();
 
-        if (t->type != oper_const ||
-            t->data.val < 0 || t->data.val > 100) {
-            parser_error("Invalid color value");
-        }
-
-        treenode_t *color = new_tree_node();
-        color->type = oper_const;
-        color->d.val = t->data.val;
-        add_son_node(node, color);
-        
-        token_index++;
+        add_son_node(node, expr());
         
         if (i != 2) { // not last iteration
             assert_token(get_token(true)->type == oper_sep, "Missing comma for color value");
@@ -439,7 +429,7 @@ treenode_t *operand() {
     treenode_t *node = new_tree_node(); // head
     treenode_t *active_node = node;
 
-    if (get_token()->type == oper_neg) {
+    if (get_token()->type == oper_neg || get_token()->type == oper_sub) {
         token_index++;
         active_node->type = oper_neg;
         active_node = new_tree_node();
@@ -453,9 +443,8 @@ treenode_t *operand() {
         case name_math_sin:
         case name_math_cos:
         case name_math_tan:
-            active_node->type = name_any;
-            active_node->d.p_name = &(name_tab[token->data.name_tab_index]); // todo: does this work?
-            active_node->d.p_name->type = name_pvar_ro;
+            active_node->type = oper_lpar;
+            active_node->d.p_name = &(name_tab[token->data.name_tab_index]);
 
             assert_token(get_token(true)->type == oper_lpar, "missing left bracket");
             assert_token(add_son_node(active_node, expr()), "Missing expression");
@@ -464,16 +453,20 @@ treenode_t *operand() {
         case name_pvar_ro:
         case name_pvar_rw: // fixme
             active_node->type = name_any; // token->type; // ?
-            active_node->d.p_name = &(name_tab[token->data.name_tab_index]); // todo: does this work?
+            active_node->d.p_name = &(name_tab[token->data.name_tab_index]);
             break;
         // "rand" "(" EXPR "," EXPR ")"
         case name_math_rand:
-            active_node->type = token->type;
-            active_node->d.p_name = &(name_tab[token->data.name_tab_index]); // todo: does this work?
+            active_node->type = oper_lpar;
+            active_node->d.p_name = &(name_tab[token->data.name_tab_index]);
+
+            assert_token(get_token(true)->type == oper_lpar, "missing left bracket");
 
             assert_token(add_son_node(active_node, expr()), "Missing expression");
             assert_token(get_token(true)->type == oper_sep, "Missing comma");
             assert_token(add_son_node(active_node, expr()), "Missing expression after comma");
+
+            assert_token(get_token(true)->type == oper_rpar, "missing right bracket");
             break;
         // "(" EXPR ")" | "|" EXPR "|"
         case oper_abs:
