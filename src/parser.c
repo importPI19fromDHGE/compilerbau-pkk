@@ -110,7 +110,7 @@ void pathdef() {
     if (get_token()->type == oper_lpar) {
         token_index++;
         fill_params(func);
-        assert_token(get_token(true)->type == oper_rpar, "Missing closing parenthesis");
+        assert_token(get_token(true)->type == oper_rpar, "pathdef: Missing closing parenthesis");
     }
 
     // fill body with statements
@@ -140,7 +140,7 @@ void calcdef() {
     // fill params
     assert_token(get_token(true)->type == oper_lpar, "Missing opening parenthesis");
     fill_params(func);
-    assert_token(get_token(true)->type == oper_rpar, "Missing closing parenthesis");
+    assert_token(get_token(true)->type == oper_rpar, "calcdef: Missing closing parenthesis");
 
     // fill body with statements | can be null
     treenode_t *body = NULL;
@@ -293,23 +293,38 @@ treenode_t *color() {
 
 void fill_args(treenode_t *parent_node) {
     bool has_added_token;
+    type_t type;
     do {
         has_added_token = add_son_node(parent_node, expr());
-        if (parent_node != NULL && get_token()->type == oper_sep) {
+        type = get_token()->type;
+        if (parent_node != NULL && type == oper_sep) {
             token_index++;
             assert_token(has_added_token, "Missing expression after comma");
         }
-    } while (get_token()->type == oper_sep);
+    } while (type == oper_sep);
 }
 
 treenode_t *cond() {
     treenode_t *node = new_tree_node();
-    if (get_token()->type == oper_lpar) {
-        token_index++;
-        node = cond_s(node);
-        assert_token(get_token(true)->type == oper_rpar, "error in condition: expected expression");
-    } else {
-        node = cond_s(node);
+//    if (get_token()->type == oper_lpar) {
+//        token_index++;
+//        node = cond_s(node);
+//        assert_token(get_token(true)->type == oper_rpar, "error in condition: expected expression");
+//    } else {
+//        node = cond_s(node);
+//    }
+// todo: fix this mess
+
+    cond_s(node);
+    switch (get_token()->type) {
+        case keyw_not:
+        case keyw_and:
+        case keyw_or:
+            node->son[1]->type = get_token(true)->type;
+            cond_s(node->son[1]); // todo: check if this works for kusche code
+            break;
+        default:
+            break;
     }
 
     return node;
@@ -473,6 +488,7 @@ treenode_t *operand() {
         case oper_abs:
         case oper_lpar:
             memcpy(active_node, expr(), sizeof(treenode_t));
+
             assert_token(active_node, "Missing expression");
             if (token->type == oper_abs) {
                 assert_token(get_token(true)->type == oper_abs, "missing right absolut");
@@ -556,7 +572,7 @@ treenode_t *cmd_draw() {
             if (get_token()->type == oper_lpar) {
                 token_index++;
                 fill_args(node);
-                assert_token(get_token(true)->type == oper_rpar, "missing closing parenthesis");
+                assert_token(get_token(true)->type == oper_rpar, "draw: missing closing parenthesis");
             }
             //break;
             return node;

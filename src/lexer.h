@@ -4,7 +4,7 @@
 
 #ifndef COMPILERBAU_PKK_LEXER_H
 #define COMPILERBAU_PKK_LEXER_H
-#define MAX_DELIMITER 15
+#define MAX_DELIMITER 16
 
 #include "turtle.h"
 
