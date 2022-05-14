@@ -70,8 +70,6 @@ void fill_args(treenode_t *parent_node);
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *cond();
 
-treenode_t *cond_s(treenode_t *node);
-
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *cond_s();
