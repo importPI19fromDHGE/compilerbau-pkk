@@ -141,6 +141,4 @@ void assert_token(bool expression, ///< Boolean for determining success of opera
                   const char* msg ///< An Error message.
                   );
 
-void assign_head_or_next(treenode_t **head, treenode_t **next_head, treenode_t* (*fptr)());
-
 #endif
