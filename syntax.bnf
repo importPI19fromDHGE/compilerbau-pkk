@@ -9,8 +9,8 @@ VAR        ::= NAME
 COLOR      ::= EXPR "," EXPR "," EXPR
 COND       ::= ("(" COND_S ")") | COND_S
 COND_S     ::= EXPR ("<" | ">" | "<=" | ">=" | "=" | "<>") EXPR {("not" | "and" | "or") COND_S}
-EXPR       ::= TERM { ( "-" | "+" ) TERM }
-TERM       ::= FAKTOR { ( "*" | "/" ) FAKTOR }
+EXPR       ::= TERM [ ( "-" | "+" ) TERM ]
+TERM       ::= FAKTOR [ ( "*" | "/" ) FAKTOR ]
 FAKTOR     ::= OPERAND [ "^" FAKTOR ]
 OPERAND    ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "rand" "(" EXPR "," EXPR ")" | "(" EXPR ")" | "|" EXPR "|"  | ZIFFER {ZIFFER} ["." {ZIFFER}] | VAR | NAME "(" ARGS ")" )
 ARGS       ::= [ EXPR { "," EXPR } ]

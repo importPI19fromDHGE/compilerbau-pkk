@@ -30,12 +30,12 @@ treenode_t *program();
 /// PATHDEF ::= "path" NAME [ "("[ PARAMS ]")" ] STATEMENTS "endpath"
 /// definition of a path function.
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *pathdef();
+void pathdef();
 
 /// CALCDEF ::= "calculation" NAME "("[ PARAMS ]")" [ STATEMENTS ] "returns" EXPR "endcalc"
 /// definition of a calculation function.
 /// \returns a treenode_t* matching to description or default (see parser.h)
-treenode_t *calcdef();
+void calcdef();
 
 /// NAME ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }.
 /// name or var of a function; increments token_index.
@@ -53,7 +53,7 @@ void *fill_params(funcdef_t *func /**< func to insert */);
 
 /// concatenates statement-nodes from statement() to an EVL in the parent-node.
 /// STATEMENTS ::= STATEMENT { STATEMENT }.
-void fill_statements(treenode_t *parent /**< The parent node where the statements will be linked*/);
+treenode_t* statements();
 
 /// STATEMENT  ::= DRAW_CMD | MARK_CMD | CALC_CMD | IF_CMD | TIMES_CMD | CNT_CMD | WHILE_CMD | REPEAT_CMD.
 /// \returns a treenode_t* matching to description or default (see parser.h)
@@ -142,5 +142,7 @@ treenode_t *new_tree_node();
 void assert_token(bool expression, ///< Boolean for determining success of operation as returned by a helper function.
                   const char* msg ///< An Error message.
                   );
+
+void assign_head_or_next(treenode_t **head, treenode_t **next_head, treenode_t* (*fptr)());
 
 #endif

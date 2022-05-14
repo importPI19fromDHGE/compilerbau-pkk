@@ -8,6 +8,7 @@
 path sqr(len)
   do 4 times
     " walk testfunc(len)
+    " hier fehlen aktuell die folgenden statements
     walk 5
     turn left 90
   done
@@ -16,6 +17,7 @@ endpath
 " nur um eine Funktion zu testen
 calculation testfunc(a)
   mul a by 1.1
+  " return type ist cursed
 returns a
 endcalc
 

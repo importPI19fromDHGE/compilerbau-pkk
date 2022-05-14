@@ -88,6 +88,7 @@ treenode_t *lex_parse(void) {
             );
         }
     }
+    printf("\n");
 
     // parse
     program();

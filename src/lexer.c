@@ -27,7 +27,8 @@ delimiter_t delimiters[MAX_DELIMITER] = {
         {'^',  false},
         {'(',  false},
         {')',  false},
-        {'|',  false}
+        {'|',  false},
+        {',',  false}
 };
 
 /// todo: documentation
