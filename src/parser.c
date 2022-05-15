@@ -1,6 +1,8 @@
 //
 // Created by pkk on 29.03.22.
 //
+#include "parser.h"
+
 #ifndef _MALLOC_H
 #include <malloc.h>
 #endif
@@ -12,8 +14,6 @@
 #ifndef _STDLIB_H
 #include <stdlib.h>
 #endif
-
-#include "parser.h"
 
 #ifndef _TURTLE_H
 #include "turtle.h"
@@ -30,7 +30,7 @@ int token_index = 0;
 const token_t *capture_error_token = NULL;
 
 // maybe look at first token and choose or skip cmd (func for each array entry)
-treenode_t* (*cmd_ptrs[FNPTRS])(void) = { // this is where the fun* begins // now THIS is peak C programming
+treenode_t *(*cmd_ptrs[FNPTRS])(void) = { // this is where the fun* begins // now THIS is peak C programming
         cmd_mark,   // jump, walk, mark
         cmd_draw,   // walk, jump, turn, color, clear, stop, finish, path
         cmd_calc,   // store, add, sub, mul, div
@@ -45,7 +45,7 @@ treenode_t *program() {
     treenode_t *node = NULL;
 
     assert(get_token(true)->type == tok_bofeof);
-    while(get_token()->type != keyw_begin) {
+    while (get_token()->type != keyw_begin) {
         pathdef();
         calcdef();
     }
@@ -72,12 +72,12 @@ void pathdef() {
 
     nameentry_t *func_target = name(false);
     assert_token(func_target != NULL, "Missing path name for path definition");
-    printf("[debug] pathdef fct {%s} init for nametab_index {%d}\n",
-           func_target->name, token_stream.array[token_index-1].data.name_tab_index
-    );
+    // printf("[debug] pathdef fct {%s} init for nametab_index {%d}\n",
+    //        func_target->name, token_stream.array[token_index - 1].data.name_tab_index
+    // );
 
     // function for the node in the syntaxtree
-    funcdef_t *func = malloc(sizeof (funcdef_t));
+    funcdef_t *func = malloc(sizeof(funcdef_t));
     func->params[0] = NULL;
     func->params[1] = NULL;
     func->ret = NULL; // cause pathdef -> no return to fill (see funcdef_t)
@@ -108,12 +108,12 @@ void calcdef() {
 
     nameentry_t *func_target = name(false);
     assert_token(func_target != NULL, "Missing name for calc definition");
-    printf("[debug] calcdef fct {%s} init for nametab_index {%d}\n",
-           func_target->name, token_stream.array[token_index-1].data.name_tab_index
-    );
+    // printf("[debug] calcdef fct {%s} init for nametab_index {%d}\n",
+    //        func_target->name, token_stream.array[token_index - 1].data.name_tab_index
+    // );
 
     // function for the node in the syntaxtree
-    funcdef_t *func = malloc(sizeof (funcdef_t));
+    funcdef_t *func = malloc(sizeof(funcdef_t));
 
     // init target
     func_target->type = name_calc;
@@ -135,6 +135,22 @@ void calcdef() {
     assert_token(get_token(true)->type == keyw_endcalc, "missing endcalc keyword");
 }
 
+void *fill_params(funcdef_t *func) {
+//    nameentry_t *entry = malloc(sizeof(nameentry_t) * MAX_ARGS);
+    int index = 0;
+
+    /// name_any oper_sep name_any oper_sep name_any oper_rpar
+    nameentry_t *v = var();
+    func->params[index] = v;
+
+    while (get_token()->type == oper_sep) {
+        index++;
+        token_index++;
+        v = var();
+        assert_token(v != NULL, "Missing variable after ");
+        func->params[index] = v;
+    }
+}
 
 nameentry_t *name(bool is_var) {
     nameentry_t *nameentry = &(name_tab[get_token()->data.name_tab_index]);
@@ -196,53 +212,6 @@ nameentry_t *var() {
     return entry;
 }
 
-treenode_t *statement() {
-    treenode_t *statement_to_add = NULL;
-
-    for (int i = 0; i < FNPTRS; i++) {
-        statement_to_add = cmd_ptrs[i]();
-        if (statement_to_add != NULL) {
-            break;
-        }
-    }
-
-    return statement_to_add;
-}
-
-treenode_t* statements() {
-    // statement() legt Speicher für statement-Knoten an, diese Funktion verknüpft das zu einer EVL in parent
-    treenode_t *statement_tree = NULL; // top head
-    treenode_t *active_statement = NULL; // current head of subtree
-    do {
-        if (statement_tree == NULL) {
-            statement_tree = statement();
-            active_statement = statement_tree;
-        } else {
-            active_statement->next = statement();
-            active_statement = active_statement->next;
-        }
-    } while (active_statement != NULL);
-
-    return statement_tree;
-}
-
-void *fill_params(funcdef_t *func) {
-//    nameentry_t *entry = malloc(sizeof(nameentry_t) * MAX_ARGS);
-    int index = 0;
-
-    /// name_any oper_sep name_any oper_sep name_any oper_rpar
-    nameentry_t *v = var();
-    func->params[index] = v;
-
-    while(get_token()->type == oper_sep) {
-        index++;
-        token_index++;
-        v = var();
-        assert_token(v != NULL, "Missing variable after ");
-        func->params[index] = v;
-    }
-}
-
 treenode_t *color() {
     const token_t *t;
     treenode_t *node = new_tree_node();
@@ -252,26 +221,13 @@ treenode_t *color() {
         t = get_token();
 
         add_son_node(node, expr());
-        
+
         if (i != 2) { // not last iteration
             assert_token(get_token(true)->type == oper_sep, "Missing comma for color value");
         }
     }
 
     return node;
-}
-
-void fill_args(treenode_t *parent_node) {
-    bool has_added_token;
-    type_t type;
-    do {
-        has_added_token = add_son_node(parent_node, expr());
-        type = get_token()->type;
-        if (parent_node != NULL && type == oper_sep) {
-            token_index++;
-            assert_token(has_added_token, "Missing expression after comma");
-        }
-    } while (type == oper_sep);
 }
 
 treenode_t *cond() {
@@ -309,7 +265,7 @@ treenode_t *cond() {
 
 treenode_t *cond_s() {
     treenode_t *node = new_tree_node();
-    add_son_node(node,expr());
+    add_son_node(node, expr());
     const token_t *token = get_token(true);
 
     switch (token->type) {
@@ -329,7 +285,7 @@ treenode_t *cond_s() {
     return node;
 }
 
-treenode_t *expr() { // fixme: nodes werden nicht weiter gegeben und somit entsteht ein tiefer baum
+treenode_t *expr() {
     treenode_t *node = new_tree_node();
     treenode_t *first_term = term();
     // token_index got incremented in term()
@@ -371,8 +327,6 @@ treenode_t *term() {
     node->type = operator;
     add_son_node(node, first_factor);
     add_son_node(node, second_factor);
-
-    // todo: perhaps recursion is needed
 
     return node;
 }
@@ -430,7 +384,7 @@ treenode_t *operand() {
             active_node->type = name_any; // token->type; // ?
             active_node->d.p_name = &(name_tab[token->data.name_tab_index]);
             break;
-        // "rand" "(" EXPR "," EXPR ")"
+            // "rand" "(" EXPR "," EXPR ")"
         case name_math_rand:
             active_node->type = oper_lpar;
             active_node->d.p_name = &(name_tab[token->data.name_tab_index]);
@@ -443,7 +397,7 @@ treenode_t *operand() {
 
             assert_token(get_token(true)->type == oper_rpar, "missing right bracket");
             break;
-        // "(" EXPR ")" | "|" EXPR "|"
+            // "(" EXPR ")" | "|" EXPR "|"
         case oper_abs:
         case oper_lpar:
             memcpy(active_node, expr(), sizeof(treenode_t));
@@ -455,13 +409,13 @@ treenode_t *operand() {
                 assert_token(get_token(true)->type == oper_rpar, "missing right bracket");
             }
             break;
-        // ZIFFER {ZIFFER} ["." {ZIFFER}]
-        // done by lexer => copy value of token
+            // ZIFFER {ZIFFER} ["." {ZIFFER}]
+            // done by lexer => copy value of token
         case oper_const:
             active_node->type = oper_const;
             active_node->d.val = token->data.val;
             break;
-        // VAR | NAME "(" ARGS ")"
+            // VAR | NAME "(" ARGS ")"
         case name_any:
             active_node->type = name_any;
             if (get_token()->type == oper_lpar) {
@@ -485,9 +439,52 @@ treenode_t *operand() {
     return node;
 }
 
+void fill_args(treenode_t *parent_node) {
+    bool has_added_token;
+    type_t type;
+    do {
+        has_added_token = add_son_node(parent_node, expr());
+        type = get_token()->type;
+        if (parent_node != NULL && type == oper_sep) {
+            token_index++;
+            assert_token(has_added_token, "Missing expression after comma");
+        }
+    } while (type == oper_sep);
+}
+
 //
 // Statement Commands
 //
+
+treenode_t *statements() {
+    // statement() legt Speicher für statement-Knoten an, diese Funktion verknüpft das zu einer EVL in parent
+    treenode_t *statement_tree = NULL; // top head
+    treenode_t *active_statement = NULL; // current head of subtree
+    do {
+        if (statement_tree == NULL) {
+            statement_tree = statement();
+            active_statement = statement_tree;
+        } else {
+            active_statement->next = statement();
+            active_statement = active_statement->next;
+        }
+    } while (active_statement != NULL);
+
+    return statement_tree;
+}
+
+treenode_t *statement() {
+    treenode_t *statement_to_add = NULL;
+
+    for (int i = 0; i < FNPTRS; i++) {
+        statement_to_add = cmd_ptrs[i]();
+        if (statement_to_add != NULL) {
+            break;
+        }
+    }
+
+    return statement_to_add;
+}
 
 treenode_t *cmd_draw() {
     treenode_t *node = new_tree_node();
@@ -508,7 +505,7 @@ treenode_t *cmd_draw() {
                     break;
             }
             break;
-        case keyw_turn: // todo: keyw_turn kommt in der turtle-eval gar nicht vor?
+        case keyw_turn:
             switch (get_token()->type) {
                 case keyw_left:
                 case keyw_right:
@@ -525,7 +522,7 @@ treenode_t *cmd_draw() {
             assert_token(node = color(), "missing value for color");
             // break;
             return node;
-        // only check for keyword
+            // only check for keyword
         case keyw_clear:
         case keyw_stop:
         case keyw_finish:
@@ -617,7 +614,6 @@ treenode_t *cmd_calc() {
 
     return node;
 }
-
 
 treenode_t *cmd_if() {
     if (get_token()->type != keyw_if) {
@@ -783,8 +779,8 @@ void parser_error(const char *msg) {
 
 const token_t *def_get_token(get_token_args_t args) {
     bool increment_index = args.increment_index ? args.increment_index : false; // default value = false
-    capture_error_token = &(token_stream.array[ token_index ]);
-    return &(token_stream.array[ increment_index ? token_index++ : token_index ]);
+    capture_error_token = &(token_stream.array[token_index]);
+    return &(token_stream.array[increment_index ? token_index++ : token_index]);
 }
 
 bool add_son_node(treenode_t *parent_node, treenode_t *son_node) {
@@ -806,7 +802,7 @@ treenode_t *new_tree_node() {
     return node;
 }
 
-void assert_token(bool expression, const char* msg) {
+void assert_token(bool expression, const char *msg) {
     if (expression) {
         capture_error_token = NULL;
         return;

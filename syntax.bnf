@@ -7,21 +7,21 @@ ZIFFER     ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 NAME       ::= ["@"] ( BUCHST | "_" ) { BUCHST | "_" | ZIFFER }
 VAR        ::= NAME
 COLOR      ::= EXPR "," EXPR "," EXPR
-COND       ::= ("(" COND_S ")") | COND_S
-COND_S     ::= EXPR ("<" | ">" | "<=" | ">=" | "=" | "<>") EXPR {("not" | "and" | "or") COND_S}
-EXPR       ::= TERM [ ( "-" | "+" ) TERM ]
-TERM       ::= FAKTOR [ ( "*" | "/" ) FAKTOR ]
+COND       ::= ( "(" COND_S ")" | COND_S ) [ ( "not" | "and" | "or" ) COND ]
+COND_S     ::= EXPR ("<" | ">" | "<=" | ">=" | "=" | "<>") EXPR
+EXPR       ::= TERM [ ( "-" | "+" ) EXPR ]
+TERM       ::= FAKTOR [ ( "*" | "/" ) TERM ]
 FAKTOR     ::= OPERAND [ "^" FAKTOR ]
-OPERAND    ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "rand" "(" EXPR "," EXPR ")" | "(" EXPR ")" | "|" EXPR "|"  | ZIFFER {ZIFFER} ["." {ZIFFER}] | VAR | NAME "(" ARGS ")" )
+OPERAND    ::= [ "-" ] ( "sqrt" | "sin" | "cos" | "tan" "(" EXPR ")" | "rand" "(" EXPR "," EXPR ")" | "(" EXPR ")" | "|" EXPR "|" | ZIFFER {ZIFFER} ["." {ZIFFER}] | VAR | NAME "(" ARGS ")" )
 ARGS       ::= [ EXPR { "," EXPR } ]
 STATEMENTS ::= STATEMENT { STATEMENT }
-STATEMENT  ::= DRAW_CMD | MARK_CMD | CALC_CMD | IF_CMD | DO_CMD | CNT_CMD | WHILE_CMD | REPEAT_CMD
-DRAW_CMD   ::= ((("walk" ["back" | "home"]) | ("jump" ["back" | "home"]) | ("turn" ["left" | "right"]) | "direction") EXPR) | ("color" COLOR) | "clear" | "stop" | "finish" | ("path" NAME ["(" [ ARGS ] ")"])
-MARK_CMD   ::= ("mark") | ("walk mark") | ("jump mark")
-CALC_CMD   ::= ("store" EXPR "in" VAR) | ("add" EXPR "to" VAR) | ("sub" EXPR "from" VAR) | ("mul" VAR "by" EXPR) | ("div" VAR "by" EXPR)
-IF_CMD     ::= "if" COND "then" STATEMENTS ["else" STATEMENTS] "endif"
-DO_CMD     ::= "do" EXPR "times" STATEMENTS "done"
-CNT_CMD    ::= "counter" VAR "from" EXPR ("to" | "downto") EXPR ["step" EXPR] "do" STATEMENTS "done"
-WHILE_CMD  ::= "while" COND "do" STATEMENTS "done"
-REPEAT_CMD ::= "repeat" STATEMENTS "until" COND
+STATEMENT  ::= CMD_DRAW | CMD_MARK | CMD_CALC | CMD_IF | CMD_COUNTER | CMD_CNT | CMD_WHILE | CMD_REPEAT
+CMD_DRAW   ::= ((("walk" ["back"]) | ("jump" ["back"]) | ("turn" ["left" | "right"]) | "direction") EXPR) | ( ("walk" | "jump") "home" ) | ("color" COLOR) | "clear" | "stop" | "finish" | ("path" NAME ["(" [ ARGS ] ")"])
+CMD_MARK   ::= ("mark") | ("walk mark") | ("jump mark")
+CMD_CALC   ::= ("store" EXPR "in" VAR) | ("add" EXPR "to" VAR) | ("sub" EXPR "from" VAR) | ("mul" VAR "by" EXPR) | ("div" VAR "by" EXPR)
+CMD_IF     ::= "if" COND "then" STATEMENTS ["else" STATEMENTS] "endif"
+CMD_COUNTER::= "do" EXPR "times" STATEMENTS "done"
+CMD_CNT    ::= "counter" VAR "from" EXPR ("to" | "downto") EXPR ["step" EXPR] "do" STATEMENTS "done"
+CMD_WHILE  ::= "while" COND "do" STATEMENTS "done"
+CMD_REPEAT ::= "repeat" STATEMENTS "until" COND
 COMMENT    ::= "\"" {BUCHST | ZIFFER | "_" | "@" | "*" | "/" | "(" | ")" | "[" | "]" | "+" | "-" | "," | "." | ">" | "<" | "=" | "%" | "\"" | "'"} "\n"

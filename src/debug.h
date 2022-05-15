@@ -4,15 +4,16 @@
 
 #ifndef COMPILERBAU_PKK_DEBUG_H
 #define COMPILERBAU_PKK_DEBUG_H
-#define DEBUG 1 // 1 == true
+#define DEBUG 0 // 1 == true
 
+/// Struct to match types.
 typedef struct {
     char *name;
     char *value;
 } DEBUG_TURTLE_TYPE_NAMES_T;
 
 // 1:1 match for enum type_t
-// DEBUG_TURTLE_TYPE_NAMES[<type_t>] will return a struct with the type name saved as string (name) and a debug value
+/// DEBUG_TURTLE_TYPE_NAMES[<type_t>] will return a struct with the type name saved as string (name) and a debug value
 DEBUG_TURTLE_TYPE_NAMES_T DEBUG_TURTLE_TYPE_NAMES[76] = {
         {"name_any","<any>"},
         {"name_var","<var>"},

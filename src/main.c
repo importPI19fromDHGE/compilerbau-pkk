@@ -134,7 +134,6 @@ int main(int argc, const char *argv[]) {
 
     treenode_t *tree = lex_parse();
     free(input_buf);
-    // todo: free input_stream to save storage and reveal problems
     evaluate(tree, argc - 2, &(argv[2]));
 
     exit(EXIT_SUCCESS);
