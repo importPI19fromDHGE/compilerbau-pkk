@@ -41,31 +41,8 @@ treenode_t* (*cmd_ptrs[FNPTRS])(void) = { // this is where the fun* begins // no
         cmd_repeat  // repeat
 };
 
-// node->next
-// "statments" => walk, jump, left, right, direction, clear, stop, finish, mark, path,
-//                 color, store, add, sub, mul, div, if, do, counter, while, repeat
-
-// node->son[...]
-// cond, expr, fcall -> arg/param, pcall -> arg/param,
-
-// yes... it works and that's the only thing that matters (fix soon™)
-void assign_head_or_next(treenode_t **head, treenode_t **next_head, treenode_t* (*fptr)()) {
-    if (*head == NULL) {
-        *head = (fptr)();
-        if (*head != NULL && next_head != NULL) {
-            *next_head = *head;
-        }
-    } else if (next_head != NULL) {
-        (*next_head)->next = (fptr)();
-        *next_head = (*next_head)->next;
-    } else {
-        assert(false); // "safety first" :^)
-    }
-}
-
 treenode_t *program() {
     treenode_t *node = NULL;
-    treenode_t *active_node = NULL;
 
     assert(get_token(true)->type == tok_bofeof);
     while(get_token()->type != keyw_begin) {
@@ -76,7 +53,8 @@ treenode_t *program() {
     // begin => (type == keyw_begin)
     assert_token(get_token(true)->type == keyw_begin, "begin keyword missing!");
     // fill statements of main treenode
-    assign_head_or_next(&node, &active_node, statements);
+    node = statements();
+    assert_token(node != NULL, "missing statements");
 
     // end => (type == keyw_end)
     assert_token(get_token(true)->type == keyw_end, "end keyword missing!");
@@ -94,7 +72,9 @@ void pathdef() {
 
     nameentry_t *func_target = name(false);
     assert_token(func_target != NULL, "Missing path name for path definition");
-    printf("[debug]name_tab_index for pathdef fct %s:%d\n", func_target->name, token_index-1);
+    printf("[debug] pathdef fct {%s} init for nametab_index {%d}\n",
+           func_target->name, token_stream.array[token_index-1].data.name_tab_index
+    );
 
     // function for the node in the syntaxtree
     funcdef_t *func = malloc(sizeof (funcdef_t));
@@ -115,7 +95,7 @@ void pathdef() {
 
     // fill body with statements
     func->body = NULL;
-    assign_head_or_next(&(func->body), NULL, statements);
+    func->body = statements();
     assert_token(func->body != NULL, "Missing statements for path definition");
     assert_token(get_token(true)->type == keyw_endpath, "Missing endpath keyword!");
 }
@@ -128,7 +108,9 @@ void calcdef() {
 
     nameentry_t *func_target = name(false);
     assert_token(func_target != NULL, "Missing name for calc definition");
-    printf("[debug]name_tab_index for calcdef fct %s:%d\n", func_target->name, token_index-1);
+    printf("[debug] calcdef fct {%s} init for nametab_index {%d}\n",
+           func_target->name, token_stream.array[token_index-1].data.name_tab_index
+    );
 
     // function for the node in the syntaxtree
     funcdef_t *func = malloc(sizeof (funcdef_t));
@@ -143,18 +125,13 @@ void calcdef() {
     assert_token(get_token(true)->type == oper_rpar, "calcdef: Missing closing parenthesis");
 
     // fill body with statements | can be null
-    treenode_t *body = NULL;
-    assign_head_or_next(&body, NULL, statements);
-    // free if no statements inserted
-    if (body != NULL) {
-        func->body = body;
-    }
+    func->body = NULL;
+    func->body = statements(); // no check needed
     assert_token(get_token(true)->type == keyw_returns, "returns keyword is missing");
 
     // fill return with expression
-    treenode_t *ret = new_tree_node();
-    assert_token(add_son_node(ret, expr()), "missing expression");
-    func->ret = ret;
+    func->ret = expr();
+    assert_token(func->ret != NULL, "missing expression");
     assert_token(get_token(true)->type == keyw_endcalc, "missing endcalc keyword");
 }
 
@@ -237,12 +214,14 @@ treenode_t* statements() {
     treenode_t *statement_tree = NULL; // top head
     treenode_t *active_statement = NULL; // current head of subtree
     do {
-        assign_head_or_next(&statement_tree, &active_statement, statement);
+        if (statement_tree == NULL) {
+            statement_tree = statement();
+            active_statement = statement_tree;
+        } else {
+            active_statement->next = statement();
+            active_statement = active_statement->next;
+        }
     } while (active_statement != NULL);
-    
-    if (statement_tree == NULL) {
-        parser_error("missing at least one valid statement");
-    }
 
     return statement_tree;
 }
@@ -272,19 +251,10 @@ treenode_t *color() {
     for (int i = 0; i < 3; i++) {
         t = get_token();
 
-        if (t->type != oper_const ||
-            t->data.val < 0 || t->data.val > 100) {
-            parser_error("Invalid color value");
-        }
-
-        treenode_t *color = new_tree_node();
-        color->d.val = t->data.val;
-        add_son_node(node, color);
-        
-        token_index++;
+        add_son_node(node, expr());
         
         if (i != 2) { // not last iteration
-            assert_token(get_token(true)->type != oper_sep, "Missing comma for color value");
+            assert_token(get_token(true)->type == oper_sep, "Missing comma for color value");
         }
     }
 
@@ -306,31 +276,39 @@ void fill_args(treenode_t *parent_node) {
 
 treenode_t *cond() {
     treenode_t *node = new_tree_node();
-//    if (get_token()->type == oper_lpar) {
-//        token_index++;
-//        node = cond_s(node);
-//        assert_token(get_token(true)->type == oper_rpar, "error in condition: expected expression");
-//    } else {
-//        node = cond_s(node);
-//    }
-// todo: fix this mess
+    treenode_t *first_cond;
+    if (get_token()->type == oper_lpar) {
+        token_index++;
+        first_cond = cond_s();
+        assert_token(first_cond, "missing condition");
+        assert_token(get_token(true)->type == oper_rpar, "error in condition: expected expression");
+    } else {
+        first_cond = cond_s();
+        assert_token(first_cond, "missing condition");
+    }
 
-    cond_s(node);
-    switch (get_token()->type) {
+    type_t multi_cond_type = get_token()->type;
+    switch (multi_cond_type) {
         case keyw_not:
         case keyw_and:
         case keyw_or:
-            node->son[1]->type = get_token(true)->type;
-            cond_s(node->son[1]); // todo: check if this works for kusche code
+            node->type = multi_cond_type;
+            token_index++;
             break;
         default:
-            break;
+            free(node);
+            return first_cond;
     }
+    treenode_t *second_cond = cond();
+    assert_token(second_cond, "missing second condition after multi condition");
+    add_son_node(node, first_cond);
+    add_son_node(node, second_cond);
 
     return node;
 }
 
-treenode_t *cond_s(treenode_t *node) {
+treenode_t *cond_s() {
+    treenode_t *node = new_tree_node();
     add_son_node(node,expr());
     const token_t *token = get_token(true);
 
@@ -348,18 +326,6 @@ treenode_t *cond_s(treenode_t *node) {
     }
 
     add_son_node(node, expr());
-
-    switch (get_token()->type) {
-        case keyw_not:
-        case keyw_and:
-        case keyw_or:
-            node->son[1]->type = get_token(true)->type;
-            cond_s(node->son[1]); // todo: check if this works for kusche code
-            break;
-        default:
-            break;
-    }
-
     return node;
 }
 
@@ -370,7 +336,6 @@ treenode_t *expr() { // fixme: nodes werden nicht weiter gegeben und somit entst
 
     assert_token(first_term, "error in expression: expected a term");
 
-
     type_t operator = get_token()->type;
     if (operator != oper_sub && operator != oper_add) {
         free(node);
@@ -378,7 +343,8 @@ treenode_t *expr() { // fixme: nodes werden nicht weiter gegeben und somit entst
     }
 
     token_index++;
-    treenode_t *second_term = term();
+    // second term is always recursion to read long expressions
+    treenode_t *second_term = expr();
     assert_token(second_term, "missing second term of expression");
     node->type = operator;
     add_son_node(node, first_term);
@@ -399,26 +365,14 @@ treenode_t *term() {
         return first_factor;
     }
     token_index++;
-    treenode_t *second_factor = factor();
+    // second factor is always recursion to read long expressions
+    treenode_t *second_factor = term();
     assert_token(second_factor, "Missing second factor of term");
     node->type = operator;
     add_son_node(node, first_factor);
     add_son_node(node, second_factor);
 
     // todo: perhaps recursion is needed
-
-//    treenode_t *node = new_tree_node();
-//    assert_token(add_son_node(node, factor()), "error in expression: expected a factor");
-//    // token_index got incremented in term()
-//    type_t type = get_token()->type;
-//    // token_index got incremented in get_token(true)
-//    while ((type == oper_mul) || (type == oper_div)) {
-//        token_index++;
-//        assert_token(add_son_node(node, factor()), "error in expression: expected a factor");
-//        // token_index got incremented in term()
-//        type = get_token()->type;
-//        // token_index got incremented in get_token(true)
-//    }
 
     return node;
 }
@@ -435,6 +389,7 @@ treenode_t *factor() {
         return first_operand;
     }
     token_index++;
+    // second operand is always recursion to read long expressions
     treenode_t *second_operand = factor();
     // token_index got incremented in factor()
     assert_token(second_operand, "factor: missing operand after ^");
@@ -449,7 +404,7 @@ treenode_t *operand() {
     treenode_t *node = new_tree_node(); // head
     treenode_t *active_node = node;
 
-    if (get_token()->type == oper_neg) {
+    if (get_token()->type == oper_neg || get_token()->type == oper_sub) {
         token_index++;
         active_node->type = oper_neg;
         active_node = new_tree_node();
@@ -463,8 +418,8 @@ treenode_t *operand() {
         case name_math_sin:
         case name_math_cos:
         case name_math_tan:
-            active_node->type = token->type;
-            active_node->d.p_name = &(name_tab[token->data.name_tab_index]); // todo: does this work?
+            active_node->type = oper_lpar;
+            active_node->d.p_name = &(name_tab[token->data.name_tab_index]);
 
             assert_token(get_token(true)->type == oper_lpar, "missing left bracket");
             assert_token(add_son_node(active_node, expr()), "Missing expression");
@@ -473,16 +428,20 @@ treenode_t *operand() {
         case name_pvar_ro:
         case name_pvar_rw: // fixme
             active_node->type = name_any; // token->type; // ?
-            active_node->d.p_name = &(name_tab[token->data.name_tab_index]); // todo: does this work?
+            active_node->d.p_name = &(name_tab[token->data.name_tab_index]);
             break;
         // "rand" "(" EXPR "," EXPR ")"
         case name_math_rand:
-            active_node->type = token->type;
-            active_node->d.p_name = &(name_tab[token->data.name_tab_index]); // todo: does this work?
+            active_node->type = oper_lpar;
+            active_node->d.p_name = &(name_tab[token->data.name_tab_index]);
+
+            assert_token(get_token(true)->type == oper_lpar, "missing left bracket");
 
             assert_token(add_son_node(active_node, expr()), "Missing expression");
             assert_token(get_token(true)->type == oper_sep, "Missing comma");
             assert_token(add_son_node(active_node, expr()), "Missing expression after comma");
+
+            assert_token(get_token(true)->type == oper_rpar, "missing right bracket");
             break;
         // "(" EXPR ")" | "|" EXPR "|"
         case oper_abs:
@@ -504,15 +463,17 @@ treenode_t *operand() {
             break;
         // VAR | NAME "(" ARGS ")"
         case name_any:
-            token_index--;
+            active_node->type = name_any;
             if (get_token()->type == oper_lpar) {
-                token_index++;
+                active_node->type = oper_lpar;
+                token_index--;
                 active_node->d.p_name = name(false);
                 // token_index got incremented in name()
                 assert_token(get_token(true)->type == oper_lpar, "missing left bracket");
                 fill_args(active_node);
                 assert_token(get_token(true)->type == oper_rpar, "missing left bracket");
             } else {
+                token_index--;
                 active_node->d.p_name = var();
                 assert_token(active_node->d.p_name, "operand: missing var");
             }
@@ -537,9 +498,11 @@ treenode_t *cmd_draw() {
         case keyw_jump:
             switch (get_token()->type) {
                 case keyw_back:
-                case keyw_home:
                     node->d.walk = get_token(true)->type;
                     break;
+                case keyw_home:
+                    node->d.walk = get_token(true)->type;
+                    return node;
                 default:
                     node->d.walk = keyw_walk;
                     break;
@@ -552,6 +515,7 @@ treenode_t *cmd_draw() {
                     node->type = get_token(true)->type;
                     break;
                 default:
+                    node->type = keyw_right;
                     break;
             }
             break;
@@ -668,12 +632,14 @@ treenode_t *cmd_if() {
     assert_token(get_token(true)->type == keyw_then, "missing then keyword");
 
     // fill then statements -> son[1]
-    assign_head_or_next(&(node->son[1]), NULL, statements);
+    node->son[1] = NULL;
+    node->son[1] = statements();
 
     if (get_token()->type == keyw_else) {
         token_index++;
         // fill else statements -> son[2]
-        assign_head_or_next(&(node->son[2]), NULL, statements);
+        node->son[2] = NULL;
+        node->son[2] = statements();
     }
 
     assert_token(get_token(true)->type == keyw_endif, "missing endif keyword");
@@ -694,7 +660,8 @@ treenode_t *cmd_do() {
     assert_token(get_token(true)->type == keyw_times, "missing times keyword");
 
     // fill statements into son 1
-    assign_head_or_next(&(node->son[1]), NULL, statements);
+    node->son[1] = NULL;
+    node->son[1] = statements();
     assert_token(get_token(true)->type == keyw_done, "missing done keyword");
 
     return node;
@@ -755,7 +722,8 @@ treenode_t *cmd_counter() {
     }
     assert_token(get_token(true)->type == keyw_do, "syntax error in counter: expected \"do\"");
     // fill statements into son 4
-    assign_head_or_next(&(node->son)[4],NULL, statements);
+    node->son[4] = NULL;
+    node->son[4] = statements();
     assert_token(get_token(true)->type == keyw_done, "Missing done keyboard");
 
     return node;
@@ -774,7 +742,8 @@ treenode_t *cmd_while() {
     assert_token(get_token(true)->type == keyw_do, "missing do keyword");
 
     // fill statements into son 1
-    assign_head_or_next(&(node->son[1]), NULL, statements);
+    node->son[1] = NULL;
+    node->son[1] = statements();
     assert_token(get_token(true)->type == keyw_done, "missing done keyword");
 
     return node;
@@ -790,7 +759,8 @@ treenode_t *cmd_repeat() {
     node->type = keyw_repeat;
 
     // fill statements into son 1
-    assign_head_or_next(&(node->son[1]), NULL, statements);
+    node->son[1] = NULL;
+    node->son[1] = statements();
     assert_token(get_token(true)->type == keyw_until, "missing until keyword");
 
     assert_token(add_son_node(node, cond()), "missing condition for repeat cmd");

@@ -70,8 +70,6 @@ void fill_args(treenode_t *parent_node);
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *cond();
 
-treenode_t *cond_s(treenode_t *node);
-
 ///
 /// \returns a treenode_t* matching to description or default (see parser.h)
 treenode_t *cond_s();
@@ -142,7 +140,5 @@ treenode_t *new_tree_node();
 void assert_token(bool expression, ///< Boolean for determining success of operation as returned by a helper function.
                   const char* msg ///< An Error message.
                   );
-
-void assign_head_or_next(treenode_t **head, treenode_t **next_head, treenode_t* (*fptr)());
 
 #endif
