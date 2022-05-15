@@ -1,39 +1,30 @@
 # compilerbau-pkk
 
-## Specification
+## Prerequisites
 
-- Entwicklungsumgebung: vscode / CLion
-- Build tool: cmake
-- Extensions: ms-vscode.cpptools, luniclynx.bison, luniclynx.lex, twxs.cmake, ms-vscode.cmake-tools
-- händisch mit C
-- umgebung: GNU/Linux
-- Source Files **müssen** in LF gespeichert werden
+- cmake >= 3.21
+- make
+- SDL2
 
-## Token-Übersetzung
+## Build instructions
 
-| Original | iel |
-| -------- | --- |
+- run `build.sh`
+- binary can be found in `./build`
 
-## EBNF
+## Documentation
 
-- alle Non-Terminals sind eine Funktion
-- jede Funktion gibt ``double`` zurück
+- run `doxygen`
+- inspect documentation under `./docs`
 
-Siehe [hier](syntax.bnf).
+## Bericht zum Projektverlauf
 
-## TODO
-- Oliver
-  - [x] cmd_calc
-  - [x] cmd_draw
-- Max
-  - [x] cmd_counter
-  - [ ] expr
-    - TODO: vordefinierte Funktionen wie sin, cos, tan
-    - Funktionsaufrufe
-  - [x] term
-  - [x] cond/cond_s
-- Felix
-  - [x] operand 
-    - added `"rand" "(" EXPR "," EXPR ")"` 
-    - removed `"[" EXPR "]"`
-  - [x] args -> fill_args
+Nach einigen Startschwierigkeiten war der Lexer nach relativ kurzer Zeit funktionstüchtig.
+All die Parser Funktionen zu implementieren hat sehr viel Zeit beansprucht und hat für viele Probleme gesorgt.
+Daher musste zum Schluss sehr intensives Debugging betrieben werden, um Fehler zu beheben.
+Da die Umsetzung insgesamt länger gedauert hat, als erwartet, konnte die geplante deutsche Übersetzung der Sprache nicht mehr realisiert werden.
+
+Zunächst wurden die Hinweise, welche Informationen in welche Söhne geschrieben werden müssen, übersehen.
+Das führte zu dazu, dass häufig der Code des Evaluators analysiert wurde.
+
+Insgesamt konnte das Projekt jedoch fertiggestellt und auf einen funktionstüchtigen Stand gebracht werden.
+Das Programm wurde mit den, sich in `./tests/` befindlichen, Testprogrammen getestet.
