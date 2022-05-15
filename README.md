@@ -9,12 +9,12 @@
 ## Build instructions
 
 - run `build.sh`
-- binary can be found in `/build`
+- binary can be found in `./build`
 
 ## Documentation
 
 - run `doxygen`
-- inspect documentation under `/docs`
+- inspect documentation under `./docs`
 
 ## Bericht zum Projektverlauf
 
@@ -27,4 +27,4 @@ Zunächst wurden die Hinweise, welche Informationen in welche Söhne geschrieben
 Das führte zu dazu, dass häufig der Code des Evaluators analysiert wurde.
 
 Insgesamt konnte das Projekt jedoch fertiggestellt und auf einen funktionstüchtigen Stand gebracht werden.
-Das Programm wurde mit den, sich in `/tests/` befindlichen, Testprogrammen getestet.
+Das Programm wurde mit den, sich in `./tests/` befindlichen, Testprogrammen getestet.
